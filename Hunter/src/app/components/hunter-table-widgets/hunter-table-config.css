@@ -1,0 +1,118 @@
+
+.regionComboboxContainer, .hunterMasterTable, .hunterTable{
+    width:100%;
+}
+
+
+
+.cursorPointer{
+    cursor:pointer;
+}
+
+.headerSpan{
+    float:left;
+    margin:4px;
+    text-align: left;   
+}
+
+.hunterTable thead tr th{
+    background-color:#EFF8F9;
+    padding-top:1.08em;
+    padding-bottom:1.08em;
+    padding-left:4px;
+    padding-right:4px;
+    text-align: center;
+    color:#0874A9;
+    text-decoration: none;
+    border-bottom:1px solid #E0F0F0;
+    font-size: 16px;
+}
+
+.hunterTableTd{
+    border:1px solid #E2F1F5;
+    padding-top:1.03em;
+    padding-bottom:1.03em;
+    padding-left:4px;
+    padding-right:4px;
+    color:#217695;
+    font-size: 14x;
+}
+
+.hunterTable tr:hover{
+    background-color: #F0F2F2 !important;
+}
+
+.hunterTable tr:nth-child(even){
+    background-color: #F6F6F6
+}
+
+
+
+.hunterMasterTableTitleBar{
+    background-color:#EFF8F9;
+    min-height:40px;
+    border:1px solid #E0F0F0;
+    border-bottom:'';
+}
+
+
+
+#bottomTitleBarPagesTd{
+    text-align: left;
+    padding-left:10px;
+}
+
+
+
+.circularComponent:hover{
+    background-color:#B9E2E8 !important;
+}
+
+.circularComponent{
+    border:1px solid #C6DEE1;
+    border-radius:50%;
+    width:30px;
+    height:30px;
+    padding-top:5px;
+    text-align: center;
+    color:#419BAE;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+.itemsPerPageDiv{
+    margin-left:5px;
+    height:100%;
+    width:120px;
+}
+
+#itemsPerPageDivOptions{
+    padding-top:3px;
+    padding-bottom:3px;
+    padding-right:5px;
+    padding-left:5px;
+    color:#419BAE;
+    border:1px solid #419BAE;
+    background-color: #EFF8F9; 
+    border:1px solid #D7E6E8;
+}
+
+.dropdown-toggle {
+    background-color: #EFF8F9 !important;   
+    border:1px solid #D7E6E8 !important;
+}
+
+.ropdown-menu li{
+    border:1px solid black !important;
+}
+
+.itemsPerPageOption{
+    border-bottom:1px solid #E4F3F2;
+}
+
+
+
+
+
+
+

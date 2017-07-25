@@ -1,0 +1,49 @@
+<div *ngIf="!addingGroup">
+    <button (click)="setAddingGroup()" class="btn hunterButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Group</button>
+</div>
+
+<div class="panel panel-default" *ngIf="addingGroup">
+    <div class="panel-heading">
+        <h3 class="panel-title" style='color:#136398;' >Add Task Group</h3>
+    </div>
+    <div class="panel-body">
+        
+    </div>
+    <div class="panel-footer">
+        <button (click)="addGroupAndSave()" class="btn hunterButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Selected Group</button>
+    </div>
+</div>
+
+
+<div *ngIf="taskGroups">
+    <table id='taskGroupsTable' class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Receiver Type</th>
+                <th>Receiver Count</th>
+                <th>Created On</th>
+                <th>Created By</th>
+                <th>Updated On</th>
+                <th>Updated By</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let group of taskGroups_">
+                <td>{{group.groupId}}</td>
+                <td>{{group.groupName}}</td>
+                <td>{{group.groupDesc}}</td>
+                <td>{{group.receiverType}}</td>
+                <td>{{group.receiverCount}}</td>
+                <td>{{group.cretDate}}</td>
+                <td>{{group.createdBy}}</td>
+                <td>{{group.lastUpdate}}</td>
+                <td>{{group.lastUpdatedBy}}</td>
+                <td class="fit" style="text-align:center;"><button class="btn hunterButton"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

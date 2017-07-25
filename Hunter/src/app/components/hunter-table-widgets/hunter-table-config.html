@@ -1,0 +1,99 @@
+<br/>
+<br/>
+<br/>
+
+<div class='regionComboboxContainer'>
+
+    <table class='hunterMasterTable'>
+        <tr>
+            <td>
+                <div class='hunterMasterTableTitleBar'>
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class='hunterTable'>
+                    <thead class='hunterTableHead'>
+                        <tr class='hunterTableTr'>
+                            <th class='hunterTableTd' *ngFor="let header of headers">
+                                <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"  *ngIf="!header.isActionCol" ></span>
+                                <span class='hunterHeaderText headerSpan cursorPointer' >{{header.displayName}}</span>
+                                <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.isActionCol && header.sortable && header.currentOrder"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let datum of hunterTableData" >
+                            <td class='hunterTableTd' *ngFor="let header of headers"  [style.text-align]="header.isActionCol ? 'center':'left'" >
+                                <span *ngIf="!header.isActionCol" >{{ datum[header.headerId] }}</span>             
+                                <div (click)="onClickButton(header.headerId, datum[header.dataId])" class='btn hunterButton' *ngIf="header.isActionCol" style="margin:auto;" >
+                                        <span [class]="getBootstrapClass(header.actionColIconName)" ></span>             
+                                </div>                              
+                            </td>
+                        </tr>                        
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class='hunterMasterTableTitleBar'>
+                    <table style='width:100%;min-height:40px;'>
+                        <tr style='min-height:40px;'>
+                            <td id='bottomTitleBarPagesTd' style='width:60%;min-height: 40px;padding-left:10px;'>
+                                <table>
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></div>
+                                    </td>
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'>1</div>
+                                    </td>
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'>2</div>
+                                    </td>
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'>3</div>
+                                    </td>
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'>4</div>
+                                    </td>
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'>5</div>
+                                    </td>
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></div>
+                                    </td>
+                                    <td style='padding:2px;'>
+                                        <div class='itemsPerPageDiv'>
+                                            <div class="dropdown" style="padding-bottom:3px;"  >
+                                                <button  class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span style='margin-right:10px;' >10 items per page</span><span class="caret"></span></button>
+                                                <ul class="dropdown-menu" style='background-color:#EFF8F9 !important;' >
+                                                    <li><a class='itemsPerPageOption' >10</a></li>
+                                                    <li><a class='itemsPerPageOption' >20</a></li>
+                                                    <li><a class='itemsPerPageOption' >50</a></li>
+                                                    <li><a class='itemsPerPageOption' >100</a></li>
+                                                    <li><a class='itemsPerPageOption' >200</a></li>
+                                                    <li><a class='itemsPerPageOption' >500</a></li>
+                                                    <li><a>All</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </table>
+                            </td>
+                            <td style='width:auto;min-height: 40px;'></td>
+                            <td style='width:5%;min-height: 40px;text-align:center;cursor:pointer;'>
+                                <div id='bottomTitleBarRefreshBubble' class="circularComponent">
+                                    <!-- There is CSS for this -->
+                                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

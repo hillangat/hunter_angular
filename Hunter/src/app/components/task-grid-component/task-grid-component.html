@@ -1,0 +1,81 @@
+<div id='taskGridContainer' >
+    <div class="row" >
+        <div class="col-md-12" >                                           
+            <table id='tasksGridTable' class="table table-striped table-bordered table-hover" >
+                <thead>
+                    <tr>
+                        <th>ID </th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Client</th>
+                        <th>Message Type</th>
+                        <th>Created On</th>                   
+                        <th>Progress</th>
+                        <th>Status</th>                        
+                        <th>Clone</th>                   
+                        <th>Process</th>
+                        <th>Delete</th>                         
+                        <th>Open</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let task of tasks; let i = index;" >
+                        <td>{{task.taskId}}</td>
+                        <td>{{task.taskName}}</td>
+                        <td>{{task.taskType}}</td>
+                        <td>{{task.clientId}}</td>
+                        <td>{{task.tskMsgType}}</td>                    
+                        <td>{{task.cretDate}}</td>
+                        <td  style='text-align:center;'>{{task.taskLifeStatus}}</td>
+                        <td  style='text-align:center;' >{{task.taskDeliveryStatus}}</td>
+                        <td class='fit' ><button class="btn"><span class="glyphicon glyphicon-book" aria-hidden="true"></span></button></td>
+                        <td class='fit' ><button class="btn"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button></td>
+                        <td class='fit' ><button class="btn"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></td>
+                        <td class='fit' ><button [routerLink]="['/taskdetails', task.taskId]" class="btn"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span></button></td>                        
+                    </tr>                                          
+                </tbody>
+            </table>  
+             <table style="width:100%;margin-top:0px !important;" >
+                <tr>
+                    <td class="fit">
+                        <ul class="pagination" style="margin:0px !important;float:left;" >
+                            <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                            </li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                            </li>
+                        </ul>
+                        <div class="dropdown" style="float:left;margin-left:3px;" >
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                10 tasks per Page
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a>10</a></li>
+                                <li><a>20</a></li>
+                                <li><a>50</a></li>                                
+                                <li><a>100</a></li>
+                            </ul>
+                        </div>
+                    </td>                   
+                    <td style='text-align:right;'>
+                        10 of 200 items
+                    </td>
+                    <td style='text-align:right;'>
+                        <span style="cursor:pointer;" class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                    </td>
+                </tr>
+             </table>           
+        </div>
+    </div>
+</div>

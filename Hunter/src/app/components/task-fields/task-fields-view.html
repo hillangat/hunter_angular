@@ -1,0 +1,52 @@
+
+
+<ul class="list-group">
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Client Name</label> {{task.clientId}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Gateway Client</label> {{task.gateWayClient}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Budget</label>{{moneySign}}{{task.taskBudget}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Task ID</label> {{task.taskId}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Objective</label> {{task.taskObjective}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Message Type</label> {{task.tskMsgType}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Type</label> {{task.taskType}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Recurrent</label>
+        <span *ngIf="task.recurrentTask == 'Y'">Yes</span>
+        <span *ngIf="task.recurrentTask != 'Y'">False</span>
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Name</label> {{task.taskName}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Description</label> {{task.description}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Available Receiver</label>
+        <span>{{task.availableReceiverCount}}</span>
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Confirmed Receivers</label> {{task.confirmedReceiverCount}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Desired Receivers</label> {{task.desiredReceiverCount}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Task Date Line</label> {{task.taskDateline}}
+    </li>
+    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+        <label style='width:25%;color:#41ABBC;'>Disclaimer</label> {{task.disclaimer}}
+    </li>
+</ul>

@@ -1,0 +1,24 @@
+.fieldId{
+    width:30% !important;
+    float: left;
+    text-align: left;
+    position:relative;    
+    padding:5px;
+    border-right:10px solid blue;
+}
+.fieldValue{
+    position:relative;
+    width:68% !important;    
+    text-align: left;
+    float:left;
+    padding:5px;
+}
+
+.failedStatus{
+    color:red;
+}
+
+.successStatus{
+    color:green;
+}
+

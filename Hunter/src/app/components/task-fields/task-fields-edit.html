@@ -1,0 +1,90 @@
+<!-- Task Editing -->
+<form [formGroup]="taskFieldsForm" novalidate (ngSubmit)="save(taskFieldsForm.value, taskFieldsForm.valid)" id="taskFieldsForm">
+    <div class="form-group">
+        <label for="taskName" style="color:#41ABBC;font-size:1.05em;;">Task Name</label>
+        <input class="form-control input-md" id="taskName" formControlName="taskName" type="text" placeholder="Enter Task Name..">
+        <small [hidden]="taskFieldsForm.controls.taskName.valid || (taskFieldsForm.controls.taskName.pristine && !submitted)">
+            {{ customValidatorMessages.taskName }}
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="taskLifeStatus" style="color:#41ABBC;font-size:1.05em;;">Task Status</label>
+        <select class="form-control" id="taskLifeStatus" formControlName="taskLifeStatus" placeholder="Select Status...">
+            <option value="Draft">Draft</option>
+            <option value="Review">Review</option>
+            <option value="Approved">Approved</option>
+        </select>
+        <small [hidden]="taskFieldsForm.controls.taskLifeStatus.valid || (taskFieldsForm.controls.taskLifeStatus.pristine && !submitted)">
+            {{ customValidatorMessages.taskLifeStatus }}
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="description" style="color:#41ABBC;font-size:1.05em;">Task Description</label>
+        <textarea class="form-control" rows="3" id="description" formControlName="description" placeholder="Enter Task Description..."></textarea>
+    </div>
+    <div class="form-group">
+        <label for="taskType" style="color:#41ABBC;font-size:1.05em;;">Task Type</label>
+        <select class="form-control" id="taskType" formControlName="taskType" placeholder="Select Task Type...">
+            <option *ngFor="let type of taskTypes_" [value]="type">{{type}}</option>
+        </select>
+        <small [hidden]="taskFieldsForm.controls.taskType.valid || (taskFieldsForm.controls.taskType.pristine && !submitted)">
+            {{ customValidatorMessages.taskType }}
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="tskMsgType" style="color:#41ABBC;font-size:1.05em;;">Task Message Type</label>
+        <select class="form-control" id="tskMsgType" formControlName="tskMsgType" placeholder="Select Task Message Type...">
+            <option *ngFor="let type of messageTypes_" [value]="type">{{type}}</option>
+        </select>
+        <small [hidden]="taskFieldsForm.controls.tskMsgType.valid || (taskFieldsForm.controls.tskMsgType.pristine && !submitted)">
+            {{ customValidatorMessages.msgType }}
+        </small>
+    </div>
+    <label for="taskDateline" style="color:#41ABBC;font-size:1.05em;;">Task Dateline</label>
+    <div class="form-group" style="margin-bottom:-30px;">
+        <div style="display:inline-block; min-height:290px;">
+            <datepicker formControlName="taskDateline" [minDate]="minDate" [showWeeks]="true" [dateDisabled]="false"></datepicker>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="taskObjective" style="color:#41ABBC;font-size:1.05em;">Task Objective</label>
+        <textarea class="form-control" rows="5" id="taskObjective" formControlName="taskObjective" placeholder="Enter Task Objective...">
+                            
+        </textarea>
+        <small [hidden]="taskFieldsForm.controls.taskObjective.valid || (taskFieldsForm.controls.taskObjective.pristine && !submitted)">
+            {{ customValidatorMessages.taskObjective }}
+        </small>
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+        <div>
+            <label for="recurrentTask" style="color:#41ABBC;font-size:1.05em;">Task Recurrent</label>
+            <input class="checkbox" type="checkbox" value="" formControlName="recurrentTask">
+        </div>
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+        <div>
+            <label for="taskApproved" style="color:#41ABBC;font-size:1.05em;">Task Approved</label>
+            <input class="checkbox" type="checkbox" value="" formControlName="taskApproved">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="taskBudget" style="color:#41ABBC;font-size:1.05em;;">Task Budget</label>
+        <input style="max-width: 25%;" class="form-control input-md" id="taskBudget" formControlName="taskBudget" type="number" placeholder="Enter Task Budget..">
+        <small [hidden]="taskFieldsForm.controls.taskBudget.valid || (taskFieldsForm.controls.taskBudget.pristine && !submitted)">
+            {{ customValidatorMessages.taskBudget }}
+        </small>
+    </div>
+    <div class="form-group">
+        <label for="desiredReceiverCount" style="color:#41ABBC;font-size:1.05em;;">Desired Receiver Count</label>
+        <input style="max-width: 25%;" class="form-control input-md" id="desiredReceiverCount" formControlName="desiredReceiverCount"
+            type="number" placeholder="Enter Desired Receiver Count..">
+        <small [hidden]="taskFieldsForm.controls.desiredReceiverCount.valid || (taskFieldsForm.controls.desiredReceiverCount.pristine && !submitted)">
+            {{ customValidatorMessages.desiredReceiverCount }}
+        </small>
+    </div>
+    <br/>
+    <button class="btn btn-primary btn-success" type="submit"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp; Submit</button>    &nbsp;&nbsp;
+    <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp; Cancel</button>
+</form>
+
+<br/> {{ taskFieldsForm.value | json }}
