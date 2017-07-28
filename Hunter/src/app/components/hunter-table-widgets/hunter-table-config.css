@@ -50,13 +50,12 @@
     color:#0874A9;
     text-decoration: none;
     border-bottom:1px solid #E0F0F0;
-    font-size: 16px;
 }
 
 .hunterTableTd{
     border:1px solid #E2F1F5;
-    padding-top:2px;
-    padding-bottom:2px;
+    padding-top:3px;
+    padding-bottom:3px;
     padding-left:4px;
     padding-right:4px;
     color:#217695;
@@ -137,7 +136,13 @@
 
 .itemsPerPageOption{
     border-bottom:1px solid #E4F3F2;
+    color:#217695;
 }
+
+.hunterDropdownHeader{
+    border-bottom: 1px solid red !important;
+}
+
 
 
 

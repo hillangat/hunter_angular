@@ -35,7 +35,7 @@ export class HunterTableConfig implements OnInit {
 
 
     constructor( private ref: ElementRef ){
-
+        console.log( 'Starting it up...' );
     }
 
     ngOnInit(){        
@@ -241,6 +241,12 @@ export class HunterTableConfig implements OnInit {
         this.initializeDataGrid();
     }
 
+    getCurrentPageCount(){
+        let
+        startNo =  ( this.currentPageNo - 1 ) * this.selItemsPerPage + 1,
+        endNo   =  startNo + this.visibleHunterTableData.length - 1;
+        return startNo + '-' + endNo;
+    }
 
 
    
