@@ -2,13 +2,26 @@
 <br/>
 <br/>
 
-<div class='regionComboboxContainer'>
+<div>Start index : {{startIndex}}</div>
+<div>End index : {{endIndex-1}}</div>
+<div>Total : {{hunterTableData.length}}</div>
+
+<br/>
+
+<div id="overlay" [style.display]="overIsOn ? 'block':'none'">
+    <div class='hunterOverlayProgressBArDiv'>
+        <img src="../../assets/images/loadingSpinner.gif" style="width:75px;height:75px;">
+    </div>
+</div>
+
+
+<div class='hunterTableContainer'>
 
     <table class='hunterMasterTable'>
         <tr>
             <td>
                 <div class='hunterMasterTableTitleBar'>
-
+                    <button (click)="displayNewCreationWidget()"  class="btn hunterButton" style='margin:3px;' *ngIf="hasNewRowButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Add New {{dataBeanName}}</button>
                 </div>
             </td>
         </tr>
@@ -18,21 +31,22 @@
                     <thead class='hunterTableHead'>
                         <tr class='hunterTableTr'>
                             <th class='hunterTableTd' *ngFor="let header of headers">
-                                <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"  *ngIf="!header.isActionCol" ></span>
-                                <span class='hunterHeaderText headerSpan cursorPointer' >{{header.displayName}}</span>
+                                <span (click)="showFilterDropdown()" class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"
+                                    *ngIf="!header.isActionCol"></span>
+                                <span class='hunterHeaderText headerSpan cursorPointer'>{{header.displayName}}</span>
                                 <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.isActionCol && header.sortable && header.currentOrder"></span>
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr *ngFor="let datum of hunterTableData" >
-                            <td class='hunterTableTd' *ngFor="let header of headers"  [style.text-align]="header.isActionCol ? 'center':'left'" >
-                                <span *ngIf="!header.isActionCol" >{{ datum[header.headerId] }}</span>             
-                                <div (click)="onClickButton(header.headerId, datum[header.dataId])" class='btn hunterButton' *ngIf="header.isActionCol" style="margin:auto;" >
-                                        <span [class]="getBootstrapClass(header.actionColIconName)" ></span>             
-                                </div>                              
+                    <tbody *ngIf="visibleHunterTableData.length > 0 " >
+                        <tr *ngFor="let datum of visibleHunterTableData">
+                            <td class='hunterTableTd' *ngFor="let header of headers" [style.text-align]="header.isActionCol || header.headerId == header.dataId ? 'center':'left'">
+                                <span *ngIf="!header.isActionCol">{{ datum[header.headerId] }}</span>
+                                <div (click)="onClickButton(header.headerId, datum[header.dataId])" class='btn hunterButton' *ngIf="header.isActionCol" style="margin:auto;">
+                                    <span [class]="getBootstrapClass(header.actionColIconName)"></span>
+                                </div>
                             </td>
-                        </tr>                        
+                        </tr>
                     </tbody>
                 </table>
             </td>
@@ -45,38 +59,41 @@
                             <td id='bottomTitleBarPagesTd' style='width:60%;min-height: 40px;padding-left:10px;'>
                                 <table>
                                     <td style='padding:2px;'>
-                                        <div class='circularComponent'><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></div>
+                                        <div class='circularComponent'><span class="glyphicon glyphicon-step-backward" (click)="goToPageOne()" aria-hidden="true"></span></div>
                                     </td>
                                     <td style='padding:2px;'>
-                                        <div class='circularComponent'>1</div>
+                                        <div class='circularComponent'><span class="glyphicon glyphicon-chevron-left"  (click)="goToPreviousPage()" aria-hidden="true"></span></div>
+                                    </td>                                    
+                                    <td style='padding:2px;' *ngFor="let pageNo of visiblePageNumbers; let i = index" (click)="setCurrentPage(visiblePageNumbers[i])" >
+                                        <div class='circularComponent' [style.background-color] = "getStyleForSelPageCircle(visiblePageNumbers[i])" >{{visiblePageNumbers[i]}}</div>
+                                    </td>                                    
+                                    <td style='padding:2px;'>
+                                        <div class='circularComponent'><span class="glyphicon glyphicon-chevron-right" (click)="goToNextPage()" aria-hidden="true"></span></div>
                                     </td>
                                     <td style='padding:2px;'>
-                                        <div class='circularComponent'>2</div>
-                                    </td>
-                                    <td style='padding:2px;'>
-                                        <div class='circularComponent'>3</div>
-                                    </td>
-                                    <td style='padding:2px;'>
-                                        <div class='circularComponent'>4</div>
-                                    </td>
-                                    <td style='padding:2px;'>
-                                        <div class='circularComponent'>5</div>
-                                    </td>
-                                    <td style='padding:2px;'>
-                                        <div class='circularComponent'><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></div>
+                                        <div class='circularComponent'><span class="glyphicon glyphicon-step-forward" (click)="goToLastPage()" aria-hidden="true"></span></div>
                                     </td>
                                     <td style='padding:2px;'>
                                         <div class='itemsPerPageDiv'>
-                                            <div class="dropdown" style="padding-bottom:3px;"  >
-                                                <button  class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span style='margin-right:10px;' >10 items per page</span><span class="caret"></span></button>
-                                                <ul class="dropdown-menu" style='background-color:#EFF8F9 !important;' >
-                                                    <li><a class='itemsPerPageOption' >10</a></li>
-                                                    <li><a class='itemsPerPageOption' >20</a></li>
-                                                    <li><a class='itemsPerPageOption' >50</a></li>
-                                                    <li><a class='itemsPerPageOption' >100</a></li>
-                                                    <li><a class='itemsPerPageOption' >200</a></li>
-                                                    <li><a class='itemsPerPageOption' >500</a></li>
-                                                    <li><a>All</a></li>
+                                            <div class="dropdown dropup" style="padding-bottom:3px;">
+                                                <button class="btn btn-default dropdown-toggle"  type="button" data-toggle="dropdown"  >
+                                                    <span style='margin-right:10px;' >
+                                                        <span>{{displaySelItemsPerPage}}</span>
+                                                        <span *ngIf="displaySelItemsPerPage == 'All'" >Items</span>
+                                                        <span *ngIf="displaySelItemsPerPage != 'All'" >Items Per Page</span>
+                                                    </span>
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" style='background-color:#EFF8F9 !important;'>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(1)">1</a></li>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(2)">2</a></li>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(5)">5</a></li>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(10)">10</a></li>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(25)">25</a></li>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(50)">50</a></li>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(100)">100</a></li>
+                                                    <li><a class='itemsPerPageOption' (click)="setItemsPerPage(150)">150</a></li>
+                                                    <li><a (click)="setItemsPerPage(0)">All</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -85,7 +102,7 @@
                             </td>
                             <td style='width:auto;min-height: 40px;'></td>
                             <td style='width:5%;min-height: 40px;text-align:center;cursor:pointer;'>
-                                <div id='bottomTitleBarRefreshBubble' class="circularComponent">
+                                <div id='bottomTitleBarRefreshBubble' class="circularComponent" (click)="showOverlay()">
                                     <!-- There is CSS for this -->
                                     <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
                                 </div>
@@ -97,3 +114,4 @@
         </tr>
     </table>
 </div>
+

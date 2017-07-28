@@ -1,7 +1,32 @@
-
 <hunter-table-config 
     [headers]="headers" 
-    [hunterTableData]="hunterTableData"
-    (handleGridAction) = "handleGridAction($event)" >
+    [hunterTableData]="hunterTableData" 
+    (createNewAction)="createNewAction($event)"
+    (handleGridAction)="handleGridAction($event)">
 </hunter-table-config>
 
+
+
+<div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
+    tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{popupModalTitle}}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <span style='color:red;'>Are you sure you want to delete?</span> <br><br>
+                <table style='width:60%;margin-left:20%;margin-bottom:5%;'>
+                    <tr>
+                        <td><button class="btn btn-danger" (click)="deleteSelectedRow()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;Delete</button></td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td><button class="btn btn-primary" (click)="hideModal()"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Close</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
