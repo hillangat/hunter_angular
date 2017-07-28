@@ -16,14 +16,15 @@ export class HunterTableConfig implements OnInit {
     @Input('hunterTableData') hunterTableData:any[];
     private visibleHunterTableData:any[];
     
-    private overIsOn: boolean = false;
-    private selItemsPerPage:number = 1;
-    private displaySelItemsPerPage:string = "1";
+    private overIsOn: boolean = false;    
     private hasNewRowButton:boolean = true;
     private dataBeanName:string = "Task History";
     private calculatedPageNumbers:number = 0;
     private calculatedPageNumberArray:number[] = [];
     private visiblePageNumbers:number[] = [];
+    private itemsPerPage:number[] = [ 4,5,20,50,100,200,500 ];
+    private displaySelItemsPerPage:string = this.itemsPerPage[0]+"";
+    private selItemsPerPage:number = this.itemsPerPage[0];
     private maxVisiblePageNos:number = 3;
     private totalRowNum:number = 0;
     private currentPageNo:number = 1;
@@ -37,7 +38,7 @@ export class HunterTableConfig implements OnInit {
 
     }
 
-    ngOnInit(){
+    ngOnInit(){        
         this.initializeDataGrid();
     }
 

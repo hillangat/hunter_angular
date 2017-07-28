@@ -10,5 +10,6 @@ export type HunterTableConfig = {
     dataType:string,
     currentOrder:boolean,
     isActionCol:boolean,
-    actionColIconName:string
+    actionColIconName:string,
+    width:string
 }

@@ -11,6 +11,6 @@ export interface TableConfig{
     orderType:string;
     selDataIds:any[];
     data:any[];
-    
+        
 }
 

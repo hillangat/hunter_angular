@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { HunterTableConfig } from '../../beans/hunter-table-configs';
 import { taskHistory } from '../../data/mocked-task-history';
+import { HunterTableConfig } from '../../beans/hunter-table-configs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -18,14 +18,14 @@ export class HomeComponent{
 
 
   headers:Array<HunterTableConfig> = [
-    {"index":0, "headerId":'historyId',"dataId":'historyId',"displayName":'ID',"sortable":true,"show":true,"bootstrapIconName":null,"dataType":'number','currentOrder':false,'isActionCol':false,'actionColIconName':null },
-    {"index":1, "headerId":'evenName',"dataId":'historyId',"displayName":'Event Name',"sortable":true,"show":true,"bootstrapIconName":'search',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null },
-    {"index":2, "headerId":'eventMessage',"dataId":'historyId',"displayName":'Event Message',"sortable":true,"show":true,"bootstrapIconName":'remove',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null },
-    {"index":3, "headerId":'eventDate',"dataId":'historyId',"displayName":'Event Date',"sortable":true,"show":true,"bootstrapIconName":'calendar',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null },
-    {"index":4, "headerId":'eventUser',"dataId":'historyId',"displayName":'Event User',"sortable":true,"show":true,"bootstrapIconName":'user',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null },
-    {"index":5, "headerId":'eventStatus',"dataId":'historyId',"displayName":'Status',"sortable":true,"show":true,"bootstrapIconName":'clock',"dataType":'string','currentOrder':true,'isActionCol':false,'actionColIconName':null },
-    {"index":5, "headerId":'edit',"dataId":'historyId',"displayName":'Edit',"sortable":false,"show":false,"bootstrapIconName":'edit',"dataType":'string','currentOrder':false,'isActionCol':true,'actionColIconName':'pencil' },
-    {"index":5, "headerId":'delete',"dataId":'historyId',"displayName":'Delete',"sortable":false,"show":false,"bootstrapIconName":'remove',"dataType":'string','currentOrder':false,'isActionCol':true,'actionColIconName':'remove' }
+    {"index":0, "headerId":'historyId',"dataId":'historyId',"displayName":'ID',"sortable":true,"show":true,"bootstrapIconName":null,"dataType":'number','currentOrder':false,'isActionCol':false,'actionColIconName':null,width:'80px' },
+    {"index":1, "headerId":'evenName',"dataId":'historyId',"displayName":'Event Name',"sortable":true,"show":true,"bootstrapIconName":'search',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null,width:null},
+    {"index":2, "headerId":'eventMessage',"dataId":'historyId',"displayName":'Event Message',"sortable":true,"show":true,"bootstrapIconName":'remove',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null,width:null},
+    {"index":3, "headerId":'eventDate',"dataId":'historyId',"displayName":'Event Date',"sortable":true,"show":true,"bootstrapIconName":'calendar',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null,width:null},
+    {"index":4, "headerId":'eventUser',"dataId":'historyId',"displayName":'Event User',"sortable":true,"show":true,"bootstrapIconName":'user',"dataType":'string','currentOrder':false,'isActionCol':false,'actionColIconName':null,width:null},
+    {"index":5, "headerId":'eventStatus',"dataId":'historyId',"displayName":'Status',"sortable":true,"show":true,"bootstrapIconName":'clock',"dataType":'string','currentOrder':true,'isActionCol':false,'actionColIconName':null,width:null},
+    {"index":5, "headerId":'edit',"dataId":'historyId',"displayName":'Edit',"sortable":false,"show":false,"bootstrapIconName":'edit',"dataType":'string','currentOrder':false,'isActionCol':true,'actionColIconName':'pencil',width:null},
+    {"index":5, "headerId":'delete',"dataId":'historyId',"displayName":'Delete',"sortable":false,"show":false,"bootstrapIconName":'remove',"dataType":'string','currentOrder':false,'isActionCol':true,'actionColIconName':'remove',width:null}
   ]
 
   hunterTableData = [
