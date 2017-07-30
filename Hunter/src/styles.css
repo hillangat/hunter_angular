@@ -27,7 +27,7 @@ hr {
 }
 
 body{
-  min-height: 600px;
+  min-height: 500px;
 }
 
 .hunterButton{
@@ -46,4 +46,14 @@ body{
     color:#185454;
     text-decoration: none;
 }
+
+.panel-heading, .panel-footer,.breadcrumb{
+  background-color: #E3F0F2 !important;  
+}
+.panel-default{
+  border:1px solid #D4EAEE !important;
+}
+
+ 
+
 

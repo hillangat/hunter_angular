@@ -1,11 +1,4 @@
-#taskFieldsForm{
-    width:60%;
-    margin:1.5%;
-    border:1px solid #D2E5E8;
-    background-color:#F9FEFF !important;
-    padding:5%;
-    border-radius: 5px;
-}
+
 
 small{
     color:red;
@@ -15,4 +8,9 @@ small{
 #taskFieldsForm input {
     font-family: Courier New, Courier, monospace;
     font-size: 16px;
+    
+}
+
+input{
+    border:1px solid #E6F1F3 !important;
 }

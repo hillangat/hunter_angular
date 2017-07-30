@@ -1,7 +1,3 @@
-<br/>
-<br/>
-<br/>
-
 <div id="overlay" [style.display]="overIsOn ? 'block':'none'">
     <div class='hunterOverlayProgressBArDiv'>
         <img src="../../assets/images/loadingSpinner.gif" style="width:75px;height:75px;">
@@ -15,7 +11,7 @@
         <tr>
             <td>
                 <div class='hunterMasterTableTitleBar'>
-                    <button (click)="displayNewCreationWidget()" class="btn hunterButton" style='margin:3px;' *ngIf="hasNewRowButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Add New {{dataBeanName}}</button>
+                    <button (click)="onClickButton('NewRecord',-1)" class="btn hunterButton" style='margin:3px;' *ngIf="hasNewRowButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Add New {{dataBeanName}}</button>
                 </div>
             </td>
         </tr>
