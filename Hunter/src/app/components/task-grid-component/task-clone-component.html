@@ -1,30 +1,16 @@
-<br>
-<br>
-
-
-
-<hunter-table-config 
-    #hunterTable
-    [headers]="headers" 
-    [hunterTableData]="tasks" 
-    (handleGridAction)="handleGridAction($event)">
-</hunter-table-config>
-
-
-
 <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
     tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pull-left"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; {{cloneTitle}}</h4>
+                <h4 class="modal-title pull-left"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; {{title}}</h4>
                 <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
-                    <form novalidate id="taskFieldsForm">
+                <h4 style='color:red;'>
+                    <form  novalidate id="taskFieldsForm">
                         <div class="form-group">
                             <label for="taskName" style="color:#41ABBC;font-size:13px;">New Task Name</label>
                             <input style="border:1px solid #E6F1F3 !important;" class="form-control input-sm" id="taskName" type="text" placeholder="Enter Task Name..">
@@ -47,22 +33,12 @@
                             </small>
                         </div>
                     </form>
-                </div>
-                <div id="confirmTaskDelete" *ngIf="modalAction == 'DeleteTask'">
-                    <h3 style="color:red;">The selected task will be deleted<br/> Are you sure?</h3>
-                </div>
-                <div id="processTask" *ngIf="modalAction == 'ProcessTask'">
-                    <h3 style="color:green;">The selected action will be submitted for processing.<br>
-                        Are you sure?
-                    </h3>
-                </div>
+                </h4>
             </div>
             <div class="modal-footer">
-                <button [class]="getActionButtonClass()" (click)="performSelAction()" (click)="hunterTable.initializeDataGrid()"><span [class]="getActionIcon()" aria-hidden="true"></span>&nbsp;{{selActionDispName}}</button>
+                <button class="btn btn-success" (click)="cloneSelectedTask()"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;Clone</button>
                 <button class="btn btn-primary" (click)="hideModal()"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Close</button>
             </div>
         </div>
     </div>
 </div>
-
-

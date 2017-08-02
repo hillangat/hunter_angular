@@ -7,13 +7,13 @@ export class LoginService{
     
     isUserLoggedIn  = false;
     loginURL:string = "localhost:8080/Hunter/restservices/client/tasks/tasks";    
-    userServe:boolean = false;
+    useServer:boolean = false;
        
 
     constructor( private http:Http ){}
     
     public login( user:User ){              
-        if( this.userServe ){
+        if( this.useServer ){
             this.isUserLoggedIn = false;        
             var headers = this.getHeaders();
             let creds   = this.getCredString(user);

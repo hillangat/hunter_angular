@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { TasksService } from '../../services/tasks-service';
 import { ActivatedRoute } from '@angular/router';
 import { taskDetailStates } from '../../beans/task-detail-states';
+import { TasksHistoryHeaders } from '../../data/task-history-headers';
+import { HunterTableConfig } from '../../beans/hunter-table-configs';
+
 
 
 
@@ -15,11 +18,19 @@ export class TaskDetailComponent implements OnInit {
 
     task: any;
     isEditMode:boolean = false;
+
+    currFunc:string = null;
+    currDataId:number = null;
+    index:number;
+
+    
     
     private taskId: number;
     private sub: any;
     private moneySign: string = '$';
+    
     private history: any[];
+    private historyHeaders:Array<HunterTableConfig> = TasksHistoryHeaders;
     
     
 

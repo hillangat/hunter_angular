@@ -42,10 +42,11 @@ export class HunterTableConfig implements OnInit {
         this.initializeDataGrid();
     }
 
-    initializeDataGrid(){
+    public initializeDataGrid(){
         this.calculatePageNumbers();
         this.redrawBubblePages();
         this.updateVisibleHunterTableData();
+        console.log( 'Table initialized!!!' );
     }
 
     calculatePageNumbers(){

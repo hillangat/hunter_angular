@@ -1,0 +1,16 @@
+.alertServiceBoby{
+    z-index: 1999;
+    position:fixed;
+    top:0;
+    right:0;
+    text-align: right;
+    padding:10px;
+    margin:5px;
+    min-width: 300px;    
+}
+
+.alert{
+    min-width: 100px !important;
+    position:relative;
+    text-align: left;
+}

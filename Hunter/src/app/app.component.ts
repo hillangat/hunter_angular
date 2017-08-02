@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginService } from './services/login-service';
 import { TasksService } from './services/tasks-service';
+
+
 
 @Component({
   selector: 'app-root',
@@ -8,7 +10,9 @@ import { TasksService } from './services/tasks-service';
   styleUrls: ['./app.component.css'],
   providers:[ LoginService, TasksService ]  
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+
+  
 
   constructor( private loginService:LoginService, private taskService:TasksService ){}
 
@@ -22,6 +26,10 @@ export class AppComponent implements OnInit {
 
   logout(){
     return this.loginService.logout();  
+  }
+
+  ngOnDestroy(){
+    
   }
 
 

@@ -32,9 +32,9 @@ body{
 
 .hunterButton{
   background-color:#EFF8F9 !important;
-  border:1px solid #C2E8E5 !important;
+  border:1px solid #DAE5E4 !important;
   border-radius: 4px !important;
-  color:#5A9595;
+  color:#217695;
 }
 
 .hunterTable_ thead tr th{
@@ -47,11 +47,15 @@ body{
     text-decoration: none;
 }
 
-.panel-heading, .panel-footer,.breadcrumb{
+.panel-heading, .panel-footer,.breadcrumb,.modal-header,.modal-footer{
   background-color: #E3F0F2 !important;  
 }
 .panel-default{
   border:1px solid #D4EAEE !important;
+}
+
+.modal-header,.modal-footer{
+  border-radius: 5px !important;
 }
 
  

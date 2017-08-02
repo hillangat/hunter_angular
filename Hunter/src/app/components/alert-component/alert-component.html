@@ -1,0 +1,18 @@
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2 col-md-offset-10 alertServiceBoby" *ngIf="alerts.length > 0" >
+            <table style="width:100%;border-collapse: collapse" >
+                <tr *ngFor="let alert of alerts; let i=index;">
+                    <td style="margin:0px;" >
+                        <div [class]="getClassByAlertType(alert)" role="alert">
+                            <button (click)="removeAlert(i)" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            {{alert.message}}    
+                        </div>
+                    </td>
+                </tr>        
+            </table>
+        </div>        
+    </div>
+</div>
