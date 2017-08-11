@@ -9,7 +9,6 @@ import { FirebaseService } from './services/firebase-service';
 import { AlertService } from './services/alert-service';
 import { NavbarComponent } from './components/navbar-component/navbar-component';
 import { FooterComponent } from './components/footer-component/footer-component';
-import { TaskCloneComponent } from './components/task-grid-component/task-clone-component';
 import { TaskGridComponent } from './components/task-grid-component/task-grid-component';
 import { HomeComponent } from './components/home/home';
 import { LoginComponent } from './components/login-component/login-component';
@@ -21,6 +20,8 @@ import { TaskFieldsEditComponent } from './components/task-fields/task-fields-ed
 import { TasksGroupsComponent } from './components/task-groups/task-groups-component';
 import { HunterTableConfig } from './components/hunter-table-widgets/hunter-table-config';
 import { AlertComponent } from './components/alert-component/alert-component';
+import { ConfirmComponent } from './components/confirm-component/confirm-component';
+import { CloneTaskComponent } from './components/clone-task-component/clone-task-component';
 
 
 
@@ -41,7 +42,6 @@ import { AppRoutingModule }     from './app-routing.module';
     NavbarComponent,
     FooterComponent,
     TaskGridComponent,
-    TaskCloneComponent,
     HomeComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -51,7 +51,9 @@ import { AppRoutingModule }     from './app-routing.module';
     TaskFieldsEditComponent,
     TasksGroupsComponent,
     HunterTableConfig,
-    AlertComponent
+    AlertComponent,
+    ConfirmComponent,
+    CloneTaskComponent
   ],
   imports: [
     BrowserModule,

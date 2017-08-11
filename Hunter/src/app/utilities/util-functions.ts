@@ -3,7 +3,7 @@
 
 export const utilFuncs = {
     
-    "constains": function(value, array: string[]) {
+    "constains": function(value, array: any[]) {
         if (array == null || array.length == 0)
             return false;
         for (var i = 0; i < array.length; i++) {
@@ -12,7 +12,7 @@ export const utilFuncs = {
         }
         return false;
     },
-    "arrayCSV": function( array: string[] ){
+    "arrayCSV": function( array: any[] ){
         if (array == null || array.length == 0)
             return null;
         var csv:string = '';

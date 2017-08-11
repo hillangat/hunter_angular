@@ -1,10 +1,13 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { TasksService } from '../../services/tasks-service';
 import { taskGroups } from '../../data/mocked-task-groups';
 import { HunterTableConfig } from '../../beans/hunter-table-configs';
 import { TasksGroupHeaders } from '../../data/task-groups-headers';
 import { ActivatedRoute,Router } from '@angular/router';
+import { AlertService } from '../../services/alert-service';
+import { Alert, AlertType } from '../../beans/alert';
+
 
 @Component({
     moduleId:module.id,
@@ -16,6 +19,8 @@ import { ActivatedRoute,Router } from '@angular/router';
 export class TasksGroupsComponent{
     
      @Input() taskGroups: any;     
+    @ViewChild('confirmAlert') confirmAlertComponent;
+    
      taskGroups_ :any = taskGroups;
      addingGroup:boolean = false;
      headers : HunterTableConfig[] = TasksGroupHeaders;
@@ -24,9 +29,12 @@ export class TasksGroupsComponent{
     currDataId:number = null;
     index:number;
     popupModalTitle:string = 'Delete Task History';
+    confirmingDelete:boolean = false;
+
+    
      
 
-    constructor( private taskService:TasksService,private route:ActivatedRoute,  private router: Router ){
+    constructor( private taskService:TasksService,private route:ActivatedRoute,  private router: Router,private alertService:AlertService  ){
 
     }
 
@@ -60,7 +68,7 @@ export class TasksGroupsComponent{
             this.setAddingGroup();
             break;
         case 'delete' : 
-          alert( 'Deleting...' + this.currDataId );
+          this.confirmingDelete = true;
           break;
         case 'edit' : 
           alert( 'Editing...' + this.currDataId );
@@ -86,6 +94,49 @@ export class TasksGroupsComponent{
             this.index = i;
           }
         }
+  }
+
+  getCurrentDataId(){
+    return this.currDataId;
+  }
+
+  closeConfirmAlertModal(){
+    this.confirmingDelete = false;
+  }
+
+  onConfirm( params:any[] ){
+    console.log( JSON.stringify(params) );    
+    let type = params[0];
+    let marker = params[1];
+    let dataId = params[2];
+    
+    if( marker == 'RemoveGroup' && type == 'yes' ){      
+      this.removeGroupWithId( dataId );
+      this.confirmAlertComponent.hideModal();
+    }else if( marker == 'RemoveGroup' && type == 'no' ){
+      this.confirmAlertComponent.hideModal();
+    }
+
+  }
+
+  removeGroupWithId( groupId:number ){
+    
+    if( this.taskGroups && this.taskGroups.length > 0 ){
+      var index = -1;
+      for( var i=0; i<this.taskGroups.length; i++ ){
+        var group = this.taskGroups[i];
+        console.log( "group.groupId = " + group.groupId );
+        if( group.groupId == groupId ){
+          index = i;
+          break;
+        }
+      }
+      if( index != -1 ){
+        this.taskGroups.splice( index, 1 );
+        console.log( 'splicing....' );
+        this.alertService.success('Task group successfully deleted', false);
+      }
+    }
   }
 
 

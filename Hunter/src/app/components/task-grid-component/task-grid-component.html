@@ -5,12 +5,21 @@
 
 <hunter-table-config 
     #hunterTable
+    [dataBeanName] = "'Task'"
     [headers]="headers" 
     [hunterTableData]="tasks" 
     (handleGridAction)="handleGridAction($event)">
 </hunter-table-config>
 
 
+
+<div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
+    <clone-task [taskId]="currDataId" [isModalShown] = true #cloneTask></clone-task>
+</div>
+
+
+
+<!--
 
 <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
     tabindex="-1" role="dialog" aria-hidden="true">
@@ -23,40 +32,21 @@
                 </button>
             </div>
             <div class="modal-body">
+                
                 <div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
-                    <form novalidate id="taskFieldsForm">
-                        <div class="form-group">
-                            <label for="taskName" style="color:#41ABBC;font-size:13px;">New Task Name</label>
-                            <input style="border:1px solid #E6F1F3 !important;" class="form-control input-sm" id="taskName" type="text" placeholder="Enter Task Name..">
-                            <small>
-                                
-                            </small>
-                        </div>
-                        <div class="form-group">
-                            <label for="taskName" style="color:#41ABBC;font-size:13px;">New Task Name</label>
-                            <input style="border:1px solid #E6F1F3 !important;" class="form-control input-sm" id="taskName" type="text" placeholder="Enter Task Name..">
-                            <small>
-                                
-                            </small>
-                        </div>
-                        <div class="form-group">
-                            <label for="taskName" style="color:#41ABBC;font-size:13px;">New Task Name</label>
-                            <input style="border:1px solid #E6F1F3 !important;" class="form-control input-sm" id="taskName" type="text" placeholder="Enter Task Name..">
-                            <small>
-                                
-                            </small>
-                        </div>
-                    </form>
+                    <clone-task [taskId]="currDataId" ></clone-task>
                 </div>
-                <div id="confirmTaskDelete" *ngIf="modalAction == 'DeleteTask'">
+                
+                <div *ngIf="modalAction == 'DeleteTask'"  id="confirmTaskDelete" >
                     <h3 style="color:red;">The selected task will be deleted<br/> Are you sure?</h3>
                 </div>
-                <div id="processTask" *ngIf="modalAction == 'ProcessTask'">
+                
+                <div *ngIf="modalAction == 'ProcessTask'" id="processTask" >
                     <h3 style="color:green;">The selected action will be submitted for processing.<br>
                         Are you sure?
                     </h3>
                 </div>
-            </div>
+            </div>            
             <div class="modal-footer">
                 <button [class]="getActionButtonClass()" (click)="performSelAction()" (click)="hunterTable.initializeDataGrid()"><span [class]="getActionIcon()" aria-hidden="true"></span>&nbsp;{{selActionDispName}}</button>
                 <button class="btn btn-primary" (click)="hideModal()"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Close</button>
@@ -64,5 +54,7 @@
         </div>
     </div>
 </div>
+
+-->
 
 

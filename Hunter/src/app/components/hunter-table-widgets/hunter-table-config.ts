@@ -6,7 +6,7 @@ import { taskHistory } from '../../data/mocked-task-history';
     selector: 'hunter-table-config',
     templateUrl: 'hunter-table-config.html',
     styleUrls: ['hunter-table-config.css'],
-    inputs: ['headers', 'hunterTableData']
+    inputs: ['headers', 'hunterTableData', 'dataBeanName']
 })
 export class HunterTableConfig implements OnInit {
 
@@ -14,11 +14,11 @@ export class HunterTableConfig implements OnInit {
     @Output() createNewAction = new EventEmitter<string>();
 
     @Input('hunterTableData') hunterTableData:any[];
-    private visibleHunterTableData:any[];
+    @Input('dataBeanName') dataBeanName:string = 'Record';
     
+    private visibleHunterTableData:any[];    
     private overIsOn: boolean = false;    
-    private hasNewRowButton:boolean = true;
-    private dataBeanName:string = "Task History";
+    private hasNewRowButton:boolean = true;    
     private calculatedPageNumbers:number = 0;
     private calculatedPageNumberArray:number[] = [];
     private visiblePageNumbers:number[] = [];
@@ -29,7 +29,7 @@ export class HunterTableConfig implements OnInit {
     private totalRowNum:number = 0;
     private currentPageNo:number = 1;
     private startIndex:number = 0 ;
-    private endIndex:number = 0 
+    private endIndex:number = 0;
 
     
 
@@ -200,6 +200,7 @@ export class HunterTableConfig implements OnInit {
         this.overIsOn = true;  
         setTimeout(() => {
            this.overIsOn = false;
+           this.initializeDataGrid();
         }, 1500);
     }
 

@@ -1,9 +1,14 @@
 <div class="panel panel-default" *ngIf="addingGroup">
     <div class="panel-heading">
-        <h3 class="panel-title" style='color:#136398;' >Add Task Group</h3>
+        <h3 class="panel-title" style='color:#136398;'>Add Task Group</h3>
     </div>
     <div class="panel-body">
-        
+        <form>
+            <div class="form-group">
+                <label for="groupName">Group Name:</label>
+                <input type="text" class="form-control" id="groupName" placeholder="Enter group name...">
+            </div>            
+        </form>
     </div>
     <div class="panel-footer">
         <button (click)="addGroupAndSave()" class="btn hunterButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Selected Group</button>
@@ -11,9 +16,26 @@
 </div>
 
 
-<hunter-table-config 
-    *ngIf="!addingGroup"
+<hunter-table-config *ngIf="!addingGroup" 
     [headers]="headers" 
-    [hunterTableData]="taskGroups_"
+    [hunterTableData]="taskGroups_" 
     (handleGridAction)="handleGridAction($event)">
 </hunter-table-config>
+
+
+<confirm-alert
+    *ngIf="confirmingDelete"
+    [message] = "'The selected task group will be deleted. Are you sure?'"
+    [title] = "'Delete Selected Task Group'"
+    [yesText] = "'Delete'"
+    [noText] = "'Cancel'"
+    [yesBootstrapClass] = "'glyphicon glyphicon-remove'"
+    [noBootstrapClass] = "'glyphicon glyphicon-ban-circle'"
+    [yesButtonClass] = "'btn btn-danger'"
+    [noButtonClass] = "'btn btn-primary'"
+    [marker]="'RemoveGroup'"
+    [dataId]="getCurrentDataId()"
+    (onConfirm)="onConfirm($event)"
+
+    #confirmAlert
+></confirm-alert>

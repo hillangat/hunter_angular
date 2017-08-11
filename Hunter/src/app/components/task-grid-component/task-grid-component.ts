@@ -5,7 +5,6 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TasksGridHeaders } from '../../data/tasks-grid-headers';
 import { HunterTableConfig } from '../../beans/hunter-table-configs';
 import { ActivatedRoute,Router } from '@angular/router';
-import { TaskCloneComponent } from './task-clone-component';
 import { AlertService } from '../../services/alert-service';
 import { Alert, AlertType } from '../../beans/alert';
 
@@ -20,6 +19,7 @@ import { Alert, AlertType } from '../../beans/alert';
 })
 export class TaskGridComponent implements OnInit {
 
+  @ViewChild('cloneTask') cloneTaskComponent;
   
   tasks:any[];
   headers:HunterTableConfig[] = TasksGridHeaders;
@@ -94,8 +94,9 @@ export class TaskGridComponent implements OnInit {
           break;
         case 'clone' :
           this.modalAction = "CloneTask"
+          this.cloneTaskComponent.showModal();
           this.selActionDispName = "Clone";
-          this.showModal();
+          this.showModal(); 
           break;
       }
 

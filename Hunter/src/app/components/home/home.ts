@@ -98,6 +98,18 @@ export class HomeComponent{
       this.hideModal();
     }
 
+    getCurrentDataId(){
+      return 999;
+    }
+
+    onConfirm(params:string[]){
+      let type = params[0];
+      let marker = params[1];
+      let dataId = params[2];      
+      //alert( 'marker = ' + marker + ', ' + 'dataId = ' + dataId + ', type = ' + type );
+      //this.onConfirm.emit([type, this.marker, this.dataId]);
+    }
+
 
   @ViewChild('autoShownModal') 
   public autoShownModal:ModalDirective;

@@ -7,7 +7,6 @@ import { LoginComponent } from './components/login-component/login-component';
 import { TasksMessageComponent } from './components/task-message/task-message';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found';
 import { TaskDetailComponent } from './components/task-detail/task-detail-component';
-import { TaskCloneComponent } from './components/task-grid-component/task-clone-component';
 
 
 const routes: Routes = [
@@ -16,7 +15,6 @@ const routes: Routes = [
   { path:'login',  component: LoginComponent },
   { path:'tasks',  component: TaskGridComponent },
   { path:'home',   component: HomeComponent },
-  { path:'clone',  component: TaskCloneComponent },
 
   { path:'taskdetails/:taskId', component: TaskDetailComponent },  
   { path:'taskmessage/:taskId', component: TasksMessageComponent },

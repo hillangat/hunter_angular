@@ -22,13 +22,13 @@ export class AlertComponent implements OnInit, OnDestroy {
             console.log(JSON.stringify(alert));
             if (!alert) return;
             this.alerts.push(alert);
-            this.setAlertDeath(this.alerts);
+            this.setAlertLifeTime(this.alerts);
         });
     }
 
-    setAlertDeath(alerts_:Alert[]) {
+    setAlertLifeTime(alerts:Alert[]) {
         setTimeout(function () {
-            alerts_.splice(0,1);
+            alerts.splice(0,1);
         }, this.alertLifeTime);
     }
 
