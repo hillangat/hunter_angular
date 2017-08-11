@@ -13,13 +13,15 @@ import { Alert, AlertType } from '../../beans/alert';
     moduleId:module.id,
     selector:'task-groups',
     templateUrl:'task-groups-component.html',
-    styleUrls:['task-groups-component.css'] 
+    styleUrls:['task-groups-component.css'],
+    inputs:['taskGroups']
 })
 
 export class TasksGroupsComponent{
     
-     @Input() taskGroups: any;     
-    @ViewChild('confirmAlert') confirmAlertComponent;
+    @Input('taskGroups') taskGroups: any;     
+    @ViewChild('confirmAlert') confirmAlert;
+    @ViewChild('hunterTableConfig') hunterTableConfig;
     
      taskGroups_ :any = taskGroups;
      addingGroup:boolean = false;
@@ -68,7 +70,7 @@ export class TasksGroupsComponent{
             this.setAddingGroup();
             break;
         case 'delete' : 
-          this.confirmingDelete = true;
+          this.confirmingDelete = true;          
           break;
         case 'edit' : 
           alert( 'Editing...' + this.currDataId );
@@ -87,8 +89,8 @@ export class TasksGroupsComponent{
   }
 
   getCurrGroupIdAndSetIndex(){
-        for(var i=0; i<this.taskGroups.length; i++ ){
-          var groupId = this.taskGroups[i].groupId;
+        for(var i=0; i<this.taskGroups_.length; i++ ){
+          var groupId = this.taskGroups_[i].groupId;
           if( groupId == this.currDataId ){
             this.currDataId = groupId;
             this.index = i;
@@ -102,42 +104,43 @@ export class TasksGroupsComponent{
 
   closeConfirmAlertModal(){
     this.confirmingDelete = false;
+    this.confirmAlert.hideModal();
+    this.hunterTableConfig.initializeDataGrid();
   }
 
   onConfirm( params:any[] ){
+    
     console.log( JSON.stringify(params) );    
+    
     let type = params[0];
     let marker = params[1];
     let dataId = params[2];
     
-    if( marker == 'RemoveGroup' && type == 'yes' ){      
+    if( marker == 'RemoveGroup' && type == 'yes' ){ 
       this.removeGroupWithId( dataId );
-      this.confirmAlertComponent.hideModal();
+      this.closeConfirmAlertModal();
     }else if( marker == 'RemoveGroup' && type == 'no' ){
-      this.confirmAlertComponent.hideModal();
+      this.closeConfirmAlertModal();      
     }
 
   }
 
   removeGroupWithId( groupId:number ){
-    
-    if( this.taskGroups && this.taskGroups.length > 0 ){
       var index = -1;
-      for( var i=0; i<this.taskGroups.length; i++ ){
-        var group = this.taskGroups[i];
-        console.log( "group.groupId = " + group.groupId );
+      for( var i=0; i<this.taskGroups_.length; i++ ){        
+        var group = this.taskGroups_[i];
+        console.log( JSON.stringify(group) );
         if( group.groupId == groupId ){
           index = i;
           break;
         }
       }
       if( index != -1 ){
-        this.taskGroups.splice( index, 1 );
-        console.log( 'splicing....' );
+        this.taskGroups_.splice( index, 1 );
+        this.taskGroups.splice(index,1);
         this.alertService.success('Task group successfully deleted', false);
       }
     }
-  }
 
 
 }

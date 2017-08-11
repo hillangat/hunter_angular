@@ -19,7 +19,9 @@
 <hunter-table-config *ngIf="!addingGroup" 
     [headers]="headers" 
     [hunterTableData]="taskGroups_" 
-    (handleGridAction)="handleGridAction($event)">
+    (handleGridAction)="handleGridAction($event)"
+    #hunterTableConfig
+    >
 </hunter-table-config>
 
 

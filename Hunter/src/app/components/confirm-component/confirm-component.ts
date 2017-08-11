@@ -67,7 +67,7 @@ export class ConfirmComponent implements OnInit {
 
     
 
-    hideModal(){        
+    hideModal(){             
         this.showAlert = false;
     }
 
