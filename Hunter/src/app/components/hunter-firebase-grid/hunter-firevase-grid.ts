@@ -1,5 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter,ElementRef } from '@angular/core';
 import { taskHistory } from '../../data/mocked-task-history';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component({
     moduleId: module.id,
@@ -13,11 +14,15 @@ export class HunterTableConfig implements OnInit {
     @Output() handleGridAction = new EventEmitter<any[]>();
     @Output() createNewAction = new EventEmitter<string>();
 
-    @Input('hunterTableData') hunterTableData:any[];
     @Input('dataBeanName') dataBeanName:string = 'Record';
+
+    private hunterTableData:any[];
+    private hunterTableDataObservable:FirebaseListObservable<any[]> = null;
+    private dataPath:string = "/tasks";
+    
     
     private visibleHunterTableData:any[];    
-    private overlayIsOn: boolean = false;    
+    private overIsOn: boolean = false;    
     private hasNewRowButton:boolean = true;    
     private calculatedPageNumbers:number = 0;
     private calculatedPageNumberArray:number[] = [];
@@ -32,12 +37,15 @@ export class HunterTableConfig implements OnInit {
     private endIndex:number = 0;
 
     
-    constructor( private ref: ElementRef ){
+    constructor( private ref: ElementRef, private database: AngularFireDatabase){
         console.log( 'Starting it up...' );
     }
 
     ngOnInit(){        
-        this.initializeDataGrid();
+        this.database.list(this.dataPath).subscribe(data => {
+            this.hunterTableData = data;
+            this.initializeDataGrid();
+        });        
     }
 
     public initializeDataGrid(){
@@ -184,20 +192,23 @@ export class HunterTableConfig implements OnInit {
         return datum[header.dataId]
     }
 
-    onClickButton(funcName: string, dataId: any) {        
+    onClickButton(funcName: string, dataId: any) {
+        console.log(funcName);
         this.handleGridAction.emit([funcName, dataId]);
         this.initializeDataGrid();
     }
 
-    removeOverlay() {        
-        this.overlayIsOn = false;
+    removeOverlay() {
+        this.overIsOn = false;
     }
 
     showOverlay() {      
-        this.overlayIsOn = true;  
-        this.onClickButton( 'refresh', -1 );
+        this.overIsOn = true;  
+        setTimeout(() => {
+           this.overIsOn = false;
+           this.initializeDataGrid();
+        }, 1500);
     }
-    
 
     
     
@@ -244,8 +255,6 @@ export class HunterTableConfig implements OnInit {
         endNo   =  startNo + this.visibleHunterTableData.length - 1;
         return startNo + '-' + endNo;
     }
-    
-    
 
 
    

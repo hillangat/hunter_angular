@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoginService } from '../../services/login-service';
+import { FirebaseService } from '../../services/firebase-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,20 +7,24 @@ import { Router } from '@angular/router';
   selector:'navbar-component',
   templateUrl:'navbar-component.html',
   styleUrls:['navbar-component.css'],
-  providers:[]
+  providers:[ FirebaseService ]
 })
 
 export class NavbarComponent{
 
   loggedInOutText:string = "Log Out";
+  private userFullName:string = "";
 
-  constructor( private router:Router, private loginService:LoginService ){
+  constructor( private router:Router, private firebaseService:FirebaseService ){
     this.loggedInOutText = "Log Out";
   }
 
+  ngOnInit(){
+    this.userFullName = this.firebaseService.getUserFullName();    
+  }
+
   logInOrOut(){
-    this.loginService.logout();
-    this.router.navigateByUrl('/login');
+    this.firebaseService.logout();    
   }
 
   

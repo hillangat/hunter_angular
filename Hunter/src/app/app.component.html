@@ -1,6 +1,14 @@
 
-<alerts></alerts>
-<navbar-component></navbar-component>
-<router-outlet></router-outlet>
-<footer-component></footer-component>
+<div *ngIf="firebaseService.isUserLoggedIn()" >
+    <alerts></alerts>
+    <navbar-component></navbar-component>
+    <router-outlet></router-outlet>
+    <footer-component></footer-component>    
+</div>
+
+<div *ngIf="!firebaseService.isUserLoggedIn()" >
+    <h1 style="cursor:pointer;text-align:center;width:100%;margin-top:30%;" 
+    (click)="firebaseService.login()" >Sign in
+</h1>    
+</div>
 

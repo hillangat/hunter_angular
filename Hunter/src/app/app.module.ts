@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+
 import { AppComponent } from './app.component';
 import { FirebaseService } from './services/firebase-service';
 import { AlertService } from './services/alert-service';
@@ -22,6 +23,7 @@ import { HunterTableConfig } from './components/hunter-table-widgets/hunter-tabl
 import { AlertComponent } from './components/alert-component/alert-component';
 import { ConfirmComponent } from './components/confirm-component/confirm-component';
 import { CloneTaskComponent } from './components/clone-task-component/clone-task-component';
+import { ClientComponent } from './components/client-component/client-component';
 
 
 
@@ -34,6 +36,11 @@ import {HttpModule} from '@angular/http';
 
 
 import { AppRoutingModule }     from './app-routing.module';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { TestTaskGridComponentComponent } from './components/test-task-grid-component/test-task-grid-component.component';
 
 
 @NgModule({
@@ -53,19 +60,28 @@ import { AppRoutingModule }     from './app-routing.module';
     HunterTableConfig,
     AlertComponent,
     ConfirmComponent,
-    CloneTaskComponent
+    CloneTaskComponent,
+    ClientComponent,
+    TestTaskGridComponentComponent
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),    
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
     BrowserModule,
     FormsModule,        
     AppRoutingModule,
     HttpModule,    
-    ReactiveFormsModule,
+    ReactiveFormsModule,    
     AlertModule.forRoot(),
     ModalModule.forRoot(),
     DatepickerModule.forRoot()
+    
   ],
-  providers: [ FirebaseService,AlertService ],
+  providers: [ 
+    FirebaseService,
+    AlertService    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

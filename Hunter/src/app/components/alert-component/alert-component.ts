@@ -18,8 +18,7 @@ export class AlertComponent implements OnInit, OnDestroy {
     private alertLifeTime: number = 4500;
 
     constructor(private alertService: AlertService) {
-        this.subscription = this.alertService.getAlert().subscribe(alert => {
-            console.log(JSON.stringify(alert));
+        this.subscription = this.alertService.getAlert().subscribe(alert => {            
             if (!alert) return;
             this.alerts.push(alert);
             this.setAlertLifeTime(this.alerts);

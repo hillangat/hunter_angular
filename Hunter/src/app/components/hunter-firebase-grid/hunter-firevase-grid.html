@@ -1,0 +1,114 @@
+<div id="overlay" [style.display]="overIsOn ? 'block':'none'">
+        <div class='hunterOverlayProgressBArDiv'>
+            <img src="../../assets/images/loadingSpinner.gif" style="width:75px;height:75px;">
+        </div>
+    </div>
+    
+    
+    <div class='hunterTableContainer'>
+    
+        <table class='hunterMasterTable'>
+            <tr>
+                <td>
+                    <div class='hunterMasterTableTitleBar'>
+                        <button (click)="onClickButton('NewRecord',-1)" class="btn hunterButton" style='margin:3px;' *ngIf="hasNewRowButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Create New {{dataBeanName}}</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="height:500px;overflow-y: scroll;" >
+                        <table class='hunterTable'>
+                            <thead class='hunterTableHead'>
+                                <tr class='hunterTableTr'>
+                                    <th class='hunterTableTd' *ngFor="let header of headers" [style.width]="header.width">
+                                        <span (click)="showFilterDropdown()" class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"
+                                            *ngIf="!header.isActionCol"></span>
+                                        <span class='hunterHeaderText headerSpan cursorPointer'>{{header.displayName}}</span>
+                                        <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.isActionCol && header.sortable && header.currentOrder"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="visibleHunterTableData.length > 0 ">
+                                <tr *ngFor="let datum of visibleHunterTableData">
+                                    <td class='hunterTableTd' *ngFor="let header of headers" [style.text-align]="header.isActionCol || header.headerId == header.dataId ? 'center':'left'">
+                                        <span *ngIf="!header.isActionCol">{{ datum[header.headerId] }}</span>
+                                        <div (click)="onClickButton(header.headerId, datum[header.dataId])" class='btn hunterButton' *ngIf="header.isActionCol" style="margin:auto;">
+                                            <span [class]="getBootstrapClass(header.actionColIconName)"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>                
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class='hunterMasterTableTitleBar'>
+                        <table style='width:100%;min-height:40px;'>
+                            <tr style='min-height:40px;'>
+                                <td id='bottomTitleBarPagesTd' style='width:60%;min-height: 40px;padding-left:10px;'>
+                                    <table>
+                                        <td style='padding:2px;'>
+                                            <div class='circularComponent'><span class="glyphicon glyphicon-step-backward" (click)="goToPageOne()" aria-hidden="true"></span></div>
+                                        </td>
+                                        <td style='padding:2px;'>
+                                            <div class='circularComponent'><span class="glyphicon glyphicon-chevron-left" (click)="goToPreviousPage()" aria-hidden="true"></span></div>
+                                        </td>
+                                        <td style='padding:2px;' *ngFor="let pageNo of visiblePageNumbers; let i = index" (click)="setCurrentPage(visiblePageNumbers[i])">
+                                            <div class='circularComponent' [style.background-color]="getStyleForSelPageCircle(visiblePageNumbers[i])">{{visiblePageNumbers[i]}}</div>
+                                        </td>
+                                        <td style='padding:2px;'>
+                                            <div class='circularComponent'><span class="glyphicon glyphicon-chevron-right" (click)="goToNextPage()" aria-hidden="true"></span></div>
+                                        </td>
+                                        <td style='padding:2px;'>
+                                            <div class='circularComponent'><span class="glyphicon glyphicon-step-forward" (click)="goToLastPage()" aria-hidden="true"></span></div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown dropup" >
+                                                <button style="color:#217695;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="true">{{currentPageNo}} of {{calculatedPageNumberArray.length}}
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style='background-color:#EFF8F9 !important;'>
+                                                    <li class="dropdown-header" style="border-bottom:1px solid #DCE2E2;color:#217695 !important;" >Select Page to Show</li>
+                                                    <li *ngFor="let page of calculatedPageNumberArray; let i=index" (click)="setCurrentPage(calculatedPageNumberArray[i])" ><a class='itemsPerPageOption'>{{calculatedPageNumberArray[i]}}</a></li>                                                
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td style='padding:2px;'>
+                                            <div class='itemsPerPageDiv'>
+                                                <div class="dropdown dropup" style="padding-bottom:3px;">
+                                                    <button style="color:#217695;" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                                        <span style='margin-right:10px;' >
+                                                            <span>{{displaySelItemsPerPage}}</span>
+                                                            <span *ngIf="displaySelItemsPerPage == 'All'" >Items</span>
+                                                            <span *ngIf="displaySelItemsPerPage != 'All'" >Items Per Page</span>
+                                                        </span>
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" style='background-color:#EFF8F9 !important;'>
+                                                        <li class="dropdown-header" style="border-bottom:1px solid #DCE2E2;color:#217695 !important;" >Select Items Per Page</li>
+                                                        <li *ngFor="let perPage of itemsPerPage; let i=index"><a class='itemsPerPageOption' (click)="setItemsPerPage(itemsPerPage[i])">{{itemsPerPage[i]}}</a></li>
+                                                        <li><a class='itemsPerPageOption' (click)="setItemsPerPage(0)">All</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </table>
+                                </td>
+                                <td style='width:auto;min-height:40px;text-align:right;padding-right:3%;'><span style="color:#217695;">Showing {{getCurrentPageCount()}} of {{hunterTableData.length}} Records </span></td>
+                                <td style='width:5%;min-height: 40px;text-align:center;cursor:pointer;'>
+                                    <div id='bottomTitleBarRefreshBubble' class="circularComponent" (click)="showOverlay()">
+                                        <!-- There is CSS for this -->
+                                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>

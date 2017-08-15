@@ -1,6 +1,7 @@
 import { Region } from './region';
 
 export class Client{
+  $key?:number;
   clientId:number;
 	clientTotalBudget:number;
 	receiver:boolean;

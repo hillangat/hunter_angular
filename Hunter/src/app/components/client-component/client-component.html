@@ -1,0 +1,30 @@
+
+
+<br>
+<br>
+
+
+<hunter-table-config 
+    #hunterTable
+    [dataBeanName] = "'Client'"
+    [headers]="headers" 
+    [hunterTableData]="clients" 
+    (handleGridAction)="handleGridAction($event)">
+</hunter-table-config>
+
+
+<confirm-alert
+    *ngIf="confirmingDelete"
+    [message] = "'The selected client will be deleted. Are you sure?'"
+    [title] = "'Delete Selected Client'"
+    [yesText] = "'Delete'"
+    [noText] = "'Cancel'"
+    [yesBootstrapClass] = "'glyphicon glyphicon-remove'"
+    [noBootstrapClass] = "'glyphicon glyphicon-ban-circle'"
+    [yesButtonClass] = "'btn btn-danger'"
+    [noButtonClass] = "'btn btn-primary'"
+    [marker]="'RemoveClient'"
+    [dataId]="getCurrentDataId()"
+    (onConfirm)="onConfirm($event)"
+    #confirmAlert
+></confirm-alert>

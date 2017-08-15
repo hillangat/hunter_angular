@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoginService } from './services/login-service';
 import { TasksService } from './services/tasks-service';
+import { FirebaseService } from './services/firebase-service';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { clients } from './data/mocked-clients';
 
 
 
@@ -8,24 +10,28 @@ import { TasksService } from './services/tasks-service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers:[ LoginService, TasksService ]  
+  providers:[ TasksService,FirebaseService ]  
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  
+  clients: FirebaseListObservable<any[]>;  
 
-  constructor( private loginService:LoginService, private taskService:TasksService ){}
+  constructor( private firebaseService:FirebaseService,private database: AngularFireDatabase ){}
 
   ngOnInit(){    
-    console.log( this.taskService.getClientTaskData() );
+    if( !this.firebaseService.isUserLoggedIn() ){
+      this.firebaseService.login();
+    }else{
+      this.clients = this.database.list('/clients');
+      if( this.clients != null ){
+        console.log(JSON.stringify(this.clients));
+      }
+    }
   }
 
-  isLoggedIn(){
-    return this.loginService.isLoggedIn();
-  }
-
-  logout(){
-    return this.loginService.logout();  
+  
+  isUserLoggedIn(){
+    return this.firebaseService.isUserLoggedIn();
   }
 
   ngOnDestroy(){
