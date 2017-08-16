@@ -11,7 +11,7 @@
             </div>
             <div class="modal-body">                
                 <div id="cloneTaskContent" >    
-                    <form [formGroup]="cloneTaskFieldsForm" novalidate (ngSubmit)="clone(taskFieldsForm.value, taskFieldsForm.valid)" id="taskFieldsForm">
+                    <form [formGroup]="cloneTaskFieldsForm" novalidate (ngSubmit)="clone(taskFieldsForm.value, taskFieldsForm.valid)" id="taskFieldsForm" style="width:80%;margin-left:10%;" >
                         <div class="form-group">
                             <label for="newTaskName" style="color:#41ABBC;font-size:1.05em;;">New Task Name</label>
                             <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="newTaskName" formControlName="newTaskName"

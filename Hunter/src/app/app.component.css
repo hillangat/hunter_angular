@@ -1,0 +1,13 @@
+#signInButton:hover{    
+    font-size: 31px;
+    font-weight: bold;
+}
+
+#signInButton{
+    cursor:pointer;
+    text-align:center;
+    width:100%;            
+    font-size: 30px;
+    color:rgb( 49,126,172 );
+        
+}

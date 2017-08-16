@@ -1,10 +1,14 @@
 
 
-<br>
-<br>
 
+<br/>
+
+<ol class="breadcrumb" style='border-bottom : 1px solid #CEE5E8 !important;'>
+    <li style="color:rgb( 49,126,172 );">Hunter Clients</li>
+</ol>
 
 <hunter-table-config 
+    *ngIf="clients.length > 0"
     #hunterTable
     [dataBeanName] = "'Client'"
     [headers]="headers" 
@@ -28,3 +32,75 @@
     (onConfirm)="onConfirm($event)"
     #confirmAlert
 ></confirm-alert>
+
+
+<div     
+    [config]="{ show: false,backdrop: 'static',keyboard:false }" 
+    (onHidden)="onHidden()" 
+    bsModal 
+    #clientEditModal="bs-modal" 
+    class="modal fade" 
+    tabindex="-1"
+    role="dialog" 
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; {{clientModeTitle}}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div id="modalBodyContent">
+                    <form [formGroup]="clientEditForm" novalidate (ngSubmit)="save(clientEditForm.value, clientEditForm.valid)" id="clientEditForm" style="width:80%;margin-left:10%;" >
+                            <div class="form-group">
+                                <label for="firstName" style="color:rgb( 49,126,172 );font-size:1.05em;;">Client First Name</label>
+                                <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="firstName" formControlName="firstName" type="text" placeholder="Enter Client First Name...">
+                                <small [hidden]="clientEditForm.controls.firstName.valid || (clientEditForm.controls.firstName.pristine && !submitted)">
+                                    {{ customValidatorMessages.firstName }}
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                    <label for="lastName" style="color:rgb( 49,126,172 );font-size:1.05em;">Client Last Name</label>
+                                    <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="lastName" formControlName="lastName" type="text" placeholder="Enter Client Last Name...">
+                                    <small [hidden]="clientEditForm.controls.lastName.valid || (clientEditForm.controls.lastName.pristine && !submitted)">
+                                        {{ customValidatorMessages.lastName }}
+                                    </small>
+                            </div>
+                            <div class="form-group">
+                                    <label for="userName" style="color:rgb( 49,126,172 );font-size:1.05em;">Client User Name </label>
+                                    <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="email" formControlName="userName" type="text" placeholder="Enter Client User Name...">
+                                    <small [hidden]="clientEditForm.controls.userName.valid || (clientEditForm.controls.userName.pristine && !submitted)">
+                                        {{ customValidatorMessages.userName }}
+                                    </small>
+                            </div>
+                            <div class="form-group">
+                                    <label for="email" style="color:rgb( 49,126,172 );font-size:1.05em;">Client Email Address </label>
+                                    <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="email" formControlName="email" type="text" placeholder="Enter Client Email...">
+                                    <small [hidden]="clientEditForm.controls.email.valid || (clientEditForm.controls.email.pristine && !submitted)">
+                                        {{ customValidatorMessages.email }}
+                                    </small>
+                            </div>
+                            <div class="form-group">
+                                    <label for="budget" style="color:rgb( 49,126,172 );font-size:1.05em;">Client Budget </label>
+                                    <input style="border:1px solid #E6F1F3 !important;width:25%;" class="form-control" id="budget" formControlName="budget" type="number" >
+                                    <small [hidden]="clientEditForm.controls.budget.valid || (clientEditForm.controls.budget.pristine && !submitted)">
+                                        {{ customValidatorMessages.budget }}
+                                    </small>
+                            </div>
+                            <div class="form-group">
+                                    <label for="receiver" style="color:rgb( 49,126,172 );font-size:1.05em;">Is Client a Receiver?</label> <br/>                                
+                                    <input type="checkbox" value="" id="receiver" formControlName="receiver" >                                    
+                            </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" (click)="saveClientData()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;Submit</button>
+                <button class="btn btn-primary" (click)="closeClientEditModal()"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Close</button>
+            </div>
+        </div>
+    </div>
+</div>

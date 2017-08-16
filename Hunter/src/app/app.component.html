@@ -6,9 +6,7 @@
     <footer-component></footer-component>    
 </div>
 
-<div *ngIf="!firebaseService.isUserLoggedIn()" >
-    <h1 style="cursor:pointer;text-align:center;width:100%;margin-top:30%;" 
-    (click)="firebaseService.login()" >Sign in
-</h1>    
+<div *ngIf="!firebaseService.isUserLoggedIn()" style="width:100%;height:100%;padding-top:20%;text-align:center;" >
+    <span id="signInButton" (click)="firebaseService.login()" >Sign in </span>    
 </div>
 

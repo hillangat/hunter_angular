@@ -65,8 +65,6 @@ export class ConfirmComponent implements OnInit {
             return this.noBootstrapClass;
     }
 
-    
-
     hideModal(){             
         this.showAlert = false;
     }

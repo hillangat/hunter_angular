@@ -69,6 +69,19 @@ export const ClientHeaders:HunterTableConfig[] = [
         'width':null 
     },{
         "index":5, 
+        "headerId":'clientTotalBudget',
+        "dataId":'clientId',
+        "displayName":'Budget',
+        "sortable":false,
+        "show":true,
+        "bootstrapIconName":null,
+        "dataType":'string',
+        'currentOrder':false,
+        'isActionCol':false,
+        'actionColIconName':null,
+        'width':null 
+    },{
+        "index":6, 
         "headerId":'cretDate',
         "dataId":'clientId',
         "displayName":'Created On',
@@ -81,7 +94,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'actionColIconName':null,
         'width':null 
     },{
-        "index":6, 
+        "index":7, 
         "headerId":'createdBy',
         "dataId":'clientId',
         "displayName":'Created By',
@@ -94,7 +107,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'actionColIconName':null,
         'width':null 
     },{
-        "index":7, 
+        "index":8, 
         "headerId":'lastUpdate',
         "dataId":'clientId',
         "displayName":'Last Update',
@@ -107,8 +120,8 @@ export const ClientHeaders:HunterTableConfig[] = [
         'actionColIconName':null,
         'width':null 
     },{
-        "index":8, 
-        "headerId":'lastUpdatedBy',
+        "index":9, 
+        "headerId":'clientTotalBudget',
         "dataId":'clientId',
         "displayName":'Updated By',
         "sortable":false,
@@ -120,7 +133,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'actionColIconName':null,
         'width':null 
     },{
-        "index":9, 
+        "index":10, 
         "headerId":'edit',
         "dataId":'clientId',
         "displayName":'Edit',
@@ -133,7 +146,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'actionColIconName':'pencil',
         'width':null 
     },{
-        "index":9, 
+        "index":11, 
         "headerId":'delete',
         "dataId":'clientId',
         "displayName":'Delete',
@@ -144,6 +157,19 @@ export const ClientHeaders:HunterTableConfig[] = [
         'currentOrder':false,
         'isActionCol':true,
         'actionColIconName':'remove',
+        'width':null 
+    },{
+        "index":12, 
+        "headerId":'tasks',
+        "dataId":'clientId',
+        "displayName":'Tasks',
+        "sortable":false,
+        "show":true,
+        "bootstrapIconName":null,
+        "dataType":'string',
+        'currentOrder':false,
+        'isActionCol':true,
+        'actionColIconName':'tasks',
         'width':null 
     }
 ]

@@ -1,7 +1,7 @@
 
 
 
-<div *ngIf="showAlert"  [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
+<div *ngIf="showAlert"  [config]="{ show: true, backdrop: 'static' }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
     tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -12,11 +12,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                
                 <div id="modalBodyContent" >
                     <h4 style="color:#125B66;" >{{ message }}</h4>
                 </div>
-                
             </div>            
             <div class="modal-footer">
                 <button [class]="getActionButtonClass('yes')" (click)="onConfirm_('yes')" ><span [class]="getBoostrapIcon('yes')" aria-hidden="true"></span>&nbsp;{{yesText}}</button>
