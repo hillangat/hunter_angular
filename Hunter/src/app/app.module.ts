@@ -24,6 +24,7 @@ import { AlertComponent } from './components/alert-component/alert-component';
 import { ConfirmComponent } from './components/confirm-component/confirm-component';
 import { CloneTaskComponent } from './components/clone-task-component/clone-task-component';
 import { ClientComponent } from './components/client-component/client-component';
+import { ClickOutsideDirective } from './common/click-outside-directive';
 
 
 
@@ -62,7 +63,8 @@ import { TestTaskGridComponentComponent } from './components/test-task-grid-comp
     ConfirmComponent,
     CloneTaskComponent,
     ClientComponent,
-    TestTaskGridComponentComponent
+    TestTaskGridComponentComponent,
+    ClickOutsideDirective
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),    

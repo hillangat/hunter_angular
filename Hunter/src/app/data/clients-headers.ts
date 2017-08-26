@@ -121,7 +121,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'width':null 
     },{
         "index":9, 
-        "headerId":'clientTotalBudget',
+        "headerId":'createdBy',
         "dataId":'clientId',
         "displayName":'Updated By',
         "sortable":false,
@@ -134,6 +134,19 @@ export const ClientHeaders:HunterTableConfig[] = [
         'width':null 
     },{
         "index":10, 
+        "headerId":'tasks',
+        "dataId":'clientId',
+        "displayName":'Tasks',
+        "sortable":false,
+        "show":true,
+        "bootstrapIconName":null,
+        "dataType":'string',
+        'currentOrder':false,
+        'isActionCol':true,
+        'actionColIconName':'tasks',
+        'width':null 
+    },{
+        "index":11, 
         "headerId":'edit',
         "dataId":'clientId',
         "displayName":'Edit',
@@ -146,7 +159,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'actionColIconName':'pencil',
         'width':null 
     },{
-        "index":11, 
+        "index":12, 
         "headerId":'delete',
         "dataId":'clientId',
         "displayName":'Delete',
@@ -157,19 +170,6 @@ export const ClientHeaders:HunterTableConfig[] = [
         'currentOrder':false,
         'isActionCol':true,
         'actionColIconName':'remove',
-        'width':null 
-    },{
-        "index":12, 
-        "headerId":'tasks',
-        "dataId":'clientId',
-        "displayName":'Tasks',
-        "sortable":false,
-        "show":true,
-        "bootstrapIconName":null,
-        "dataType":'string',
-        'currentOrder':false,
-        'isActionCol':true,
-        'actionColIconName':'tasks',
         'width':null 
     }
 ]

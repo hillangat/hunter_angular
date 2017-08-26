@@ -129,6 +129,10 @@ export class HomeComponent{
   }
 
 
+  clickedOutside(){
+    alert( 'User clicked outside!!!!!!!!!!' );
+  }
+
 
 
 

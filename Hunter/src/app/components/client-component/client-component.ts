@@ -253,21 +253,18 @@ export class ClientComponent implements OnInit{
 
             setTimeout(() => {
                 if( this.currClientMode == 'edit' ){  
-                    this.clientsObservable.update(client.$key, client).catch(error => {
-                        console.log( 'Error updating client >>>>>>>>>>>> '+ JSON.stringify(error) );
+                    this.clientsObservable.update(client.$key, client).catch(error => {                        
                         this.removeOverlayAndAlert(error.message, 'Error');
                     }).then(() => {                        
                         this.removeOverlayAndAlert('Successfully updated client', 'Success');
                     });
                 }else if( this.currClientMode == 'NewRecord' ){
-                    this.clientsObservable.push( client ).catch(error => {
-                        console.error( 'Error creating a new client >>>>>>>>>>>> '+ JSON.stringify(error) );
+                    this.clientsObservable.push( client ).catch(error => {                        
                         this.removeOverlayAndAlert(error.message, 'Error');
                     }).then(() => {
                         this.removeOverlayAndAlert('Successfully saved client', 'Success');
                     });
-                }else{
-                    console.log( 'curr client mode invalid!!! >>>> ' + this.currClientMode );
+                }else{                    
                     this.removeOverlayAndAlert('Error occurred while trying to save client data!!', 'Error');
                 }
             }, 800);
