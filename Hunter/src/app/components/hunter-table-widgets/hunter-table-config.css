@@ -143,6 +143,13 @@
     border-bottom: 1px solid red !important;
 }
 
+.popOverFilterText{
+    padding:8px;
+    background-color:#F6FEFF;
+    border:2px solid #DEEBEF;
+    border-radius:4px;
+}
+
 
 
 

@@ -3,11 +3,15 @@ import { NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 
 import { AppComponent } from './app.component';
 import { FirebaseService } from './services/firebase-service';
+import { InMemHeroService } from './services/in-memory-workflow-tree';
 import { AlertService } from './services/alert-service';
+import { WorkflowTreeService } from './services/workflow-tree-service';
 import { NavbarComponent } from './components/navbar-component/navbar-component';
 import { FooterComponent } from './components/footer-component/footer-component';
 import { TaskGridComponent } from './components/task-grid-component/task-grid-component';
@@ -25,6 +29,7 @@ import { ConfirmComponent } from './components/confirm-component/confirm-compone
 import { CloneTaskComponent } from './components/clone-task-component/clone-task-component';
 import { ClientComponent } from './components/client-component/client-component';
 import { ClickOutsideDirective } from './common/click-outside-directive';
+
 
 
 
@@ -67,6 +72,7 @@ import { TestTaskGridComponentComponent } from './components/test-task-grid-comp
     ClickOutsideDirective
   ],
   imports: [
+    PopoverModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),    
     AngularFireDatabaseModule,
     AngularFireAuthModule,
@@ -77,12 +83,14 @@ import { TestTaskGridComponentComponent } from './components/test-task-grid-comp
     ReactiveFormsModule,    
     AlertModule.forRoot(),
     ModalModule.forRoot(),
-    DatepickerModule.forRoot()
+    DatepickerModule.forRoot(),
+    InMemoryWebApiModule.forRoot(InMemHeroService, { delay: 0 })
     
   ],
   providers: [ 
     FirebaseService,
-    AlertService    
+    AlertService,
+    WorkflowTreeService   
   ],
   bootstrap: [AppComponent]
 })

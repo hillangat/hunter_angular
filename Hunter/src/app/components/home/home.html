@@ -12,6 +12,42 @@
     (handleGridAction)="handleGridAction($event)">
 </hunter-table-config>
 
+
+<ng-template #popTemplate >
+    <div #pop="" >
+        <form>
+            <span dropdown (onShown)="onShown()" (onHidden)="onFilterDropdownHidden()" (isOpenChange)="isOpenChange()">
+                <a href dropdownToggle (click)="false">Click me for a dropdown, yo!</a>
+                <ul *dropdownMenu class="dropdown-menu">
+                    <li *ngFor="let choice of items">
+                        <a class="dropdown-item" href="#">{{choice}}</a>
+                    </li>
+                </ul>
+            </span>
+            <div>
+                <label>Filter</label>
+                <input type="text" name='hntrTblCnfgFltrTxt' id='hntrTblCnfgFltrTxt' placeholder="Enter Filter Text..." >
+            </div>
+        </form> 
+        <br> 
+        <div class='text-right' >
+            <button class='btn btn-default' (click)="filterAndClosePopup()" ><span class="glyphicon glyphicon-filter" aria-hidden="true"></span>&nbsp;Filter</button>
+            <button class='btn btn-default' (click)="closePopupButton.click()" ><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Cancel</button>
+        </div>         
+    </div>
+</ng-template>
+
+<a 
+    aria-hidden="true"
+    #closePopupButton
+    [popover]="popTemplate" 
+    popoverTitle="Filter By Name"
+    placement="bottom"
+    style='margin-left:10%; margin-top:100px;'>
+<span class="glyphicon glyphicon-filter" ></span>
+</a>
+
+
 <!--
 <confirm-alert
     [message] = "'The selected text will be deleted. Are you sure?'"
@@ -59,3 +95,6 @@
 </div>
 
 -->
+
+<button class="btn btn-default" (click)="loadWorkflowTrees()" >Load Trees</button>
+<span *ngFor="let step of worflowSteps; let i=index" >Hey</span>

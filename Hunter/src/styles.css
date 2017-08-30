@@ -53,9 +53,14 @@ body{
     text-decoration: none;
 }
 
-.panel-heading, .panel-footer,.breadcrumb,.modal-header,.modal-footer{
+.panel-heading, .panel-footer,.breadcrumb,.modal-header,.modal-footer, .popover-title, .popover-arrow .arrow{
   background-color: #E3F0F2 !important;  
 }
+
+.popover-content{
+  background-color: #EEF7F9 !important;  
+}
+
 .panel-default{
   border:1px solid #D4EAEE !important;
 }

@@ -1,13 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { taskHistory } from '../../data/mocked-task-history';
 import { HunterTableConfig } from '../../beans/hunter-table-configs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { AlertService } from '../../services/alert-service';
+import { Alert, AlertType } from '../../beans/alert';
+import { WorkflowTreeService } from '../../services/workflow-tree-service';
+import { WorkflowStep } from '../../beans/workflow-tree';
 
 @Component({
     moduleId:module.id,
     selector:'home-component',
     templateUrl: 'home.html',
-    styleUrls: ['home.css']    
+    styleUrls: ['home.css'],
+    providers:[ WorkflowTreeService ] 
 })
 export class HomeComponent{
 
@@ -15,6 +20,8 @@ export class HomeComponent{
   currDataId:number = null;
   index:number;
   popupModalTitle:string = 'Delete Task History';
+
+  @ViewChild('closePopupButton') closePopupButton:ElementRef;
 
 
   headers:Array<HunterTableConfig> = [
@@ -58,7 +65,7 @@ export class HomeComponent{
   
  
 
-  constructor( ){}
+  constructor( private alertService:AlertService, private workflowTreeService:WorkflowTreeService ){}
 
     createNewAction( dataBeanId:string ){      
       if( dataBeanId == 'Task History' ){
@@ -126,6 +133,46 @@ export class HomeComponent{
  
   public onHidden():void {
     this.isModalShown = false;
+  }
+
+  
+  private worflowSteps:WorkflowStep[];
+
+
+  public loadWorkflowTrees(){
+    this.workflowTreeService.getWorkflowTrees().then( workflowSteps => {
+      this.worflowSteps = workflowSteps;
+      alert( 'Done!!' );
+    } );
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+  }
+
+
+
+
+
+
+
+  public filterAndClosePopup(){
+    this.closePopupButton.nativeElement.click();   
+    this.alertService.success( 'Successfully filtered', false ); 
+  }
+
+  public items: string[] = ['The first choice!',
+  'And another choice for you.', 'but wait! A third!'];
+
+  public onFilterDropdownHidden(): void {
+    console.log('Dropdown is hidden');
+  }
+  public onShown(): void {
+    console.log('Dropdown is shown');
+  }
+  public isOpenChange(): void {
+    console.log('Dropdown state is changed');
   }
 
 

@@ -22,7 +22,12 @@
                         <thead class='hunterTableHead'>
                             <tr class='hunterTableTr'>
                                 <th class='hunterTableTd' *ngFor="let header of headers" [style.width]="header.width">
-                                    <span (click)="showFilterDropdown()" class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"
+                                    <span                                         
+                                        [id] = header.headerId
+                                        [popover]="popTemplate" 
+                                        popoverTitle="Filter By {{header.displayName}}"
+                                        placement="bottom"
+                                        (click)="showFilterDropdown()" class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"
                                         *ngIf="!header.isActionCol"></span>
                                     <span class='hunterHeaderText headerSpan cursorPointer'>{{header.displayName}}</span>
                                     <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.isActionCol && header.sortable && header.currentOrder"></span>
@@ -112,3 +117,21 @@
         </tr>
     </table>
 </div>
+
+
+
+<ng-template #popTemplate >
+    <div #pop="" class="hunterBackground" >
+        <form>            
+            <div>
+                <label>Filter</label>
+                <input type="text" class="popOverFilterText" name='hntrTblCnfgFltrTxt' id='hntrTblCnfgFltrTxt' placeholder="Enter Filter Text..." >
+            </div>
+        </form> 
+        <br> 
+        <div class='text-right' >
+            <button class='btn btn-default' (click)="filterAndClosePopup()" ><span class="glyphicon glyphicon-filter" aria-hidden="true"></span>&nbsp;Filter</button>
+            <button class='btn btn-default' (click)="closePopupButton.click()" ><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Close</button>
+        </div>         
+    </div>
+</ng-template>

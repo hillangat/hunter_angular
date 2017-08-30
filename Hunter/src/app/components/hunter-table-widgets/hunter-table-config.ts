@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter,ElementRef } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter,ElementRef, ViewChild } from '@angular/core';
 import { taskHistory } from '../../data/mocked-task-history';
 
 @Component({
@@ -15,6 +15,8 @@ export class HunterTableConfig implements OnInit {
 
     @Input('hunterTableData') hunterTableData:any[];
     @Input('dataBeanName') dataBeanName:string = 'Record';
+    
+    @ViewChild('closePopupButton') closePopupButton:ElementRef;
     
     private visibleHunterTableData:any[];    
     private overlayIsOn: boolean = false;    
@@ -249,7 +251,22 @@ export class HunterTableConfig implements OnInit {
 
 
    
+    public filterAndClosePopup(){
+        this.closePopupButton.nativeElement.click();           
+    }
 
+    public items: string[] = ['The first choice!',
+    'And another choice for you.', 'but wait! A third!'];
+
+    public onFilterDropdownHidden(): void {
+    console.log('Dropdown is hidden');
+    }
+    public onShown(): void {
+    console.log('Dropdown is shown');
+    }
+    public isOpenChange(): void {
+    console.log('Dropdown state is changed');
+    }
 
 
 
