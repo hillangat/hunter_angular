@@ -9,5 +9,6 @@ export class WorkflowStep{
     parentId:number;
     drools:string;
     committeeFlag:boolean;
+    adhocs:WorkflowStep[]
     
 }

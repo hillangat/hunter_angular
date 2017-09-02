@@ -4,7 +4,7 @@ import { environment } from '../environments/environment';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+
 
 
 import { AppComponent } from './app.component';
@@ -39,6 +39,7 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 import {HttpModule} from '@angular/http';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 
 import { AppRoutingModule }     from './app-routing.module';
@@ -84,7 +85,7 @@ import { TestTaskGridComponentComponent } from './components/test-task-grid-comp
     AlertModule.forRoot(),
     ModalModule.forRoot(),
     DatepickerModule.forRoot(),
-    InMemoryWebApiModule.forRoot(InMemHeroService, { delay: 0 })
+    InMemoryWebApiModule.forRoot(InMemHeroService, { delay:2500 })
     
   ],
   providers: [ 

@@ -76,7 +76,6 @@ export class HomeComponent{
 
     handleGridAction(params:any[]){
       
-      
       this.currFunc   = params[0]; 
       this.currDataId = params[1];
       this.index      = -1;     
@@ -103,6 +102,7 @@ export class HomeComponent{
     deleteSelectedRow(){
       this.hunterTableData.splice( this.index, 1 );
       this.hideModal();
+      this.alertService.success( 'Successfully closed the modal', false );
     }
 
     getCurrentDataId(){
@@ -137,24 +137,40 @@ export class HomeComponent{
 
   
   private worflowSteps:WorkflowStep[];
+  private loadingTrees:boolean = false;
+  private errorOccurred:boolean = false;
+  private selStep:WorkflowStep;
 
 
   public loadWorkflowTrees(){
-    this.workflowTreeService.getWorkflowTrees().then( workflowSteps => {
-      this.worflowSteps = workflowSteps;
-      alert( 'Done!!' );
-    } );
+    this.loadingTrees  = true;
+    this.worflowSteps  = null;
+    this.errorOccurred = false;
+    this.workflowTreeService.getWorkflowTrees().then( 
+      data => {        
+        this.worflowSteps  = data; 
+        this.loadingTrees  = false;
+        this.errorOccurred = false;
+      },
+      error => {
+        this.alertService.error('Error: ' + error.status + ':' + error.statusText, false);
+        this.loadingTrees  = false;
+        this.errorOccurred = true;
+      }
+    );
   }
+  
+  public showStepDetails( step:WorkflowStep ){
+    this.selStep = step;
+    this.popupModalTitle = "Workflow Tree Step Details";
+    this.showModal();
+  }
+
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
   }
-
-
-
-
-
 
 
   public filterAndClosePopup(){

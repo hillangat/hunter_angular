@@ -96,5 +96,60 @@
 
 -->
 
-<button class="btn btn-default" (click)="loadWorkflowTrees()" >Load Trees</button>
-<span *ngFor="let step of worflowSteps; let i=index" >Hey</span>
+<br>
+<br>
+
+
+
+<div class="container">
+    <div class="jumbotron">      
+      <div>
+            <h2>Workflow Trees:</h2> 
+            <button *ngIf="!loadingTrees" class="btn btn-default" (click)="loadWorkflowTrees()" >Load Trees</button>
+      </div>
+      <div *ngIf="loadingTrees" style='margin-top:20px;' ><img src="../../assets/images/loadingSpinner.gif" style="width:30px;height:30px;"></div>
+      <span *ngIf="errorOccurred" style="font-size:15px;color:red;" ><br><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Error occurred while loading workflow trees</span>                   
+      <div style='margin-top:20px;' *ngIf="worflowSteps" >
+          <ul>
+            <li class="treenode" *ngFor="let step of worflowSteps; let i=index" (click)="showStepDetails(step)" >
+                {{ step.stepName }}
+                <ul>
+                    <li *ngFor="let adhoc of step.adhocs; let a=index" >
+                        {{ adhoc.stepName }}
+                     </li>
+                </ul>
+            </li>
+          </ul>        
+      </div>
+
+    </div>    
+  </div>
+  
+
+
+  <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
+  tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title pull-left">{{popupModalTitle}}</h4>
+              <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+                    <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+                <span *ngIf="selStep" >                     
+                    <ul>
+                        <span style='margin:-20px;font-weight: bold;' >{{ selStep.stepName }}</span>
+                        <li *ngFor="let adhoc of selStep.adhocs; let a=index" >
+                            {{ adhoc.stepName }}
+                        </li>
+                    </ul>
+                </span>                              
+          </div>
+          <div class="modal-footer">
+                <button class="btn btn-small btn-default" (click)="hideModal()"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Close</button>
+          </div>
+      </div>
+  </div>
+</div>

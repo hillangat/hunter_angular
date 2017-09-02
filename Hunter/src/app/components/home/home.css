@@ -4,3 +4,21 @@
     padding:4px !important;
 }
 
+
+.treenode{
+    background-color:#F3F3F3;
+    padding:10px;
+    border-radius:3px;
+    border:1px solid #CAD0D2;
+    margin-bottom:4px;
+    cursor:pointer;
+}
+
+.treenode:hover{
+    background-color:#ECEFEF;
+    border:1px solid #B8C0C3;    
+}
+
+.treenodeul{
+    list-style-type: none;
+}
