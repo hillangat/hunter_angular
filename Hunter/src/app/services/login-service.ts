@@ -1,40 +1,32 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import { Http, Headers, RequestOptionsArgs, Response } from '@angular/http';
 import { User } from '../beans/User';
+import { Observable } from 'rxjs/Observable';
+import { ServerResponse } from '../beans/ServerResponse';
 
 @Injectable()
 export class LoginService{
     
-    isUserLoggedIn  = false;
-    loginURL:string = "localhost:8080/Hunter/restservices/client/tasks/tasks";    
-    useServer:boolean = false;
+    loginURL:string = "http://localhost:8080/Hunter/restful/user/login";    
        
-
     constructor( private http:Http ){}
-    
-    public login( user:User ){              
-        if( this.useServer ){
-            this.isUserLoggedIn = false;        
-            var headers = this.getHeaders();
-            let creds   = this.getCredString(user);
 
-            return new Promise((resolve) => {
-                this.http.post(this.loginURL, creds, {headers: headers}).subscribe((data) => {
-                    if(data.json().success) {
-                        let authKey = data.json().token;
-                        window.localStorage.setItem('auth_key', authKey);   
-                        this.isUserLoggedIn = true;                 
-                    }
-                    resolve(this.isUserLoggedIn)
-                })
-            })
-        }else{
-            this.isUserLoggedIn = true;                 
-            return true;
-        }
+    public login( userName: string, password: string ): Observable<ServerResponse[]>{   
+        const opts:any = { headers: this.getHeaders };      
+        const creds:any = this.getCredString( userName, password );             
+        return this.http
+                   .post( this.loginURL, creds, opts )
+                   .map( (response: Response) => response.json().data as ServerResponse[] )
+                   .catch(this.handleError);
     }
 
-    
+    public handleError(error: any) {
+        console.log( 'Error occurred >> ' + JSON.stringify(error) );
+        if (error instanceof Response) {
+            return Observable.throw(error.json().error || 'backend server error');
+        }
+        return Observable.throw(error || 'backend server error');
+    }
 
     public getHeaders():Headers  {
         var headers = new Headers();        
@@ -42,18 +34,14 @@ export class LoginService{
         return headers;
     }
 
-    public getCredString(user:User){
-        var creds   = 'name=' + user.userName + '&password=' + user.password;
+    public getCredString( userName: string, password: string ){
+        var creds   = 'name=' + userName + '&password=' + password;
         return creds;
     }
 
-    public isLoggedIn():boolean{
-        return this.isUserLoggedIn;
-    }
-
+    
     public logout(){
-        window.localStorage.removeItem('auth_key'); 
-        this.isUserLoggedIn = false;
+        window.localStorage.removeItem('auth_key');         
         return true;
     }
 

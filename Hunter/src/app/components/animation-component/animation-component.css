@@ -1,0 +1,20 @@
+#wf-container{
+    width:400%;
+    margin-top:10%;
+    border-radius:4px;
+    padding:10px;    
+    overflow-y: visible;
+    background-color: #81ADB0;
+    padding:10px;
+}
+
+.tableTd{
+    background-color: #A2C8CA;  
+    padding:10px;  
+    max-width:200px;
+    overflow-x: visible;
+}
+
+.current{
+    background-color: #AEDCDF;
+}

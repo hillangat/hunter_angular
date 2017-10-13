@@ -1,14 +1,14 @@
 import { Component, Input, Output, OnInit,ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from '../../services/alert-service';
-import { FirebaseService } from '../../services/firebase-service';
 import { Alert, AlertType } from '../../beans/alert';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { Client } from '../../beans/Client';
 import { ClientHeaders } from '../../data/clients-headers';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { utilFuncs } from '../../utilities/util-functions';
 import { ActivatedRoute,Router } from '@angular/router';
+import { HunterClientService } from "app/services/hunter-client-service";
+import { ServerResponse } from '../../beans/ServerResponse';
+import { Client } from '../../beans/client';
 
 
 
@@ -25,9 +25,7 @@ export class ClientComponent implements OnInit{
 
     @ViewChild('hunterTable') hunterTable;
 
-    private nextClientId:number = 0;
-
-    private clientsObservable: FirebaseListObservable<Client[]>;  
+    private nextClientId:number = 0;    
     private clients:Client[] = [];
     private headers:any[] = ClientHeaders;
     private modalAction:string;
@@ -50,27 +48,42 @@ export class ClientComponent implements OnInit{
     
 
     constructor( 
-        private database:AngularFireDatabase,
         private alertService:AlertService,
         private formBuilder: FormBuilder,
-        private firebaseService:FirebaseService,
         private route:ActivatedRoute,  
-        private router: Router, 
+        private router: Router,
+        private clientsService:HunterClientService
     ){}
 
-    ngOnInit(){        
-        this.clientsObservable = this.database.list('/clients') as FirebaseListObservable<Client[]>; 
-        this.clientsObservable.subscribe(clients_ => {            
-            this.clients = clients_;                        
-            for( var i=0; i<this.clients.length; i++ ){
-                this.nextClientId = this.clients[i].clientId > this.nextClientId ? this.clients[i].clientId : this.nextClientId; 
-            }
-            this.nextClientId++;
-            if( this.hunterTable ){            
-                this.hunterTable.removeOverlay();                            
-            }
-        });
+    ngOnInit(){              
+        this.loadAllClients();
         this.initClientForm();
+    }
+
+    public loadAllClients(){        
+        this.clientsService.getAllClients().then(           
+            ( serverResp: ServerResponse )  => {                
+                console.log( JSON.stringify(serverResp) );
+                if ( serverResp.status === 'Success' ) {
+                    this.clients = serverResp.data as Client[];
+                    for( var i=0; i<this.clients.length; i++ ){
+                        this.nextClientId = this.clients[i].clientId > this.nextClientId ? this.clients[i].clientId : this.nextClientId; 
+                    }
+                    this.nextClientId++;                
+                  }else{
+                    this.alertService.error('Error: ' + serverResp.message, false);                                   
+                  }                
+            },
+            error => {
+                this.alertService.error( JSON.stringify(error) );                
+            }
+        );
+    }
+
+    public removeHuntaTableOverlay(){
+        if( this.hunterTable ){         
+            this.hunterTable.removeOverlay();            
+        }
     }
 
     public getClients(){        
@@ -104,10 +117,7 @@ export class ClientComponent implements OnInit{
             this.clientEditModal.show();
             break;
           case 'refresh' :
-            this.modalAction = "refresh"
-            setTimeout(()=>{
-                this.hunterTable.removeOverlay();            
-            },1500);            
+            this.modalAction = "refresh";                     
             break;
           case 'tasks' :
             this.modalAction = "tasks"
@@ -168,9 +178,8 @@ export class ClientComponent implements OnInit{
     removeClientWithId(clientId: number) {
         let client = this.getClientForClientId(clientId);
         if( client ){
-            this.clientsObservable.remove(client.$key).then(() => {
-                this.alertService.success('Removed client successfully', false);
-                this.hunterTable.initializeDataGrid();
+            this.clientsService.removeClient(client.clientId).then(response => {
+
             });
         }else{
             this.alertService.error('Client with id=' + clientId + ' not found!!');
@@ -243,7 +252,7 @@ export class ClientComponent implements OnInit{
             client.lastUpdatedBy = 'admin';
 
             let newDateStr = this.getFormatedDate( new Date() );            
-            client.lastUpdate = newDateStr;
+            client.updatedOn = newDateStr;
 
             /** If it's a new client, set creation audit info */
             if( this.currClientMode == 'NewRecord' ){
@@ -253,16 +262,17 @@ export class ClientComponent implements OnInit{
 
             setTimeout(() => {
                 if( this.currClientMode == 'edit' ){  
-                    this.clientsObservable.update(client.$key, client).catch(error => {                        
+                    this.clientsService.updateClient(client).catch(error => {                        
                         this.removeOverlayAndAlert(error.message, 'Error');
                     }).then(() => {                        
                         this.removeOverlayAndAlert('Successfully updated client', 'Success');
                     });
                 }else if( this.currClientMode == 'NewRecord' ){
-                    this.clientsObservable.push( client ).catch(error => {                        
+                    this.clientsService.createClient( client ).catch(error => {                        
                         this.removeOverlayAndAlert(error.message, 'Error');
                     }).then(() => {
                         this.removeOverlayAndAlert('Successfully saved client', 'Success');
+                        this.loadAllClients();
                     });
                 }else{                    
                     this.removeOverlayAndAlert('Error occurred while trying to save client data!!', 'Error');

@@ -102,12 +102,12 @@
 
 
 <div class="container">
-    <div class="jumbotron">      
+    <div class="jumbotron" style="min-height: 500px;" >      
       <div>
             <h2>Workflow Trees:</h2> 
             <button *ngIf="!loadingTrees" class="btn btn-default" (click)="loadWorkflowTrees()" >Load Trees</button>
-      </div>
-      <div *ngIf="loadingTrees" style='margin-top:20px;' ><img src="../../assets/images/loadingSpinner.gif" style="width:30px;height:30px;"></div>
+            <img style='margin-top:20px;margin-left:4px;' *ngIf="loadingTrees" src="../../assets/images/loadingSpinner.gif" style="width:30px;height:30px;">
+      </div>      
       <span *ngIf="errorOccurred" style="font-size:15px;color:red;" ><br><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Error occurred while loading workflow trees</span>                   
       <div style='margin-top:20px;' *ngIf="worflowSteps" >
           <ul>
@@ -129,7 +129,7 @@
 
   <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
   tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog modal-md">
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title pull-left">{{popupModalTitle}}</h4>

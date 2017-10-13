@@ -108,7 +108,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'width':null 
     },{
         "index":8, 
-        "headerId":'lastUpdate',
+        "headerId":'updatedOn',
         "dataId":'clientId',
         "displayName":'Last Update',
         "sortable":false,
@@ -121,7 +121,7 @@ export const ClientHeaders:HunterTableConfig[] = [
         'width':null 
     },{
         "index":9, 
-        "headerId":'createdBy',
+        "headerId":'lastUpdatedBy',
         "dataId":'clientId',
         "displayName":'Updated By',
         "sortable":false,

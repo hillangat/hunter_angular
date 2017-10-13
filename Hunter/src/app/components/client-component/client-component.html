@@ -7,12 +7,12 @@
     <li style="color:rgb( 49,126,172 );">Hunter Clients</li>
 </ol>
 
-<hunter-table-config 
+<hunter-table-config
     *ngIf="clients.length > 0"
     #hunterTable
     [dataBeanName] = "'Client'"
     [headers]="headers" 
-    [hunterTableData]="clients" 
+    [hunterTableData]="clients"
     (handleGridAction)="handleGridAction($event)">
 </hunter-table-config>
 

@@ -39,7 +39,7 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 import {HttpModule} from '@angular/http';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+//import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 
 import { AppRoutingModule }     from './app-routing.module';
@@ -48,6 +48,8 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { TestTaskGridComponentComponent } from './components/test-task-grid-component/test-task-grid-component.component';
+import { HunterClientService } from "./services/hunter-client-service";
+import { AnimationComponent } from './components/animation-component/animation-component';
 
 
 @NgModule({
@@ -70,7 +72,8 @@ import { TestTaskGridComponentComponent } from './components/test-task-grid-comp
     CloneTaskComponent,
     ClientComponent,
     TestTaskGridComponentComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    AnimationComponent
   ],
   imports: [
     PopoverModule.forRoot(),
@@ -85,13 +88,13 @@ import { TestTaskGridComponentComponent } from './components/test-task-grid-comp
     AlertModule.forRoot(),
     ModalModule.forRoot(),
     DatepickerModule.forRoot(),
-    InMemoryWebApiModule.forRoot(InMemHeroService, { delay:2500 })
-    
+    //InMemoryWebApiModule.forRoot(InMemHeroService, { delay:2500 })    
   ],
   providers: [ 
     FirebaseService,
     AlertService,
-    WorkflowTreeService   
+    WorkflowTreeService,
+    HunterClientService
   ],
   bootstrap: [AppComponent]
 })

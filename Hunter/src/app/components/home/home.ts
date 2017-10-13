@@ -6,6 +6,7 @@ import { AlertService } from '../../services/alert-service';
 import { Alert, AlertType } from '../../beans/alert';
 import { WorkflowTreeService } from '../../services/workflow-tree-service';
 import { WorkflowStep } from '../../beans/workflow-tree';
+import { ServerResponse } from '../../beans/ServerResponse';
 
 @Component({
     moduleId:module.id,
@@ -147,10 +148,15 @@ export class HomeComponent{
     this.worflowSteps  = null;
     this.errorOccurred = false;
     this.workflowTreeService.getWorkflowTrees().then( 
-      data => {        
-        this.worflowSteps  = data; 
-        this.loadingTrees  = false;
-        this.errorOccurred = false;
+      ( serverResp: ServerResponse ) => {
+        if ( serverResp.status === 'Success' ) {
+          this.worflowSteps  = serverResp.data as WorkflowStep[]; 
+          this.errorOccurred = false;
+        }else{
+          this.errorOccurred = false;
+          this.alertService.error('Error: ' + serverResp.message, false);          
+        }
+        this.loadingTrees  = false;        
       },
       error => {
         this.alertService.error('Error: ' + error.status + ':' + error.statusText, false);
