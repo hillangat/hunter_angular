@@ -1,11 +1,11 @@
 import { Constants } from './Constants';
 
-export class Utility{
+export default class Utility {
 
-  constructor( private cons:Constants ){}
+  public static ITEMS_BASE_URL: string = '/localhost:8080/';
 
-  public getItemsUrlForPath( path:string ) : string {
-    let url = this.cons.ITEMS_BASE_URL + "/" + path;
+  public static getItemsUrlForPath( path:string ) : string {
+    let url = Utility.ITEMS_BASE_URL + "/" + path;
     console.log( url );
     return url;
   }

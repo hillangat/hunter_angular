@@ -2,8 +2,7 @@
 
 
 export const utilFuncs = {
-    
-    "constains": function(value, array: any[]) {
+    constains:  (value, array: any[]) => {
         if (array == null || array.length == 0)
             return false;
         for (var i = 0; i < array.length; i++) {
@@ -12,7 +11,7 @@ export const utilFuncs = {
         }
         return false;
     },
-    "arrayCSV": function( array: any[] ){
+    arrayCSV: ( array: any[] ) => {
         if (array == null || array.length == 0)
             return null;
         var csv:string = '';
@@ -20,7 +19,5 @@ export const utilFuncs = {
             csv = csv.length > 0 ? csv + "," + array[i] : array[i];
         }
         return csv;
-    }
-
-    
+    } 
 }
