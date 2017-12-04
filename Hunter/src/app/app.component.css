@@ -9,5 +9,8 @@
     width:100%;            
     font-size: 30px;
     color:rgb( 49,126,172 );
-        
+}
+
+.breadcrumb {
+    margin-top: 10% !important;
 }

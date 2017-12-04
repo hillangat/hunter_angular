@@ -66,7 +66,6 @@ export class HunterTableConfig implements OnInit {
             return;
         }
 
-        
         /** If there is a decimal, the page no is +1 */
         let pageNo  = this.totalRowNum / this.selItemsPerPage; // 8 divide by 2 = 4
         let decimal = pageNo - Math.floor(pageNo);        
