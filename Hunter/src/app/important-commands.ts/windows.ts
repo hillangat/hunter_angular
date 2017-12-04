@@ -1,6 +1,6 @@
 
-/* 
-Kill the serve in a port 
+/*
+Kill the serve in a port
     RUN COMMAND
     netstat -ano | findstr 4200
     netstat -ano | findstr 3000

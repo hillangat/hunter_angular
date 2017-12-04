@@ -107,21 +107,21 @@
     <div class="jumbotron" style="min-height: 500px;" >      
       <div>
             <h2>Workflow Trees:</h2> 
-            <button *ngIf="!loadingTrees" class="btn btn-default" (click)="loadWorkflowTrees()" >Load Trees</button>
-            <img style='margin-top:20px;margin-left:4px;' *ngIf="loadingTrees" src="../../assets/images/loadingSpinner.gif" style="width:30px;height:30px;">
-      </div>      
+            <button [disabled]='loadingTrees' class="btn btn-default" (click)="loadWorkflowTrees()" >Load Trees</button>
+      </div>
       <span *ngIf="errorOccurred" style="font-size:15px;color:red;" ><br><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Error occurred while loading workflow trees</span>                   
-      <div style='margin-top:20px;' *ngIf="worflowSteps" >
-          <ul>
+      <div style='margin-top:20px;' >
+        <i *ngIf="loadingTrees" class="fa fa-spinner fa-pulse fa-3x fa-fw" style="color:blue;margin-left:25px;"></i>
+        <ul *ngIf="!loadingTrees && worflowSteps" >
             <li class="treenode" *ngFor="let step of worflowSteps; let i=index" (click)="showStepDetails(step)" >
                 {{ step.stepName }}
                 <ul>
                     <li *ngFor="let adhoc of step.adhocs; let a=index" >
                         {{ adhoc.stepName }}
-                     </li>
+                        </li>
                 </ul>
             </li>
-          </ul>        
+        </ul>        
       </div>
 
     </div>    

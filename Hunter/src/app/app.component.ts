@@ -10,15 +10,15 @@ import { clients } from './data/mocked-clients';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers:[ TasksService,FirebaseService ]  
+  providers: [ TasksService, FirebaseService ]
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  clients: FirebaseListObservable<any[]>;  
+  clients: FirebaseListObservable<any[]>;
 
-  constructor( private firebaseService:FirebaseService,private database: AngularFireDatabase ){}
+  constructor( private firebaseService: FirebaseService, private database: AngularFireDatabase ){}
 
-  ngOnInit(){    
+  ngOnInit() {
     /* if( !this.firebaseService.isUserLoggedIn() ){
       this.firebaseService.login();
     }else{
@@ -29,13 +29,13 @@ export class AppComponent implements OnInit, OnDestroy {
     } */
   }
 
-  
-  isUserLoggedIn(){
+
+  isUserLoggedIn() {
     return this.firebaseService.isUserLoggedIn();
   }
 
-  ngOnDestroy(){
-    
+  ngOnDestroy() {
+
   }
 
 

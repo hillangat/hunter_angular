@@ -1,9 +1,9 @@
 
 export class Alert {
-    id:number;
+    id: number;
     type: AlertType;
     message: string;
-    constructor(){
+    constructor() {
         this.id = new Date().getTime();
     }
 }

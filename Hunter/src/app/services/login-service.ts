@@ -5,15 +5,15 @@ import { Observable } from 'rxjs/Observable';
 import { ServerResponse } from '../beans/ServerResponse';
 
 @Injectable()
-export class LoginService{
-    
-    loginURL:string = "http://localhost:8080/Hunter/restful/user/login";    
-       
-    constructor( private http:Http ){}
+export class LoginService {
 
-    public login( userName: string, password: string ): Observable<ServerResponse[]>{   
-        const opts:any = { headers: this.getHeaders };      
-        const creds:any = this.getCredString( userName, password );             
+    loginURL = 'http://localhost:8080/Hunter/restful/user/login';
+
+    constructor( private http: Http ) { }
+
+    public login( userName: string, password: string ): Observable<ServerResponse[]> {
+        const opts: any = { headers: this.getHeaders };
+        const creds: any = this.getCredString( userName, password );
         return this.http
                    .post( this.loginURL, creds, opts )
                    .map( (response: Response) => response.json().data as ServerResponse[] )
@@ -28,25 +28,21 @@ export class LoginService{
         return Observable.throw(error || 'backend server error');
     }
 
-    public getHeaders():Headers  {
-        var headers = new Headers();        
+    public getHeaders(): Headers  {
+        const headers = new Headers();
         headers.append('Content-Type', 'application/X-www-form-urlencoded');
         return headers;
     }
 
-    public getCredString( userName: string, password: string ){
-        var creds   = 'name=' + userName + '&password=' + password;
+    public getCredString( userName: string, password: string ) {
+        const creds   = 'name=' + userName + '&password=' + password;
         return creds;
     }
 
-    
-    public logout(){
-        window.localStorage.removeItem('auth_key');         
+
+    public logout() {
+        window.localStorage.removeItem('auth_key');
         return true;
     }
-
-    
-
-    
 
 }

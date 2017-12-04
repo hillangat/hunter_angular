@@ -23,7 +23,7 @@ import { TaskDetailComponent } from './components/task-detail/task-detail-compon
 import { TaskFieldsViewComponent } from './components/task-fields/task-fields-view';
 import { TaskFieldsEditComponent } from './components/task-fields/task-fields-edit';
 import { TasksGroupsComponent } from './components/task-groups/task-groups-component';
-import { HunterTableConfig } from './components/hunter-table-widgets/hunter-table-config';
+import { HunterTableComponent } from './components/hunter-table-component/hunter-table';
 import { AlertComponent } from './components/alert-component/alert-component';
 import { ConfirmComponent } from './components/confirm-component/confirm-component';
 import { CloneTaskComponent } from './components/clone-task-component/clone-task-component';
@@ -39,17 +39,18 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 import {HttpModule} from '@angular/http';
-//import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+// import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 
-import { AppRoutingModule }     from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { TestTaskGridComponentComponent } from './components/test-task-grid-component/test-task-grid-component.component';
-import { HunterClientService } from "./services/hunter-client-service";
+import { HunterClientService } from './services/hunter-client-service';
 import { AnimationComponent } from './components/animation-component/animation-component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 
 @NgModule({
@@ -66,7 +67,7 @@ import { AnimationComponent } from './components/animation-component/animation-c
     TaskFieldsViewComponent,
     TaskFieldsEditComponent,
     TasksGroupsComponent,
-    HunterTableConfig,
+    HunterTableComponent,
     AlertComponent,
     ConfirmComponent,
     CloneTaskComponent,
@@ -77,20 +78,21 @@ import { AnimationComponent } from './components/animation-component/animation-c
   ],
   imports: [
     PopoverModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebase),    
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     BrowserModule,
-    FormsModule,        
+    FormsModule,
     AppRoutingModule,
-    HttpModule,    
-    ReactiveFormsModule,    
+    HttpModule,
+    ReactiveFormsModule,
     AlertModule.forRoot(),
     ModalModule.forRoot(),
     DatepickerModule.forRoot(),
-    //InMemoryWebApiModule.forRoot(InMemHeroService, { delay:2500 })    
+    AngularFontAwesomeModule
+    // InMemoryWebApiModule.forRoot(InMemHeroService, { delay:2500 })
   ],
-  providers: [ 
+  providers: [
     FirebaseService,
     AlertService,
     WorkflowTreeService,

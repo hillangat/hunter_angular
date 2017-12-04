@@ -1,6 +1,6 @@
 import { Provider } from './provider';
 
-export interface TextMessage{
+export interface TextMessage {
     toPhone: null,
     pageWordCount: number;
     fromPhone: string;

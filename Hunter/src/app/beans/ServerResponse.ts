@@ -1,5 +1,5 @@
 
-export class ServerResponse{
+export class ServerResponse {
     status: string;
     message: string;
     data: any[]

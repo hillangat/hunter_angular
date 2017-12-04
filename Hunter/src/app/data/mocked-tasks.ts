@@ -2195,6 +2195,5 @@ export const tasks = [
         "taskBudget": 0,
         "cretDate": "2017-05-28 16:11"
     }
-    
-    
+
 ]

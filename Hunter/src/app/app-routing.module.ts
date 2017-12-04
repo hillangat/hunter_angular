@@ -1,8 +1,8 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TaskGridComponent }   from './components/task-grid-component/task-grid-component';
-import { HomeComponent }   from './components/home/home';
+import { TaskGridComponent } from './components/task-grid-component/task-grid-component';
+import { HomeComponent } from './components/home/home';
 import { LoginComponent } from './components/login-component/login-component';
 import { TasksMessageComponent } from './components/task-message/task-message';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found';
@@ -15,16 +15,16 @@ import { AnimationComponent } from './components/animation-component/animation-c
 const routes: Routes = [
 
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path:'login',  component: LoginComponent },
-  { path:'tasks',  component: TaskGridComponent },
-  { path:'home',   component: HomeComponent },
-  { path:'taskdetails/:taskId', component: TaskDetailComponent },  
-  { path:'taskmessage/:taskId', component: TasksMessageComponent },
-  { path:'clients',     component:ClientComponent },
-  { path:'testtaskgrid',     component:TestTaskGridComponentComponent },
-  { path:'animation',     component:AnimationComponent },
-  
-  { path:'**',          component: PageNotFoundComponent }
+  { path: 'login',  component: LoginComponent },
+  { path: 'tasks',  component: TaskGridComponent },
+  { path: 'home',   component: HomeComponent },
+  { path: 'taskdetails/:taskId', component: TaskDetailComponent },
+  { path: 'taskmessage/:taskId', component: TasksMessageComponent },
+  { path: 'clients',     component: ClientComponent },
+  { path: 'testtaskgrid',     component: TestTaskGridComponentComponent },
+  { path: 'animation',     component: AnimationComponent },
+
+  { path: '**',          component: PageNotFoundComponent }
 
 ];
 
@@ -32,4 +32,4 @@ const routes: Routes = [
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

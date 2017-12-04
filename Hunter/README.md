@@ -26,3 +26,7 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Using font-awesome
+Install Packages npm install --save font-awesome angular-font-awesome
+import { AngularFontAwesomeModule } from 'angular-font-awesome'; in the main module and include it in imports of the module.

@@ -1,31 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable } from 'Rxjs';
 import { Subject } from 'rxjs/subject';
 
 import { Alert, AlertType } from '../beans/alert';
 
 @Injectable()
-export class AlertService{
-    
+export class AlertService {
+
     private subject = new Subject<Alert>();
     private keepAfterRouteChange = false;
 
-    constructor( private router:Router ){
+    constructor( private router: Router ) {
         router.events.subscribe( event => {
-                if( this.keepAfterRouteChange ){
+                if ( this.keepAfterRouteChange ) {
                     this.keepAfterRouteChange = false;
-                }else{
+                } else {
                     this.clear();
                 }
         });
     }
 
-    clear(){
+    clear() {
         this.subject.next();
     }
 
-    getAlert():Observable<any>{
+    getAlert():Observable<any> {
         return this.subject.asObservable();
     }
 

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 
 
 @Injectable()
-export class ValidatorService{
+export class ValidatorService {
 
-    public isTaskValid(  ){
-        
+    public isTaskValid(  ) {
+
     }
 
 }

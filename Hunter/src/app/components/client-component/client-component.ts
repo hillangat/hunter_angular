@@ -1,12 +1,12 @@
-import { Component, Input, Output, OnInit,ViewChild } from '@angular/core';
+import { Component, Input, Output, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from '../../services/alert-service';
 import { Alert, AlertType } from '../../beans/alert';
 import { ClientHeaders } from '../../data/clients-headers';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { utilFuncs } from '../../utilities/util-functions';
-import { ActivatedRoute,Router } from '@angular/router';
-import { HunterClientService } from "app/services/hunter-client-service";
+import { ActivatedRoute, Router } from '@angular/router';
+import { HunterClientService } from 'app/services/hunter-client-service';
 import { ServerResponse } from '../../beans/ServerResponse';
 import { Client } from '../../beans/client';
 
@@ -14,214 +14,211 @@ import { Client } from '../../beans/client';
 
 
 @Component({
-    selector:'clients',
-    moduleId:module.id,
-    templateUrl:'client-component.html',
-    styleUrls: [ 'client-component.css' ],
-    inputs:[  ]
+    selector: 'app-clients',
+    moduleId: module.id,
+    templateUrl: 'client-component.html',
+    styleUrls: [ 'client-component.css' ]
 })
 
-export class ClientComponent implements OnInit{
+export class ClientComponent implements OnInit {
 
     @ViewChild('hunterTable') hunterTable;
 
-    private nextClientId:number = 0;    
-    private clients:Client[] = [];
-    private headers:any[] = ClientHeaders;
-    private modalAction:string;
+    private nextClientId = 0;
+    private clients: Client[] = [];
+    private headers: any[] = ClientHeaders;
+    private modalAction: string;
 
-    private currFunc:string = null;
-    private currDataId:number = null;
-    private index:number;
-    private popupModalTitle:string = 'Delete Task History';    
+    private currFunc: string = null;
+    private currDataId: number = null;
+    private index: number;
+    private popupModalTitle = 'Delete Task History';
 
-    private confirmingDelete:boolean = false;
+    private confirmingDelete = false;
     @ViewChild('confirmAlert') confirmAlert;
 
-    private currClientMode:string = null;
-    private clientEditForm: FormGroup; 
-    private showEditClientModal:boolean = false;
-    private clientModeTitle:string = '';
+    private currClientMode: string = null;
+    private clientEditForm: FormGroup;
+    private showEditClientModal = false;
+    private clientModeTitle = '';
     @ViewChild('clientEditModal') clientEditModal;
 
-    private clientBeingEdited:Client = null;
-    
+    private clientBeingEdited: Client = null;
 
-    constructor( 
-        private alertService:AlertService,
+    private customValidatorMessages = {
+        firstName: 'First name is required',
+        lastName: 'Last name is required.',
+        email: 'Client email is requiired',
+        userName: 'Client user name is required' ,
+        region: 'Region is required',
+        budget: 'Budget is required. Must be greater than  $49 and less than $10,000'
+    }
+
+    constructor(
+        private alertService: AlertService,
         private formBuilder: FormBuilder,
-        private route:ActivatedRoute,  
+        private route: ActivatedRoute,
         private router: Router,
-        private clientsService:HunterClientService
-    ){}
+        private clientsService: HunterClientService
+    ) { }
 
-    ngOnInit(){              
+    ngOnInit() {
         this.loadAllClients();
         this.initClientForm();
     }
 
-    public loadAllClients(){        
-        this.clientsService.getAllClients().then(           
-            ( serverResp: ServerResponse )  => {                
+    public loadAllClients() {
+        this.clientsService.getAllClients().then(
+            ( serverResp: ServerResponse )  => {
                 console.log( JSON.stringify(serverResp) );
                 if ( serverResp.status === 'Success' ) {
                     this.clients = serverResp.data as Client[];
-                    for( var i=0; i<this.clients.length; i++ ){
-                        this.nextClientId = this.clients[i].clientId > this.nextClientId ? this.clients[i].clientId : this.nextClientId; 
+                    for ( let i = 0; i < this.clients.length; i ++ ) {
+                        this.nextClientId = this.clients[i].clientId > this.nextClientId ? this.clients[i].clientId : this.nextClientId;
                     }
-                    this.nextClientId++;                
+                    this.nextClientId++;
+                  // tslint:disable-next-line:one-line
                   }else{
-                    this.alertService.error('Error: ' + serverResp.message, false);                                   
-                  }                
+                    this.alertService.error('Error: ' + serverResp.message, false);
+                  }
             },
             error => {
-                this.alertService.error( JSON.stringify(error) );                
+                this.alertService.error( JSON.stringify(error) );
             }
         );
     }
 
-    public removeHuntaTableOverlay(){
-        if( this.hunterTable ){         
-            this.hunterTable.removeOverlay();            
+    public removeHuntaTableOverlay() {
+        if ( this.hunterTable ) {
+            this.hunterTable.removeOverlay();
         }
     }
 
-    public getClients(){        
+    public getClients() {
         console.log( 'Loading clients' );
     }
 
-    handleGridAction(params:any[]){
-        
-        this.currFunc   = params[0]; 
+    public handleGridAction(params: any[]) {
+
+        this.currFunc   = params[0];
         this.currDataId = params[1];
-        this.index      = -1;     
-        
-        this.getCurrTaskIdAndSetIndex(); 
-        
-        switch( this.currFunc ){
-          case 'delete' : 
-            this.modalAction = "DeleteTask";
+        this.index      = -1;
+
+        this.getCurrTaskIdAndSetIndex();
+
+        switch ( this.currFunc ) {
+          case 'delete' :
+            this.modalAction = 'DeleteTask';
             this.openConfirmAlertModal();
             break;
-          case 'edit' : 
-            this.clientModeTitle = "Edit Selected Client";
+          case 'edit' :
+            this.clientModeTitle = 'Edit Selected Client';
             this.clientBeingEdited = this.getClientForClientId(this.currDataId);
             this.currClientMode = 'edit';
-            this.initClientFormForEdit();     
-            this.clientEditModal.show();       
+            this.initClientFormForEdit();
+            this.clientEditModal.show();
             break;
-          case 'NewRecord' :             
+          case 'NewRecord' :
             this.clientModeTitle = 'Create New Client';
             this.currClientMode = 'NewRecord';
             this.initClientForm();
             this.clientEditModal.show();
             break;
           case 'refresh' :
-            this.modalAction = "refresh";                     
+            this.modalAction = 'refresh';
             break;
           case 'tasks' :
-            this.modalAction = "tasks"
+            this.modalAction = 'tasks'
             this.hunterTable.showOverlay();
             this.router.navigateByUrl('tasks');
             break;
           default:
             console.warn( 'No equivalent found for function = ' + this.currFunc );
-          break;          
+          break;
         }
-  
+
     }
-    
-    
-    getCurrTaskIdAndSetIndex(){
-        for(var i=0; i<this.clients.length; i++ ){
-          var clientId = this.clients[i].clientId;
-          if( clientId == this.currDataId ){
+
+
+    getCurrTaskIdAndSetIndex() {
+        for ( let i = 0; i < this.clients.length; i++ ) {
+          const clientId = this.clients[i].clientId;
+          if ( clientId === this.currDataId ) {
             this.currDataId = clientId;
             this.index = i;
           }
         }
     }
 
-    getCurrentDataId(){
+    getCurrentDataId() {
         return this.currDataId;
     }
 
-    onConfirm( params:any[] ){
-        
-        
-        let type = params[0];
-        let marker = params[1];
-        let dataId = params[2];
-        
-        if( marker == 'RemoveClient' && type == 'yes' ){ 
+    onConfirm( params: any[] ) {
+
+        const type = params[0];
+        const marker = params[1];
+        const dataId = params[2];
+
+        if ( marker === 'RemoveClient' && type === 'yes' ) {
           this.removeClientWithId( dataId );
           this.closeConfirmAlertModal();
-        }else if( marker == 'RemoveClient' && type == 'no' ){
-          this.closeConfirmAlertModal();      
+        }else if ( marker === 'RemoveClient' && type === 'no' ) {
+          this.closeConfirmAlertModal();
         }
-    
       }
 
-      closeConfirmAlertModal(){
+      closeConfirmAlertModal() {
         this.confirmingDelete = false;
         this.confirmAlert.hideModal();
         this.hunterTable.initializeDataGrid();
       }
 
-      openConfirmAlertModal(){        
-        this.confirmingDelete = true;  
-        if( this.confirmAlert ){
-            this.confirmAlert.showModal();          
-        }        
+      openConfirmAlertModal() {
+        this.confirmingDelete = true;
+        if ( this.confirmAlert ) {
+            this.confirmAlert.showModal();
+        }
     }
 
     removeClientWithId(clientId: number) {
-        let client = this.getClientForClientId(clientId);
-        if( client ){
+        const client = this.getClientForClientId(clientId);
+        if ( client ) {
             this.clientsService.removeClient(client.clientId).then(response => {
 
             });
-        }else{
+        }else {
             this.alertService.error('Client with id=' + clientId + ' not found!!');
         }
     }
 
-    getClientForClientId( clientId:number ){
-        for (var i = 0; i < this.clients.length; i++) {
-            var client = this.clients[i];
-            if (client.clientId == clientId) {
+    getClientForClientId( clientId: number ) {
+        for ( let i = 0; i < this.clients.length; i++) {
+            const client = this.clients[i];
+            if (client.clientId === clientId) {
                 return client;
             }
         }
     }
 
-    private customValidatorMessages = {
-        firstName: "First name is required",
-        lastName:"Last name is required.",
-        email:"Client email is requiired",
-        userName:"Client user name is required" ,
-        region: "Region is required",
-        budget:"Budget is required. Must be greater than  $49 and less than $10,000"       
-    }
-
-    initClientForm(){
+    initClientForm() {
         this.clientEditForm = this.formBuilder.group({
             firstName:  ['',  [ <any>Validators.required ] ],
             lastName: ['', [ <any>Validators.required ] ],
             email: ['', [ <any>Validators.required ] ],
-            budget:['', [ <any>Validators.required, <any>Validators.min(50), <any>Validators.max(10000) ] ],
-            userName:['', [ <any>Validators.required ] ],
-            receiver:[false]
+            budget: ['', [ <any>Validators.required, <any>Validators.min(50), <any>Validators.max(10000) ] ],
+            userName: ['', [ <any>Validators.required ] ],
+            receiver: [false]
         });
       }
 
-      initClientFormForEdit(){
-          if( !this.clientBeingEdited ){
+      initClientFormForEdit() {
+          if ( !this.clientBeingEdited ) {
               this.alertService.error('Client to be edited not set!!');
               return;
           }
           this.initClientForm();
-          let controls = this.clientEditForm.controls;
+          const controls = this.clientEditForm.controls;
           controls['firstName'].setValue(this.clientBeingEdited.firstName);
           controls['lastName'].setValue(this.clientBeingEdited.lastName);
           controls['email'].setValue(this.clientBeingEdited.email);
@@ -230,51 +227,50 @@ export class ClientComponent implements OnInit{
           controls['budget'].setValue(this.clientBeingEdited.clientTotalBudget);
       }
 
-      getClientFromForm(){
+      getClientFromForm() {
 
       }
 
-      saveClientData(){
-          
-          if( this.clientEditForm.valid ){
-            
+      saveClientData() {
+
+          if ( this.clientEditForm.valid ) {
+
             this.hunterTable.showOverlay();
-            
-            
-            let client = this.currClientMode == 'edit' ? this.clientBeingEdited : new Client(); 
+
+            const client = this.currClientMode === 'edit' ? this.clientBeingEdited : new Client();
             client.clientId = this.nextClientId;
             client.firstName = this.clientEditForm.controls['firstName'].value;
             client.lastName = this.clientEditForm.controls['lastName'].value;
             client.email = this.clientEditForm.controls['email'].value;
             client.clientTotalBudget = this.clientEditForm.controls['budget'].value;
             client.userName = this.clientEditForm.controls['userName'].value;
-            client.receiver = this.clientEditForm.controls['receiver'].value;              
+            client.receiver = this.clientEditForm.controls['receiver'].value;
             client.lastUpdatedBy = 'admin';
 
-            let newDateStr = this.getFormatedDate( new Date() );            
+            const newDateStr = this.getFormatedDate( new Date() );
             client.updatedOn = newDateStr;
 
             /** If it's a new client, set creation audit info */
-            if( this.currClientMode == 'NewRecord' ){
+            if ( this.currClientMode === 'NewRecord' ) {
                 client.cretDate  = newDateStr;
                 client.createdBy = 'admin';
             }
 
             setTimeout(() => {
-                if( this.currClientMode == 'edit' ){  
-                    this.clientsService.updateClient(client).catch(error => {                        
+                if ( this.currClientMode === 'edit' ) {
+                    this.clientsService.updateClient(client).catch(error => {
                         this.removeOverlayAndAlert(error.message, 'Error');
-                    }).then(() => {                        
+                    }).then(() => {
                         this.removeOverlayAndAlert('Successfully updated client', 'Success');
                     });
-                }else if( this.currClientMode == 'NewRecord' ){
-                    this.clientsService.createClient( client ).catch(error => {                        
+                } else if ( this.currClientMode === 'NewRecord' ) {
+                    this.clientsService.createClient( client ).catch(error => {
                         this.removeOverlayAndAlert(error.message, 'Error');
                     }).then(() => {
                         this.removeOverlayAndAlert('Successfully saved client', 'Success');
                         this.loadAllClients();
                     });
-                }else{                    
+                } else {
                     this.removeOverlayAndAlert('Error occurred while trying to save client data!!', 'Error');
                 }
             }, 800);
@@ -282,22 +278,22 @@ export class ClientComponent implements OnInit{
             this.clientEditModal.hide();
             this.initClientForm();
 
-          }else{            
+          } else {
               this.alertService.warn( 'Please correct errors and try again.', false );
           }
-                    
+
       }
 
-      onHidden(){
+      onHidden() {
           /**
            * Used for any functions that run once the modal closes.
            */
       }
 
-      removeOverlayAndAlert( message:string, type:string ){
-        this.hunterTable.removeOverlay();                    
+      removeOverlayAndAlert( message: string, type: string ) {
+        this.hunterTable.removeOverlay();
         this.hunterTable.initializeDataGrid();
-        switch( type ){
+        switch ( type ) {
             case 'Success' :
                 this.alertService.success(message, false);
                 break;
@@ -311,35 +307,38 @@ export class ClientComponent implements OnInit{
       }
 
 
-      getFormatedDate(date:Date){
-        
-        let 
-        year:string     = date.getFullYear() + "",
-        month:string    = date.getMonth() + "",
-        date_:string    = date.getDate() + "",
-        hour:string     = date.getHours() + "",
-        minute:string   = date.getMinutes() + "",
-        secs:string     = date.getSeconds() + "",
-        formatedDate    = year + "-" + month + "-" + date_ + " " + hour + ":" + minute + ":" + secs;        
+      getFormatedDate(date: Date) {
 
-        month  = month.length  < 2 ? "0" + month  : month;
-        date_  = date_.length  < 2 ? "0" + date_  : date_;
-        minute = minute.length < 2 ? "0" + minute : minute;
-        secs   = secs.length   < 2 ? "0" + secs   : secs;
+        const
+        year: string     = date.getFullYear() + '',
+        hour: string     = date.getHours() + '';
+
+        let
+        month: string    = date.getMonth() + '',
+        date_: string    = date.getDate() + '',
+        minute: string   = date.getMinutes() + '',
+        secs: string     = date.getSeconds() + '';
+
+        const formatedDate    = year + '-' + month + '-' + date_ + ' ' + hour + ':' + minute + ':' + secs;
+
+        month  = month.length  < 2 ? '0' + month  : month;
+        date_  = date_.length  < 2 ? '0' + date_  : date_;
+        minute = minute.length < 2 ? '0' + minute : minute;
+        secs   = secs.length   < 2 ? '0' + secs   : secs;
 
         return formatedDate;
       }
 
-      closeClientEditModal(){
+      closeClientEditModal() {
         this.clientEditModal.hide();
       }
 
-      showClientEditModal(){
+      showClientEditModal() {
           this.clientEditModal.show();
       }
-      
 
 
 
-    
+
+
 }
