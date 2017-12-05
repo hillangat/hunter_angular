@@ -1,1 +1,0 @@
-module.exports = 'Now this is the content from content 2';
