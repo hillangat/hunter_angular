@@ -8,13 +8,13 @@
     <li style="color:rgb( 49,126,172 );" >Hunter Tasks</li>
 </ol>
 
-<hunter-table-config 
+<app-hunter-table
     #hunterTable
     [dataBeanName] = "'Task'"
     [headers]="headers" 
     [hunterTableData]="tasks" 
     (handleGridAction)="handleGridAction($event)">
-</hunter-table-config>
+</app-hunter-table>
 
 
 

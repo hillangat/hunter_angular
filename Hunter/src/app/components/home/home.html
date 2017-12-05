@@ -6,13 +6,13 @@
     <li style="color:rgb( 49,126,172 );">Hunter Home</li>
 </ol> 
 
-<hunter-table-config 
+<app-hunter-table
     [headers]="headers" 
     [dataBeanName] = "'Task History'"
     [hunterTableData]="hunterTableData" 
     (createNewAction)="createNewAction($event)"
     (handleGridAction)="handleGridAction($event)">
-</hunter-table-config>
+</app-hunter-table>
 
 
 <ng-template #popTemplate >

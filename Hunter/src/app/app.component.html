@@ -1,9 +1,9 @@
 
 <div *ngIf="firebaseService.isUserLoggedIn()" >
-    <alerts></alerts>
-    <navbar-component></navbar-component>
+    <app-alerts></app-alerts>
+    <app-navbar-component></app-navbar-component>
     <router-outlet></router-outlet>
-    <footer-component></footer-component>    
+    <app-footer-component></app-footer-component>    
 </div>
 
 <div *ngIf="!firebaseService.isUserLoggedIn()" style="width:100%;height:100%;padding-top:20%;text-align:center;" >

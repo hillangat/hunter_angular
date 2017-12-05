@@ -25,7 +25,7 @@
 </hunter-table-config>
 
 
-<confirm-alert
+<app-confirm-alert
     *ngIf="confirmingDelete"
     [message] = "'The selected task group will be deleted. Are you sure?'"
     [title] = "'Delete Selected Task Group'"
@@ -40,4 +40,4 @@
     (onConfirm)="onConfirm($event)"
 
     #confirmAlert
-></confirm-alert>
+></app-confirm-alert>

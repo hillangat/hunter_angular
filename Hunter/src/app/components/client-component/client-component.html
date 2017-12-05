@@ -7,17 +7,17 @@
     <li style="color:rgb( 49,126,172 );">Hunter Clients</li>
 </ol>
 
-<hunter-table-config
+<app-hunter-table
     *ngIf="clients.length > 0"
     #hunterTable
     [dataBeanName] = "'Client'"
     [headers]="headers" 
     [hunterTableData]="clients"
     (handleGridAction)="handleGridAction($event)">
-</hunter-table-config>
+</app-hunter-table>
 
 
-<confirm-alert
+<app-confirm-alert
     *ngIf="confirmingDelete"
     [message] = "'The selected client will be deleted. Are you sure?'"
     [title] = "'Delete Selected Client'"
@@ -31,7 +31,7 @@
     [dataId]="getCurrentDataId()"
     (onConfirm)="onConfirm($event)"
     #confirmAlert
-></confirm-alert>
+></app-confirm-alert>
 
 
 <div     
