@@ -3,7 +3,8 @@ import { Directive, ElementRef, Output, EventEmitter, HostListener } from '@angu
 
 
 @Directive({
-    selector: '[clickOutside]'
+    // tslint:disable-next-line:directive-selector
+    selector: '[click-outside-directive]'
 })
 export class ClickOutsideDirective {
 

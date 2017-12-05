@@ -10,7 +10,7 @@ export class TestTaskGridComponentComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
 }

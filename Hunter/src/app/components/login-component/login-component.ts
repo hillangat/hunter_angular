@@ -4,24 +4,21 @@ import { User } from '../../beans/User';
 
 
 @Component({
-    moduleId:module.id,
-    selector:'login-component',
-    templateUrl:'login-component.html',
-    styleUrls:['login-component.css']
+    moduleId: module.id,
+    selector: 'app-login-component',
+    templateUrl: 'login-component.html',
+    styleUrls: ['login-component.css']
 })
 
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
 
-    user:User = {userName:null,password:null,firstName:null,lastName:null,key:null,roles:null};
+    user: User = { userName: null, password: null, firstName: null, lastName: null, key: null, roles: null };
 
-    
-    ngOnInit(){
-        
+    ngOnInit() {
+
     }
 
-    login(){
-        
-    }
-    
+    login() {
 
+    }
 }

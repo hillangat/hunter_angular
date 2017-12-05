@@ -1,4 +1,4 @@
-import { HunterTableConfig } from 'app/components/hunter-firebase-grid/hunter-firevase-grid';
+import { HunterTableConfig } from './../../beans/hunter-table-configs';
 import { Component, Input, Output, OnInit, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { taskHistory } from '../../data/mocked-task-history';
 
@@ -222,7 +222,7 @@ export class HunterTableComponent implements OnInit {
     }
 
     goToNextPage() {
-        if ( this.currentPageNo < this.calculatedPageNumbers ){
+        if ( this.currentPageNo < this.calculatedPageNumbers ) {
             this.currentPageNo++;
         } else {
             this.currentPageNo = this.currentPageNo;

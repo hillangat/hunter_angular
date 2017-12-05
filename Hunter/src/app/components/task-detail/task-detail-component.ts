@@ -17,22 +17,19 @@ import { HunterTableConfig } from '../../beans/hunter-table-configs';
 export class TaskDetailComponent implements OnInit {
 
     task: any;
-    isEditMode:boolean = false;
+    isEditMode = false;
 
-    currFunc:string = null;
-    currDataId:number = null;
-    index:number;
+    currFunc: string = null;
+    currDataId: number;
+    index: number;
 
-    
-    
+
     private taskId: number;
     private sub: any;
-    private moneySign: string = '$';
-    
+    private moneySign = '$';
+
     private history: any[];
-    private historyHeaders:Array<HunterTableConfig> = TasksHistoryHeaders;
-    
-    
+    private historyHeaders: Array<HunterTableConfig> = TasksHistoryHeaders;
 
     constructor(private taskService: TasksService, private route: ActivatedRoute) { }
 
@@ -65,15 +62,15 @@ export class TaskDetailComponent implements OnInit {
     }
 
     isInEditMode(sectionName: string, isAnyInEditMode: boolean) {
-        let sections = taskDetailStates[1]["sections"];
-        for (var i = 0; i < sections.length; i++) {
-            let section = sections[i];
-            let name = section.name, mode = section.Mode;
-            if (mode == 'Edit' && isAnyInEditMode) {
+        const sections = taskDetailStates[1]['sections'];
+        for ( let i = 0; i < sections.length; i++) {
+            const section = sections[i];
+            const name = section.name, mode = section.Mode;
+            if (mode === 'Edit' && isAnyInEditMode) {
                 return true;
             } else {
-                if (sectionName == name) {
-                    return mode == 'Edit';
+                if (sectionName === name) {
+                    return mode === 'Edit';
                 }
             }
         }
@@ -81,18 +78,16 @@ export class TaskDetailComponent implements OnInit {
     }
 
     setEditMode(sectionName: string, _isEditMode: boolean) {
-        console.log( 'sectionname = '  + sectionName + ', _isEditMode = ' + _isEditMode );        
-        let sections = taskDetailStates[1]["sections"];
-        for (var i = 0; i < sections.length; i++) {
-            let section = sections[i];
-            let name = section.name, mode = section.Mode;
-            if (sectionName == name) {
+        console.log( 'sectionname = '  + sectionName + ', _isEditMode = ' + _isEditMode );
+        const sections = taskDetailStates[1]['sections'];
+        for ( let i = 0; i < sections.length; i++) {
+            const section = sections[i];
+            const name = section.name, mode = section.Mode;
+            if (sectionName === name) {
                 section.Mode = _isEditMode ? 'Edit' : 'View';
             }
-        }        
+        }
         this.isEditMode = this.isInEditMode( null, true );
     }
-
-
 
 }

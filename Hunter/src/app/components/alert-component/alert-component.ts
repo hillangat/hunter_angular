@@ -5,7 +5,7 @@ import { Alert, AlertType } from '../../beans/alert';
 
 @Component({
     moduleId: module.id,
-    selector: 'alerts',
+    selector: 'app-alerts',
     templateUrl: 'alert-component.html',
     styleUrls: ['alert-component.css']
 
@@ -15,19 +15,21 @@ export class AlertComponent implements OnInit, OnDestroy {
 
     private subscription: Subscription;
     private alerts: Alert[] = [];
-    private alertLifeTime: number = 4500;
+    private alertLifeTime = 4500;
 
     constructor(private alertService: AlertService) {
-        this.subscription = this.alertService.getAlert().subscribe(alert => {            
-            if (!alert) return;
+        this.subscription = this.alertService.getAlert().subscribe(alert => {
+            if (!alert) {
+                return;
+            }
             this.alerts.push(alert);
             this.setAlertLifeTime(this.alerts);
         });
     }
 
-    setAlertLifeTime(alerts:Alert[]) {
+    setAlertLifeTime(alerts: Alert[]) {
         setTimeout(function () {
-            alerts.splice(0,1);
+            alerts.splice( 0, 1 );
         }, this.alertLifeTime);
     }
 
@@ -48,7 +50,8 @@ export class AlertComponent implements OnInit, OnDestroy {
     }
 
     getClassByAlertType(alert: Alert) {
-        let clss1 = " alert-dismissible ", clss = null;
+        const clss1 = ' alert-dismissible ';
+        let clss = null;
         switch (alert.type) {
             case AlertType.Error:
                 clss = 'alert-danger';
@@ -66,7 +69,7 @@ export class AlertComponent implements OnInit, OnDestroy {
                 clss = 'alert-info';
                 break;
         }
-        return "alert " + clss + clss1;
+        return 'alert ' + clss + clss1;
     }
 
 

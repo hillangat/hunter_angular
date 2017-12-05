@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   clients: FirebaseListObservable<any[]>;
 
-  constructor( private firebaseService: FirebaseService, private database: AngularFireDatabase ){}
+  constructor( private firebaseService: FirebaseService, private database: AngularFireDatabase ) {}
 
   ngOnInit() {
     /* if( !this.firebaseService.isUserLoggedIn() ){

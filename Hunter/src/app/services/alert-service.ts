@@ -25,7 +25,7 @@ export class AlertService {
         this.subject.next();
     }
 
-    getAlert():Observable<any> {
+    getAlert(): Observable<any> {
         return this.subject.asObservable();
     }
 

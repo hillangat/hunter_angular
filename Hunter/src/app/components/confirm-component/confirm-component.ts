@@ -2,23 +2,10 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
-    selector: 'confirm-alert',
+    selector: 'app-confirm-alert',
     moduleId: module.id,
     templateUrl: 'confirm-component.html',
-    styleUrls: ['confirm-component.css'],
-    inputs: [
-        'message', 
-        'title', 
-        'yesText', 
-        'noText', 
-        'yesBootstrapClass', 
-        'noBootstrapClass',
-        'yesButtonClass',
-        'noButtonClass',
-        'marker',
-        'dataId'
-    ],
-    outputs: ['onConfirm']
+    styleUrls: ['confirm-component.css']
 })
 
 export class ConfirmComponent implements OnInit {
@@ -31,45 +18,46 @@ export class ConfirmComponent implements OnInit {
     @Input('noBootstrapClass') noBootstrapClass: string;
     @Input('yesButtonClass') yesButtonClass: string;
     @Input('noButtonClass') noButtonClass: string;
-    @Input('marker') marker:string;
-    @Input('dataId') dataId:string;
-    
+    @Input('marker') marker: string;
+    @Input('dataId') dataId: string;
 
-    private yes: string = "yes";
-    private no: string = "no";
-    private showAlert:boolean = true;
-    private configs:{ show:true };
+    private yes = 'yes';
+    private no = 'no';
+    private showAlert = true;
+    private configs: { show: true };
 
     @Output() onConfirm = new EventEmitter<any[]>();
 
-    ngOnInit(){
+    ngOnInit() {
         this.showModal();
     }
 
-    onConfirm_(type: any) {              
+    onConfirm_(type: any) {
         this.hideModal();
-        this.onConfirm.emit([type, this.marker, this.dataId]);        
+        this.onConfirm.emit([type, this.marker, this.dataId]);
     }
 
     getActionButtonClass(type: string) {
-        if (type == 'yes')
+        if ( type === 'yes' ) {
             return this.yesButtonClass;
-        else
+        } else {
             return this.noButtonClass;
+        }
     }
 
-    getBoostrapIcon(type:string){
-        if( type == 'yes' )
+    getBoostrapIcon( type: string ) {
+        if ( type === 'yes' ) {
             return this.yesBootstrapClass;
-        else 
+        } else {
             return this.noBootstrapClass;
+        }
     }
 
-    hideModal(){             
+    hideModal() {
         this.showAlert = false;
     }
 
-    showModal(){
+    showModal() {
         this.showAlert = true;
     }
 

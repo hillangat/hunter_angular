@@ -132,5 +132,7 @@ export const taskGroups = [
         'groupDesc': 'Task Group 100',
         'groupName': 'Task Group 100',
         'receiverType': 'Text',
+    }
+];
 
-]
+

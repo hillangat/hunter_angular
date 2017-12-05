@@ -1,33 +1,32 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
-    selector:'animation-component',
+    selector: 'app-animation-component',
     templateUrl: 'animation-component.html',
     styleUrls: [ 'animation-component.css' ]
 })
 
-export class AnimationComponent{
+export class AnimationComponent {
 
     @ViewChild('panel') public panel: ElementRef;
 
-    public animateParent(){
-        
+    public animateParent() {
+
     }
 
-    public scrollLeft(): void {        
+    public scrollLeft(): void {
         let count = 0, time = 50;
-        while( count < 3000 ){
+        while ( count < 3000 ) {
             count ++;
-            time += 10;            
+            time += 10;
             setTimeout(() => {
                 this.panel.nativeElement.scrollLeft -= 1;
             }, time);
         }
       }
-    
-      public scrollRight(): void {        
+      public scrollRight(): void {
         let count = 0, time = 50;
-        while( count < 3000 ){
+        while ( count < 3000 ) {
             count ++;
             time += 10;
             setTimeout(() => {
@@ -35,5 +34,4 @@ export class AnimationComponent{
             }, time);
         }
       }
-    
 }
