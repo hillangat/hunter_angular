@@ -6,7 +6,8 @@ import 'rxjs/add/operator/toPromise';
 import { Clients } from 'app/beans/clients';
 import { User } from '../beans/User';
 import { Client } from '../beans/client';
-import { ServerResponse } from '../beans/ServerResponse';
+import { HunterServerResponse } from '../beans/ServerResponse';
+import { LoggerService } from '../common/logger.service';
 
 @Injectable()
 export class HunterClientService implements OnInit {
@@ -30,18 +31,18 @@ export class HunterClientService implements OnInit {
 
     }
 
-    constructor(private http: Http) { }
+    constructor( private http: Http, private logger: LoggerService ) { }
 
-    getAllClients(): Promise<ServerResponse> {
+    getAllClients(): Promise<HunterServerResponse> {
         const headers = this.getHeaders();
         const creds   = this.getReqParams();
         return this.http.post(this.base + 'read', creds, {headers: headers} )
             .toPromise()
-            .then(response => response.json() as ServerResponse)
+            .then(response => response.json() as HunterServerResponse)
             .catch(this.handleError);
     }
 
-    public removeClient( clientId: number ): Promise<ServerResponse> {
+    public removeClient( clientId: number ): Promise<HunterServerResponse> {
         const headers = this.getHeaders();
         const creds   = this.getReqParams();
         return this.http.post(this.removeClientURL, {clientId: clientId}, {headers: headers} )
@@ -55,20 +56,20 @@ export class HunterClientService implements OnInit {
         const creds   = this.getReqParams();
         return this.http.post(this.createUpdateURL, client, {headers: headers} )
             .toPromise()
-            .then(response => response.json() as ServerResponse)
+            .then(response => response.json() as HunterServerResponse)
             .catch(this.handleError);
     }
 
-    public updateClient( client: Client ): Promise<ServerResponse> {
+    public updateClient( client: Client ): Promise<HunterServerResponse> {
         const headers = this.getHeaders();
         return this.http.post(this.updateClientURL, client, {headers: headers} )
             .toPromise()
-            .then(response => response.json() as ServerResponse)
+            .then(response => response.json() as HunterServerResponse)
             .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {
-        console.error('An error occurred' + JSON.stringify(error)); // for demo purposes only
+        this.logger.error('An error occurred' + JSON.stringify(error)); // for demo purposes only
         return Promise.reject(error.message || error);
     }
 

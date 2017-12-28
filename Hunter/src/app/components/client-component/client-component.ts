@@ -7,8 +7,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { utilFuncs } from '../../utilities/util-functions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HunterClientService } from 'app/services/hunter-client-service';
-import { ServerResponse } from '../../beans/ServerResponse';
+import { HunterServerResponse } from '../../beans/ServerResponse';
 import { Client } from '../../beans/client';
+import { fail } from 'assert';
+import { LoggerService } from '../../common/logger.service';
 
 
 
@@ -16,13 +18,15 @@ import { Client } from '../../beans/client';
 @Component({
     selector: 'app-clients',
     moduleId: module.id,
-    templateUrl: 'client-component.html',
-    styleUrls: [ 'client-component.css' ]
+    templateUrl: './client-component.html',
+    styleUrls: [ './client-component.css' ]
 })
 
 export class ClientComponent implements OnInit {
 
-    @ViewChild('hunterTable') hunterTable;
+    @ViewChild('hunterTable') public hunterTable;
+
+    public loadingData = false;
 
     private nextClientId = 0;
     private clients: Client[] = [];
@@ -59,7 +63,8 @@ export class ClientComponent implements OnInit {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private clientsService: HunterClientService
+        private clientsService: HunterClientService,
+        private logger: LoggerService
     ) { }
 
     ngOnInit() {
@@ -68,9 +73,10 @@ export class ClientComponent implements OnInit {
     }
 
     public loadAllClients() {
+        this.loadingData = true;
         this.clientsService.getAllClients().then(
-            ( serverResp: ServerResponse )  => {
-                console.log( JSON.stringify(serverResp) );
+            ( serverResp: HunterServerResponse )  => {
+                this.logger.log( JSON.stringify(serverResp) );
                 if ( serverResp.status === 'Success' ) {
                     this.clients = serverResp.data as Client[];
                     for ( let i = 0; i < this.clients.length; i ++ ) {
@@ -81,9 +87,11 @@ export class ClientComponent implements OnInit {
                   }else{
                     this.alertService.error('Error: ' + serverResp.message, false);
                   }
+                this.loadingData = false;
             },
             error => {
                 this.alertService.error( JSON.stringify(error) );
+                this.loadingData = false;
             }
         );
     }
@@ -95,7 +103,7 @@ export class ClientComponent implements OnInit {
     }
 
     public getClients() {
-        console.log( 'Loading clients' );
+        this.logger.log( 'Loading clients' );
     }
 
     public handleGridAction(params: any[]) {
@@ -133,7 +141,7 @@ export class ClientComponent implements OnInit {
             this.router.navigateByUrl('tasks');
             break;
           default:
-            console.warn( 'No equivalent found for function = ' + this.currFunc );
+            this.logger.warn( 'No equivalent found for function = ' + this.currFunc );
           break;
         }
 

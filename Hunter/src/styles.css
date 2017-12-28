@@ -41,11 +41,12 @@ body{
   border:1px solid #DAE5E4 !important;
   border-radius: 4px !important;
   color:#217695;
+  outline: none !important;
 }
 
 .hunterTable_ thead tr th{
     background-color:#EBFBFC;
-    font-size: 14px;
+    font-size: 12px;
     padding-top:1.1em;
     padding-bottom:1.1em;
     text-align: center;
@@ -69,6 +70,33 @@ body{
   border-radius: 5px !important;
 }
 
+.afterNavBar {
+  margin-top:55px;
+}
 
+.huntSmlBttn{
+  font-size:12px;
+  outline: none !important;
+}
+
+.hntSmlAwesom{
+  font-size:14px !important;
+}
+
+.hntrBGColor {
+  background-color: #EFF8F9;
+}
+
+.hntrColor {
+  color: #0874A9;
+}
+
+.loadingDataSpinner {
+  width:80%;
+  margin-left:10%;
+  height: 50px;
+  padding-top:20px;
+  text-align: center;
+}
 
 

@@ -16,13 +16,14 @@
 </div>
 
 
-<hunter-table-config *ngIf="!addingGroup" 
+<app-hunter-table *ngIf="!addingGroup" 
+    [height]='400'
     [headers]="headers" 
     [hunterTableData]="taskGroups_" 
     (handleGridAction)="handleGridAction($event)"
     #hunterTableConfig
     >
-</hunter-table-config>
+</app-hunter-table>
 
 
 <app-confirm-alert

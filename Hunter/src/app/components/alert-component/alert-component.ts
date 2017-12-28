@@ -6,8 +6,8 @@ import { Alert, AlertType } from '../../beans/alert';
 @Component({
     moduleId: module.id,
     selector: 'app-alerts',
-    templateUrl: 'alert-component.html',
-    styleUrls: ['alert-component.css']
+    templateUrl: './alert-component.html',
+    styleUrls: ['./alert-component.css']
 
 })
 

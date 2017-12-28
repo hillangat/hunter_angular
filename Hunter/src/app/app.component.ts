@@ -3,6 +3,7 @@ import { TasksService } from './services/tasks-service';
 import { FirebaseService } from './services/firebase-service';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { clients } from './data/mocked-clients';
+import { LoggerService } from './common/logger.service';
 
 
 
@@ -16,7 +17,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   clients: FirebaseListObservable<any[]>;
 
-  constructor( private firebaseService: FirebaseService, private database: AngularFireDatabase ) {}
+  constructor(
+    private firebaseService: FirebaseService,
+    private database: AngularFireDatabase,
+    private logger: LoggerService
+  ) {}
 
   ngOnInit() {
     /* if( !this.firebaseService.isUserLoggedIn() ){
@@ -24,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }else{
       this.clients = this.database.list('/clients');
       if( this.clients != null ){
-        console.log(JSON.stringify(this.clients));
+        this.logger.log(JSON.stringify(this.clients));
       }
     } */
   }

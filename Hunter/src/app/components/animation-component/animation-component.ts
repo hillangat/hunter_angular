@@ -2,8 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-animation-component',
-    templateUrl: 'animation-component.html',
-    styleUrls: [ 'animation-component.css' ]
+    templateUrl: './animation-component.html',
+    styleUrls: [ './animation-component.css' ]
 })
 
 export class AnimationComponent {

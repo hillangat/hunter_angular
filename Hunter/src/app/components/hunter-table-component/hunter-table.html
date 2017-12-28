@@ -5,19 +5,31 @@
 </div>
 
 
-<div class='hunterTableContainer'>
+<!-- https://jsfiddle.net/dPixie/byB9d/3/light/   use this to check out how to free table -->
 
-    <table class='hunterMasterTable'>
+<div class='hunterTableContainer'>
+    <div *ngIf='loadingData' class='loadingDataSpinner' >
+        <i class="fa fa-spinner fa-pulse fa-2x fa-fw hntrColor" ></i>
+    </div>
+    <table class='hunterMasterTable' *ngIf='!loadingData' >
         <tr>
             <td>
                 <div class='hunterMasterTableTitleBar'>
-                    <button (click)="onClickButton('NewRecord',-1)" class="btn hunterButton" style='margin:3px;' *ngIf="hasNewRowButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Create New {{dataBeanName}}</button>
+                    <button
+                        *ngFor="let action of barActions; let i=index" 
+                        (click)="onClickBarAction(action)" 
+                        class="{{action.bootsButtonClass}}" 
+                        style='margin:3px;'
+                    >
+                        <span class="{{action.bootstrapIconName}}" aria-hidden="true"></span>&nbsp;&nbsp;{{action.text}}
+                    </button>
                 </div>
             </td>
         </tr>
         <tr>
             <td>
-                <div style="height:500px;overflow-y: scroll;" >
+                <div [style.height.px]='height' class='hunterTableMiddleDivCover' >
+                    <div></div>
                     <table class='hunterTable'>
                         <thead class='hunterTableHead'>
                             <tr class='hunterTableTr'>
@@ -31,18 +43,18 @@
                                         placement="bottom"
                                         (click)="showFilterDropdown()" 
                                         class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"
-                                        *ngIf="!header.isActionCol"
+                                        *ngIf="!header.actionCol"
                                     ></span>
                                     <span class='hunterHeaderText headerSpan cursorPointer'>{{header.displayName}}</span>
-                                    <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.isActionCol && header.sortable && header.currentOrder"></span>
+                                    <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.actionCol && header.sortable && header.currentOrder"></span>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody *ngIf="visibleHunterTableData.length > 0 ">
+                        <tbody>
                             <tr *ngFor="let datum of visibleHunterTableData">
-                                <td class='hunterTableTd' *ngFor="let header of headers" [style.text-align]="header.isActionCol || header.headerId == header.dataId ? 'center':'left'">
-                                    <span *ngIf="!header.isActionCol">{{ datum[header.headerId] }}</span>
-                                    <div (click)="onClickButton(header.headerId, datum[header.dataId])" class='btn hunterButton' *ngIf="header.isActionCol" style="margin:auto;">
+                                <td class='hunterTableTd' *ngFor="let header of headers" [style.text-align]="header.actionCol || header.headerId == header.dataId ? 'center':'left'">
+                                    <span *ngIf="!header.actionCol">{{ datum[header.headerId] }}</span>
+                                    <div (click)="onClickButton(header.headerId, datum[header.dataId])" class='btn hunterButton' *ngIf="header.actionCol" style="margin:auto;">
                                         <span [class]="getBootstrapClass(header.actionColIconName)"></span>
                                     </div>
                                 </td>

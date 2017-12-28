@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
     moduleId: module.id,
     selector: 'app-task-message',
-    templateUrl: 'task-message.html',
-    styleUrls: ['task-message.css']
+    templateUrl: './task-message.html',
+    styleUrls: ['./task-message.css']
 })
 
 export class TasksMessageComponent implements OnInit {

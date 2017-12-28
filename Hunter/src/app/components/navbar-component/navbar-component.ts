@@ -6,8 +6,8 @@ import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 @Component({
   moduleId: module.id,
   selector: 'app-navbar-component',
-  templateUrl: 'navbar-component.html',
-  styleUrls: ['navbar-component.css'],
+  templateUrl: './navbar-component.html',
+  styleUrls: ['./navbar-component.css'],
   providers: [ FirebaseService ]
 })
 

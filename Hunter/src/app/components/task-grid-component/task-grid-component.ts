@@ -1,28 +1,33 @@
+import { HunterServerResponse } from './../../beans/ServerResponse';
 import { Component, OnInit, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { TasksService } from '../../services/tasks-service';
 import { FirebaseListObservable } from 'angularfire2/database';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { TasksGridHeaders } from '../../data/tasks-grid-headers';
 import { HunterTableConfig } from '../../beans/hunter-table-configs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../services/alert-service';
 import { Alert, AlertType } from '../../beans/alert';
+import { LoggerService } from '../../common/logger.service';
+import HunterTableUtil from 'app/components/hunter-table-component/shared/HunterTableUtil';
+import BarAction from '../hunter-table-component/shared/BarAction';
+import { HunterTableComponent } from 'app/components/hunter-table-component/hunter-table';
+
 
 
 
 @Component({
   moduleId: module.id,
   selector: 'app-task-grid',
-  templateUrl: 'task-grid-component.html',
-  styleUrls:   ['task-grid-component.css'],
+  templateUrl: './task-grid-component.html',
+  styleUrls:   ['./task-grid-component.css'],
   providers: [ TasksService ]
 })
 export class TaskGridComponent implements OnInit {
 
   @ViewChild('cloneTask') cloneTaskComponent;
-
-  tasks: any[];
-  headers: HunterTableConfig[] = TasksGridHeaders;
+  @ViewChild('hunterTable') public hunterTable: HunterTableComponent;
+  public tasks: HunterServerResponse;
+  public loadingTasks = false;
 
   currFunc: string = null;
   currDataId: number = null;
@@ -42,7 +47,8 @@ export class TaskGridComponent implements OnInit {
     private taskService: TasksService,
     private route: ActivatedRoute,
     private router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private logger: LoggerService
   ) {}
 
   alertError( message: string ) {
@@ -62,17 +68,36 @@ export class TaskGridComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.tasks = this.taskService.getClientTaskData();
+      this.loadAllTasks();
+  }
+
+  public loadAllTasks() {
+    this.loadingTasks = true;
+    this.taskService.getAllTasks().subscribe(
+      ( tasks: HunterServerResponse ) => {
+        this.tasks = tasks;
+        this.loadingTasks = false;
+      },
+      (error: HunterServerResponse) => {
+        this.tasks = error;
+        this.alertService.error( JSON.stringify(error) );
+        this.loadingTasks = false;
+      }
+    );
+  }
+
+  public handleBarAction( action: BarAction ) {
+    alert( JSON.stringify( action ) );
   }
 
 
-  handleGridAction(params: any[]) {
+  public handleGridAction(params: any[]) {
 
       this.currFunc   = params[0];
       this.currDataId = params[1];
       this.index      = -1;
 
-      this.getCurrTaskIdAndSetIndex();
+      // this.getCurrTaskIdAndSetIndex();
 
       switch ( this.currFunc ) {
         case 'delete' :
@@ -81,7 +106,7 @@ export class TaskGridComponent implements OnInit {
           this.showModal();
           break;
         case 'edit' :
-          console.log( 'Editing task not allowed here. Doing nothing' );
+          this.logger.log( 'Editing task not allowed here. Doing nothing' );
           this.selActionDispName = 'Edit';
           break;
         case 'process' :
@@ -96,32 +121,23 @@ export class TaskGridComponent implements OnInit {
         case 'clone' :
           this.modalAction = 'CloneTask'
           this.cloneTaskComponent.showModal();
-          this.selActionDispName = 'Clone';
-          this.showModal();
           break;
       }
 
   }
 
-  getCurrTaskIdAndSetIndex() {
-        for ( let i = 0; i < this.tasks.length; i++ ) {
-          const historyId = this.tasks[i].taskId;
-          if ( historyId === this.currDataId ) {
-            this.currDataId = historyId;
-            this.index = i;
-          }
-        }
+  public getBarActions(): BarAction[] {
+    return HunterTableUtil.getBarActions();
   }
 
-   performSelAction() {
-        this.getCurrTaskIdAndSetIndex();
+  public performSelAction() {
         this.hideModal();
         switch ( this.modalAction ) {
           case 'DeleteTask' :
             this.deleteTask();
             break;
           case 'EditTask' :
-            console.log( 'Editing task not allowed here. Doing nothing' );
+            this.logger.log( 'Editing task not allowed here. Doing nothing' );
             break;
           case 'ProcessTask' :
             this.processTask();
@@ -132,22 +148,22 @@ export class TaskGridComponent implements OnInit {
       }
     }
 
-    deleteTask() {
-      console.log( 'Deleting tasks....index = ' + this.index );
-      this.tasks.splice( this.index, 1 );
+    public deleteTask() {
+      this.logger.log( 'Deleting tasks....index = ' + this.index );
+      this.tasks.data.splice( this.index, 1 );
       this.alertSuccess( 'Successfully deleted task!' );
     }
 
-    processTask() {
+    public processTask() {
       this.alertError( 'This action is not currently supported!' );
     }
 
-    cloneTask() {
+    public cloneTask() {
       this.alertError( 'This action is not currently supported!' );
     }
 
-    getActionIcon() {
-      console.log( 'getting action icon for action = ' + this.currFunc );
+    public getActionIcon() {
+      this.logger.log( 'getting action icon for action = ' + this.currFunc );
       const icon = 'glyphicon glyphicon-';
       switch ( this.modalAction ) {
         case 'CloneTask': return icon + 'book';
@@ -155,7 +171,7 @@ export class TaskGridComponent implements OnInit {
         case 'EditTask' : return icon + 'pencil';
         case 'DeleteTask' : return icon + 'remove';
         default:
-          console.log( 'No action found!!' );
+          this.logger.log( 'No action found!!' );
         break;
       }
     }

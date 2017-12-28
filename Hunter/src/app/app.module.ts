@@ -1,3 +1,4 @@
+import { HunterGridComponent } from './components/hunter-grid/hunter-grid.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
@@ -29,6 +30,7 @@ import { ConfirmComponent } from './components/confirm-component/confirm-compone
 import { CloneTaskComponent } from './components/clone-task-component/clone-task-component';
 import { ClientComponent } from './components/client-component/client-component';
 import { ClickOutsideDirective } from './common/click-outside-directive';
+import { LoggerService } from 'app/common/logger.service';
 
 
 
@@ -47,7 +49,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
-import { TestTaskGridComponentComponent } from './components/test-task-grid-component/test-task-grid-component.component';
 import { HunterClientService } from './services/hunter-client-service';
 import { AnimationComponent } from './components/animation-component/animation-component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
@@ -72,9 +73,9 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     ConfirmComponent,
     CloneTaskComponent,
     ClientComponent,
-    TestTaskGridComponentComponent,
     ClickOutsideDirective,
-    AnimationComponent
+    AnimationComponent,
+    HunterGridComponent
   ],
   imports: [
     PopoverModule.forRoot(),
@@ -93,6 +94,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     // InMemoryWebApiModule.forRoot(InMemHeroService, { delay:2500 })
   ],
   providers: [
+    LoggerService,
     FirebaseService,
     AlertService,
     WorkflowTreeService,

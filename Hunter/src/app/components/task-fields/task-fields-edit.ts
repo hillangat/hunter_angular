@@ -6,18 +6,19 @@ import { messageTypes } from '../../beans/dropdowns-values';
 import { taskTypes } from '../../beans/dropdowns-values';
 import { lifeStatuses } from '../../beans/dropdowns-values';
 import { utilFuncs } from '../../utilities/util-functions';
+import { LoggerService } from 'app/common/logger.service';
 
 @Component({
     moduleId: module.id,
     selector: 'app-task-fields-edit',
-    templateUrl: 'task-fields-edit.html',
-    styleUrls: ['task-fields-edit.css'],
+    templateUrl: './task-fields-edit.html',
+    styleUrls: ['./task-fields-edit.css'],
     providers: [ FormBuilder ]
 })
 export class TaskFieldsEditComponent implements OnInit {
 
     @Input() task: any;
-    @Output() isEditMode = new EventEmitter<boolean>();
+    @Output() setEditMode = new EventEmitter<{ sectionName: string, _isEditMode: boolean }>();
 
     public taskFieldsForm: FormGroup;
     public submitted = false;
@@ -35,14 +36,19 @@ export class TaskFieldsEditComponent implements OnInit {
     };
 
 
-    constructor(private _fb: FormBuilder) { }
+    constructor(private _fb: FormBuilder, private logger: LoggerService) { }
 
     /*
         Please see this link for custom validatoros:
         https://blog.thoughtram.io/angular/2016/03/14/custom-validators-in-angular-2.html
     */
 
-    validateMsgType( fc: FormControl ) {
+    public _setEditMode( params: { sectionName: string, _isEditMode: boolean } ) {
+        this.logger.log( JSON.stringify( params ) );
+        this.setEditMode.emit( params );
+    }
+
+    public validateMsgType( fc: FormControl ) {
         const has = utilFuncs.constains(fc.value, messageTypes);
         return has === true ? null : { validateMsgType: false };
     }
@@ -103,13 +109,9 @@ export class TaskFieldsEditComponent implements OnInit {
 
     }
 
-    setEditModeForFields( isEditMode: boolean) {
-        this.isEditMode.emit(isEditMode);
-    }
-
     save(model: TaskFieldsModel, isValid: boolean) {
         this.submitted = true;
-        console.log(model, isValid);
+        this.logger.log(JSON.stringify(model) + ' : ' + isValid);
     }
 
 }
