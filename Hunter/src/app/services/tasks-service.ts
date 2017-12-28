@@ -1,5 +1,6 @@
+import { Observable } from 'rxjs/Observable';
 import { Injectable, OnInit } from '@angular/core';
-import { Http, RequestOptions, Headers } from '@angular/http';
+import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { tasks } from '../data/mocked-tasks';
 import { clients } from '../data/mocked-clients';
 import { taskHistory } from '../data/mocked-task-history';
@@ -8,23 +9,29 @@ import { TaskCloneModel } from '../beans/clone-task-model';
 
 
 import 'rxjs/add/operator/map';
+import { LoggerService } from '../common/logger.service';
+import { HunterServerResponse } from '../beans/ServerResponse';
 
 @Injectable()
 
 export class TasksService {
 
-  cloneTaskURL = 'http://localhost:8080/Hunter/task/action/clone';
-  tasks: any[];
-  getTasksURL = 'http://localhost:8080/Hunter/task/action/read/getTasksForClientId/';
-  currAccessToke = 'YWRtaW46OTk5OTk5';
+  private taskBaseURL = 'http://localhost:8080/Hunter/task/';
+  private cloneTaskURL = this.taskBaseURL + 'action/clone';
+  private tasks: any[];
+  private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
+  private currAccessToke = 'YWRtaW46OTk5OTk5';
+  private getAllTasksURL = this.getTasksURL + '/all';
 
-  constructor( private http: Http ) {}
+  constructor( private http: Http, private logger: LoggerService ) {}
 
-  getTasks() {
-    return this.tasks;
+  public getAllTasks(): Observable<HunterServerResponse> {
+    return  this.http
+                .get( this.getAllTasksURL )
+                .map( (response: Response) => response.json() as HunterServerResponse );
   }
 
-  getClientTasks( clientId: number ) {
+  public getClientTasks( clientId: number ) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
@@ -38,20 +45,20 @@ export class TasksService {
         const result = response.json();
         return result;
       }).subscribe(response => {
-        console.log( response );
+        this.logger.log( response );
       });
   }
 
-  getClientTaskData() {
+  public getClientTaskData() {
     return tasks;
   }
 
-  getTaskHistoryForTaskId( taskId: number ) {
+  public getTaskHistoryForTaskId( taskId: number ) {
     const events = taskHistory[0].events;
     return events;
   }
 
-  getTaskForTaskId(taskId: number) {
+  public getTaskForTaskId(taskId: number) {
     const tasks = this.getClientTaskData();
     for ( let i = 0; i < tasks.length; i++ ) {
       const task = tasks[i];
@@ -62,20 +69,20 @@ export class TasksService {
     return null;
   }
 
-  getTaskHistoryForTask(taskId: number) {
+  public getTaskHistoryForTask(taskId: number) {
 
   }
 
-  cloneTask<ServerStatusResponse>( cloneTask: TaskCloneModel ) {
-    console.log( 'Cloning task...' );
+  public cloneTask<ServerStatusResponse>( cloneTask: TaskCloneModel ) {
+    this.logger.log( 'Cloning task...' );
     const response = new ServerStatusResponse();
     response.status  = 'Failed';
     response.message = 'Task name already taken!';
-    console.log( 'Response from cloning...' + JSON.stringify(response) );
+    this.logger.log( 'Response from cloning...' + JSON.stringify(response) );
     return response;
   }
 
-  getAllTaskIds() {
+  public getAllTaskIds() {
     const taskIds = [];
     for ( let i = 0; i < this.tasks.length; i++ ) {
       const taskId = this.tasks[i];
@@ -84,12 +91,12 @@ export class TasksService {
     return taskIds;
   }
 
-  getClients() {
+  public getClients() {
     return clients;
   }
 
 
-  getNewTask() {
+  public getNewTask() {
     return {
         'description': 'asdfasdf',
         'taskDateline': '2017-05-26 20:03',

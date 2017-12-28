@@ -7,7 +7,7 @@ export interface HunterTableConfig {
     sortable: boolean,
     show: boolean,
     bootstrapIconName: string,
-    dataType: string,
+    dataType: string | number | boolean,
     currentOrder: boolean,
     isActionCol: boolean,
     actionColIconName: string,

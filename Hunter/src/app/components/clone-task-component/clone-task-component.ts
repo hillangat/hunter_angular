@@ -8,13 +8,14 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AlertService } from '../../services/alert-service';
 import { Alert, AlertType } from '../../beans/alert';
 import { ServerStatusResponse, ServerStatuses } from '../../beans/server-status-response';
+import { LoggerService } from '../../common/logger.service';
 
 
 @Component({
     selector: 'app-clone-task',
     moduleId: module.id,
-    templateUrl: 'clone-task-component.html',
-    styleUrls: [ 'clone-task-component.css' ]
+    templateUrl: './clone-task-component.html',
+    styleUrls: [ './clone-task-component.css' ]
 })
 
 export class CloneTaskComponent implements OnInit {
@@ -26,7 +27,7 @@ export class CloneTaskComponent implements OnInit {
     customValidatorMessages = {
         newTaskName: 'Task name is requried. Between 5-50 characters',
         newTaskDesc: 'Task description must be 100 characters or less',
-        newClientUserName: 'Task client is requiried'
+        newClientUserName: 'Task client is required'
     }
 
     serverErrors = {
@@ -44,13 +45,14 @@ export class CloneTaskComponent implements OnInit {
     constructor(
         private taskService: TasksService,
         private formBuilder: FormBuilder,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private logger: LoggerService
     ) { }
 
     ngOnInit() {
         this.task = this.taskService.getNewTask();
         this.clients = this.taskService.getClients();
-        console.log( JSON.stringify( this.clients ) );
+        this.logger.log( JSON.stringify( this.clients ) );
         this.initForm();
     }
 
@@ -69,7 +71,7 @@ export class CloneTaskComponent implements OnInit {
             newTaskId:  [this.taskId ],
             newTaskName: [this.task.taskName, [ <any>Validators.required, <any>Validators.minLength(5), <any>Validators.maxLength(50) ] ],
             newTaskDesc: [this.task.description, [ <any>Validators.required, <any>Validators.maxLength(100) ] ],
-            newClientUserName: ['', this.validateClientUserName ]
+            newClientUserName: ['', undefined ]
         });
     }
 

@@ -7,16 +7,18 @@
 </ol> 
 
 <app-hunter-table
-    [headers]="headers" 
-    [dataBeanName] = "'Task History'"
+    [barActions]="getBarActions()"
+    [height]='300'
+    [loadingData]=false
+    [headers]="headers"
     [hunterTableData]="hunterTableData" 
-    (createNewAction)="createNewAction($event)"
+    (handleBarAction)="handleBarAction($event)"
     (handleGridAction)="handleGridAction($event)">
 </app-hunter-table>
 
 
 <ng-template #popTemplate >
-    <div #pop="" >
+    <div>
         <form>
             <span dropdown (onShown)="onShown()" (onHidden)="onFilterDropdownHidden()" (isOpenChange)="isOpenChange()">
                 <a href dropdownToggle (click)="false">Click me for a dropdown, yo!</a>
@@ -111,7 +113,7 @@
       </div>
       <span *ngIf="errorOccurred" style="font-size:15px;color:red;" ><br><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Error occurred while loading workflow trees</span>                   
       <div style='margin-top:20px;' >
-        <i *ngIf="loadingTrees" class="fa fa-spinner fa-pulse fa-3x fa-fw" style="color:blue;margin-left:25px;"></i>
+        <i *ngIf="loadingTrees" class="fa fa-spinner fa-pulse fa-2x fa-fw" style="color:blue;margin-left:25px;"></i>
         <ul *ngIf="!loadingTrees && worflowSteps" >
             <li class="treenode" *ngFor="let step of worflowSteps; let i=index" (click)="showStepDetails(step)" >
                 {{ step.stepName }}
@@ -129,8 +131,16 @@
   
 
 
-  <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
-  tabindex="-1" role="dialog" aria-hidden="true">
+  <div 
+    *ngIf="isModalShown" 
+    [config]="{ show: true }" 
+    (onHidden)="onHidden()" 
+    bsModal 
+    #autoShownModal="bs-modal" 
+    class="modal fade"
+    tabindex="-1" 
+    role="dialog" 
+    aria-hidden="true" >
   <div class="modal-dialog modal-md">
       <div class="modal-content">
           <div class="modal-header">
@@ -140,14 +150,9 @@
               </button>
           </div>
           <div class="modal-body">
-                <span *ngIf="selStep" >                     
-                    <ul>
-                        <span style='margin:-20px;font-weight: bold;' >{{ selStep.stepName }}</span>
-                        <li *ngFor="let adhoc of selStep.adhocs; let a=index" >
-                            {{ adhoc.stepName }}
-                        </li>
-                    </ul>
-                </span>                              
+                <div style='min-height:300px;text-align:center;' >
+                    <span style='margin-top:260px;'> Create New Task </span>
+                </div>                              
           </div>
           <div class="modal-footer">
                 <button class="btn btn-small btn-default" (click)="hideModal()"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp;Close</button>
@@ -155,3 +160,9 @@
       </div>
   </div>
 </div>
+
+<br/>
+<br/>
+
+<button class="btn huntSmlBttn" ><i class='fa fa-remove hntSmlAwesom' ></i></button>
+<button class="btn huntSmlBttn" ><i class='fa fa-pencil hntSmlAwesom' ></i></button>

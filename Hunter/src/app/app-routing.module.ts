@@ -8,8 +8,8 @@ import { TasksMessageComponent } from './components/task-message/task-message';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found';
 import { TaskDetailComponent } from './components/task-detail/task-detail-component';
 import { ClientComponent } from './components/client-component/client-component';
-import { TestTaskGridComponentComponent } from './components/test-task-grid-component/test-task-grid-component.component';
 import { AnimationComponent } from './components/animation-component/animation-component';
+import { HunterGridComponent } from './components/hunter-grid/hunter-grid.component';
 
 
 const routes: Routes = [
@@ -21,8 +21,8 @@ const routes: Routes = [
   { path: 'taskdetails/:taskId', component: TaskDetailComponent },
   { path: 'taskmessage/:taskId', component: TasksMessageComponent },
   { path: 'clients',     component: ClientComponent },
-  { path: 'testtaskgrid',     component: TestTaskGridComponentComponent },
   { path: 'animation',     component: AnimationComponent },
+  { path: 'grid',     component: HunterGridComponent },
 
   { path: '**',          component: PageNotFoundComponent }
 

@@ -8,9 +8,8 @@
 </ol>
 
 <app-hunter-table
-    *ngIf="clients.length > 0"
+    [loadingData]='loadingData'
     #hunterTable
-    [dataBeanName] = "'Client'"
     [headers]="headers" 
     [hunterTableData]="clients"
     (handleGridAction)="handleGridAction($event)">

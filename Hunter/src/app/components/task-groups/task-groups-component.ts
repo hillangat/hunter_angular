@@ -8,13 +8,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../services/alert-service';
 import { Alert, AlertType } from '../../beans/alert';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { LoggerService } from '../../common/logger.service';
 
 
 @Component({
     moduleId: module.id,
     selector: 'app-task-groups',
-    templateUrl: 'task-groups-component.html',
-    styleUrls: ['task-groups-component.css']
+    templateUrl: './task-groups-component.html',
+    styleUrls: ['./task-groups-component.css']
 })
 
 export class TasksGroupsComponent implements OnInit {
@@ -37,7 +38,9 @@ export class TasksGroupsComponent implements OnInit {
         private taskService: TasksService,
         private route: ActivatedRoute,
         private router: Router,
-        private alertService: AlertService  ) {
+        private alertService: AlertService,
+        private logger: LoggerService
+    ) {
     }
 
     public ngOnInit() {
@@ -109,7 +112,7 @@ export class TasksGroupsComponent implements OnInit {
 
   onConfirm( params: any[] ) {
 
-    console.log( JSON.stringify(params) );
+    this.logger.log( JSON.stringify(params) );
 
     const type = params[0];
     const marker = params[1];
@@ -128,7 +131,7 @@ export class TasksGroupsComponent implements OnInit {
       let index = -1;
       for ( let i = 0; i < this.taskGroups_.length; i++ ) {
         const group = this.taskGroups_[i];
-        console.log( JSON.stringify(group) );
+        this.logger.log( JSON.stringify(group) );
         if ( group.groupId === groupId ) {
           index = i;
           break;

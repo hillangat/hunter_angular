@@ -33,37 +33,22 @@
     <li><a data-toggle="tab" href="#message"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>&nbsp; Task Message</a></li>
     <li><a data-toggle="tab" href="#regions"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp; Task Regions</a></li>
     <li><a data-toggle="tab" href="#groups"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>&nbsp; Task Groups</a></li>
-    <li><a data-toggle="tab" href="#audit"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp; Task Audit</a></li>
+    <li><a data-toggle="tab" href="#taskHistory"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp; Task History</a></li>
+    <li><a data-toggle="tab" href="#audit"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp; Task Audit Information</a></li>
 </ul>
 
 <div class="tab-content">
     <div id="fields" class="tab-pane fade in active">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default ">
-                    <div class="panel-heading">
-                        <tr style="width: 100%;">
-                            <td style="width: 100%;">
-                                <h3><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp; Task Fields</h3>
-                            </td>
-                            <td style="text-align: center;width: 100%;">
-                                <h3 *ngIf="!isEditMode">
-                                    <button (click)='setEditMode("Fields", true)' class="btn hunterButton"><span class="glyphicon glyphicon-pencil" aria-hidden="true">&nbsp;Edit</span></button>
-                                </h3>
-                                <h3 *ngIf="isEditMode">
-                                    <button (click)='setEditMode("Fields", false)' class="btn hunterButton"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true">&nbsp;Cancel</span></button>
-                                </h3>
-                            </td>
-                        </tr>
-                    </div>
-                    <div class="panel-body ">
-                        <div *ngIf="isEditMode">
-                            <task-fields-edit [task]="task"></task-fields-edit>
-                        </div>
-                        <div *ngIf="!isEditMode">
-                            <task-fields-view [task]="task"></task-fields-view>
-                        </div>
-                    </div>
+                <h3 *ngIf="!isEditMode">
+                    <button (click)='setEditMode( { sectionName: "Fields", _isEditMode: true } )' class="btn hunterButton"><span class="glyphicon glyphicon-pencil" aria-hidden="true">&nbsp;Edit</span></button>
+                </h3>
+                <div *ngIf="isEditMode">
+                    <app-task-fields-edit (setEditMode)='setEditMode($event)' [task]="task"></app-task-fields-edit>
+                </div>
+                <div *ngIf="!isEditMode">
+                    <app-task-fields-view [task]="task"></app-task-fields-view>
                 </div>
             </div>
         </div>
@@ -71,209 +56,126 @@
     <div id="statuses" class="tab-pane fade">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default ">
-                    <div class="panel-heading">
-                        <tr style="width: 100%;">
-                            <td style="width: 100%;">
-                                <h3><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;Status Information</h3>
-                            </td>
-                            <td style="text-align: center;width: 100%;">
-                                <h3><button class="btn hunterButton"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></h3>
-                            </td>
-                        </tr>
-                    </div>
-                    <div class="panel-body ">
-                        <ul class="list-group">
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Delivery Status</label>
-                                <span *ngIf="task.taskDeliveryStatus == 'Failed'" style="color:red;">{{task.taskDeliveryStatus}}</span>
-                                <span *ngIf="task.taskDeliveryStatus == 'Success'" style="color:green;">{{task.taskDeliveryStatus}}</span>
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Life Status</label>
-                                <span *ngIf="task.taskLifeStatus == 'Processed'" style="color:green;">{{task.taskLifeStatus}}</span>
-                                <span *ngIf="task.taskLifeStatus != 'Processed'" style="color: #9C6A6A;">{{task.taskLifeStatus}}</span>
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Approved</label>
-                                <span *ngIf="task.taskApprover == 'Y'">Yes</span>
-                                <span *ngIf="task.taskApprover != 'Y'">False</span>
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Approver</label> {{task.approver}}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <br/>
+                <ul class="list-group">
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Delivery Status</label>
+                        <span *ngIf="task.taskDeliveryStatus == 'Failed'" style="color:red;">{{task.taskDeliveryStatus}}</span>
+                        <span *ngIf="task.taskDeliveryStatus == 'Success'" style="color:green;">{{task.taskDeliveryStatus}}</span>
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Life Status</label>
+                        <span *ngIf="task.taskLifeStatus == 'Processed'" style="color:green;">{{task.taskLifeStatus}}</span>
+                        <span *ngIf="task.taskLifeStatus != 'Processed'" style="color: #9C6A6A;">{{task.taskLifeStatus}}</span>
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Approved</label>
+                        <span *ngIf="task.taskApprover == 'Y'">Yes</span>
+                        <span *ngIf="task.taskApprover != 'Y'">False</span>
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Approver</label> {{task.approver}}
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
     <div id="message" class="tab-pane fade">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default ">
-                    <div class="panel-heading">
-                        <tr style="width: 100%;">
-                            <td style="width: 100%;">
-                                <h3><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>&nbsp; Task Message</h3>
-                            </td>
-                            <td style="text-align: center;width: 100%;">
-                                <h3><button class="btn hunterButton"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></h3>
-                            </td>
-                        </tr>
-                    </div>
-                    <div class="panel-body ">
-                        <ul class="list-group">
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Created On</label> {{task.cretDate}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdBy}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Updated On</label> {{task.lastUpdate}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedBy}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedBy}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Processed On</label> {{task.processedOn}}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <br/>
+                <ul class="list-group">
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Created On</label> {{task.cretDate}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdBy}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Updated On</label> {{task.lastUpdate}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedBy}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedBy}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Processed On</label> {{task.processedOn}}
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
     <div id="regions" class="tab-pane fade">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default ">
-                    <div class="panel-heading">
-                        <tr style="width: 100%;">
-                            <td style="width: 100%;">
-                                <h3><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp; Task Regions</h3>
-                            </td>
-                            <td style="text-align: center;width: 100%;">
-                                <h3><button class="btn hunterButton"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></h3>
-                            </td>
-                        </tr>
-                    </div>
-                    <div class="panel-body ">
-                        <ul class="list-group">
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Created On</label> {{task.cretDate}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdBy}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Updated On</label> {{task.lastUpdate}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedBy}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedBy}}
-                            </li>
-                            <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                <label style='width:25%;color:#41ABBC;'>Processed On</label> {{task.processedOn}}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <br/>
+                <ul class="list-group">
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Created On</label> {{task.cretDate}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdBy}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Updated On</label> {{task.lastUpdate}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedBy}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedBy}}
+                    </li>
+                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                        <label style='width:25%;color:#41ABBC;'>Processed On</label> {{task.processedOn}}
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
     <div id="groups" class="tab-pane fade">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default ">
-                    <div class="panel-heading">
-                        <tr style="width: 100%;">
-                            <td style="width: 100%;">
-                                <h3><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>&nbsp; Task Groups</h3>
-                            </td>
-                        </tr>
-                    </div>
-                    <div class="panel-body ">
-                        <task-groups [taskGroups]="task.taskGroups"></task-groups>
-                    </div>
-                </div>
+                <br/>
+                <app-task-groups [taskGroups]="task.taskGroups"></app-task-groups>
             </div>
         </div>
     </div>
+    
+    <div id="taskHistory" class="tab-pane fade">
+        <br/>
+        <app-hunter-table 
+            [height]='400'
+            [headers]="historyHeaders" 
+            [hunterTableData]="history" 
+            (createNewAction)="createNewAction($event)"
+            (handleGridAction)="handleGridAction($event)">
+        </app-hunter-table>
+    </div>
+    
+
     <div id="audit" class="tab-pane fade">
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#taskHistory"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp; Task History</a></li>
-                    <li><a data-toggle="tab" href="#auditInformation"><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp; Task Audit Information</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div id="taskHistory" class="tab-pane fade in active">
-                        <div class="panel panel-default ">
-                            <div class="panel-heading">
-                                <tr style="width: 100%;">
-                                    <td style="width: 100%;">
-                                        <h3><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp; Task History</h3>
-                                    </td>
-                                </tr>
-                            </div>
-                            <div class="panel-body ">
-                                <div *ngIf="history">
-                                    <hunter-table-config 
-                                        [headers]="historyHeaders" 
-                                        [hunterTableData]="history" 
-                                        (createNewAction)="createNewAction($event)"
-                                        (handleGridAction)="handleGridAction($event)">
-                                    </hunter-table-config>
-                                </div>
-                                <div *ngIf="!history">
-                                    <h3><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;No
-                                        task history found for this task!</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="auditInformation" class="tab-pane fade">
-                        <div class="panel panel-default ">
-                            <div class="panel-heading">
-                                <tr style="width: 100%;">
-                                    <td style="width: 100%;">
-                                        <h3><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp; Task Audit</h3>
-                                    </td>
-                                </tr>
-                            </div>
-                            <div class="panel-body ">
-                                <ul class="list-group">
-                                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                        <label style='width:25%;color:#41ABBC;'>Created On</label> {{task.cretDate}}
-                                    </li>
-                                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                        <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdBy}}
-                                    </li>
-                                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                        <label style='width:25%;color:#41ABBC;'>Updated On</label> {{task.lastUpdate}}
-                                    </li>
-                                    <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                                        <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedBy}}
-                                    </li>
-                                    <li *ngIf="task.taskLifeStatus == 'Processed'" class="list-group-item" style="border:1px solid #E6F1F3;">
-                                        <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedBy}}
-                                    </li>
-                                    <li *ngIf="task.taskLifeStatus == 'Processed'" class="list-group-item" style="border:1px solid #E6F1F3;">
-                                        <label style='width:25%;color:#41ABBC;'>Processed On</label> {{task.processedOn}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <br/>
+        <ul class="list-group">
+            <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                <label style='width:25%;color:#41ABBC;'>Created On</label> {{task.cretDate}}
+            </li>
+            <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdBy}}
+            </li>
+            <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                <label style='width:25%;color:#41ABBC;'>Updated On</label> {{task.lastUpdate}}
+            </li>
+            <li class="list-group-item" style="border:1px solid #E6F1F3;">
+                <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedBy}}
+            </li>
+            <li *ngIf="task.taskLifeStatus == 'Processed'" class="list-group-item" style="border:1px solid #E6F1F3;">
+                <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedBy}}
+            </li>
+            <li *ngIf="task.taskLifeStatus == 'Processed'" class="list-group-item" style="border:1px solid #E6F1F3;">
+                <label style='width:25%;color:#41ABBC;'>Processed On</label> {{task.processedOn}}
+            </li>
+        </ul>
     </div>
 </div>

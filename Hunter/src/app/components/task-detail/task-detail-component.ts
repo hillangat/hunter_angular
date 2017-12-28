@@ -5,14 +5,15 @@ import { ActivatedRoute } from '@angular/router';
 import { taskDetailStates } from '../../beans/task-detail-states';
 import { TasksHistoryHeaders } from '../../data/task-history-headers';
 import { HunterTableConfig } from '../../beans/hunter-table-configs';
+import { LoggerService } from 'app/common/logger.service';
 
 
 
 
 @Component({
     moduleId: module.id,
-    templateUrl: 'task-detail-component.html',
-    styleUrls: ['task-detail-component.css']
+    templateUrl: './task-detail-component.html',
+    styleUrls: ['./task-detail-component.css']
 })
 export class TaskDetailComponent implements OnInit {
 
@@ -31,7 +32,11 @@ export class TaskDetailComponent implements OnInit {
     private history: any[];
     private historyHeaders: Array<HunterTableConfig> = TasksHistoryHeaders;
 
-    constructor(private taskService: TasksService, private route: ActivatedRoute) { }
+    constructor(
+        private taskService: TasksService,
+        private route: ActivatedRoute,
+        private logger: LoggerService
+    ) { }
 
     ngOnInit() {
         this.getTask();
@@ -61,15 +66,15 @@ export class TaskDetailComponent implements OnInit {
         return nextStatus;
     }
 
-    isInEditMode(sectionName: string, isAnyInEditMode: boolean) {
+    isInEditMode( params: { sectionName: string, isAnyInEditMode: boolean } ) {
         const sections = taskDetailStates[1]['sections'];
         for ( let i = 0; i < sections.length; i++) {
             const section = sections[i];
             const name = section.name, mode = section.Mode;
-            if (mode === 'Edit' && isAnyInEditMode) {
+            if (mode === 'Edit' && params.isAnyInEditMode) {
                 return true;
             } else {
-                if (sectionName === name) {
+                if (params.sectionName === name) {
                     return mode === 'Edit';
                 }
             }
@@ -77,17 +82,17 @@ export class TaskDetailComponent implements OnInit {
         return false;
     }
 
-    setEditMode(sectionName: string, _isEditMode: boolean) {
-        console.log( 'sectionname = '  + sectionName + ', _isEditMode = ' + _isEditMode );
+    setEditMode( params: { sectionName: string, _isEditMode: boolean } ) {
+        this.logger.log( 'sectionname = '  + params.sectionName + ', _isEditMode = ' + params._isEditMode );
         const sections = taskDetailStates[1]['sections'];
         for ( let i = 0; i < sections.length; i++) {
             const section = sections[i];
             const name = section.name, mode = section.Mode;
-            if (sectionName === name) {
-                section.Mode = _isEditMode ? 'Edit' : 'View';
+            if ( params.sectionName === name ) {
+                section.Mode = params._isEditMode ? 'Edit' : 'View';
             }
         }
-        this.isEditMode = this.isInEditMode( null, true );
+        this.isEditMode = this.isInEditMode( { sectionName: params.sectionName, isAnyInEditMode: params._isEditMode } );
     }
 
 }

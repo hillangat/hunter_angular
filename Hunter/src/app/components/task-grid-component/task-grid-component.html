@@ -10,21 +10,25 @@
 
 <app-hunter-table
     #hunterTable
-    [dataBeanName] = "'Task'"
-    [headers]="headers" 
-    [hunterTableData]="tasks" 
+    *ngIf='!loadingTasks'
+    [barActions]="getBarActions()"
+    [height]='420'
+    [loadingData]='loadingTasks'
+    [serverResponse]="tasks"
+    (handleBarAction)="handleBarAction($event)"
     (handleGridAction)="handleGridAction($event)">
 </app-hunter-table>
-
-
-
-<div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
-    <clone-task [taskId]="currDataId" [isModalShown] = true #cloneTask></clone-task>
+<div *ngIf='loadingTasks' class='loadingDataSpinner' >
+    <i class="fa fa-spinner fa-pulse fa-2x fa-fw hntrColor" ></i>
 </div>
 
 
 
-<!--
+<div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
+    <app-clone-task [taskId]="currDataId" [isModalShown] = true #cloneTask></app-clone-task>
+</div>
+
+
 
 <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
     tabindex="-1" role="dialog" aria-hidden="true">
@@ -39,7 +43,7 @@
             <div class="modal-body">
                 
                 <div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
-                    <clone-task [taskId]="currDataId" ></clone-task>
+                    <app-clone-task [taskId]="currDataId" ></app-clone-task>
                 </div>
                 
                 <div *ngIf="modalAction == 'DeleteTask'"  id="confirmTaskDelete" >
@@ -59,7 +63,5 @@
         </div>
     </div>
 </div>
-
--->
 
 

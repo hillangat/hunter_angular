@@ -1,6 +1,9 @@
+import { ServerStatuses } from './server-status-response';
+import { HunterTableConfig } from './hunter-table-configs';
 
-export class ServerResponse {
+export class HunterServerResponse {
     status: string;
     message: string;
-    data: any[]
+    data: any[];
+    headers: HunterTableConfig[] | undefined;
 }

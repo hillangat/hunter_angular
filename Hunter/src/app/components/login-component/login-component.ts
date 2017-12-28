@@ -6,8 +6,8 @@ import { User } from '../../beans/User';
 @Component({
     moduleId: module.id,
     selector: 'app-login-component',
-    templateUrl: 'login-component.html',
-    styleUrls: ['login-component.css']
+    templateUrl: './login-component.html',
+    styleUrls: ['./login-component.css']
 })
 
 export class LoginComponent implements OnInit {

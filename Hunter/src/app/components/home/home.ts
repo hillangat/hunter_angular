@@ -1,3 +1,5 @@
+import { BActionDisplayEnum } from './../hunter-table-component/shared/BActionDisplayEnum';
+import { ActionTypeEnum } from './../hunter-table-component/shared/ActionTypeEnum';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { taskHistory } from '../../data/mocked-task-history';
 import { HunterTableConfig } from '../../beans/hunter-table-configs';
@@ -6,13 +8,16 @@ import { AlertService } from '../../services/alert-service';
 import { Alert, AlertType } from '../../beans/alert';
 import { WorkflowTreeService } from '../../services/workflow-tree-service';
 import { WorkflowStep } from '../../beans/workflow-tree';
-import { ServerResponse } from '../../beans/ServerResponse';
+import { HunterServerResponse } from '../../beans/ServerResponse';
+import { LoggerService } from '../../common/logger.service';
+import BarAction from 'app/components/hunter-table-component/shared/BarAction';
+import HunterTableUtil from '../hunter-table-component/shared/HunterTableUtil';
 
 @Component({
     moduleId: module.id,
     selector: 'app-home-component',
-    templateUrl: 'home.html',
-    styleUrls: ['home.css'],
+    templateUrl: './home.html',
+    styleUrls: ['./home.css'],
     providers: [ WorkflowTreeService ]
 })
 export class HomeComponent {
@@ -367,14 +372,18 @@ export class HomeComponent {
   ];
 
 
-  constructor( private alertService: AlertService, private workflowTreeService: WorkflowTreeService ) {}
+  constructor(
+    private alertService: AlertService,
+    private workflowTreeService: WorkflowTreeService,
+    private logger: LoggerService
+  ) {}
 
-    createNewAction( dataBeanId: string ) {
-      if ( dataBeanId === 'Task History' ) {
-        this.popupModalTitle = 'Create New ' + dataBeanId;
-        this.showModal();
-      }
+  public handleBarAction( action: BarAction ) {
+    this.popupModalTitle = action.text;
+    if ( action.type === ActionTypeEnum.CREATE  ) {
+      this.showModal();
     }
+  }
 
     handleGridAction(params: any[]) {
 
@@ -393,7 +402,7 @@ export class HomeComponent {
         if ( this.index !== -1 ) {
           this.showModal();
         } else {
-          console.error( 'No index to be deleted found!! Bad data! funcName = ' + this.currFunc + ', dataId = ' + this.currDataId );
+          this.logger.error( 'No index to be deleted found!! Bad data! funcName = ' + this.currFunc + ', dataId = ' + this.currDataId );
         }
       } else if ( this.currFunc === 'edit' ) {
         alert('Opening edit....');
@@ -437,7 +446,7 @@ export class HomeComponent {
     this.worflowSteps  = null;
     this.errorOccurred = false;
     this.workflowTreeService.getWorkflowTrees().then(
-      ( serverResp: ServerResponse ) => {
+      ( serverResp: HunterServerResponse ) => {
         if ( serverResp.status === 'Success' ) {
           this.worflowSteps  = serverResp.data as WorkflowStep[];
           this.errorOccurred = false;
@@ -463,7 +472,7 @@ export class HomeComponent {
 
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    this.logger.error( 'An error occurred' + JSON.stringify(error) ); // for demo purposes only
     return Promise.reject(error.message || error);
   }
 
@@ -474,13 +483,17 @@ export class HomeComponent {
   }
 
   public onFilterDropdownHidden(): void {
-    console.log('Dropdown is hidden');
+    this.logger.log('Dropdown is hidden');
   }
   public onShown(): void {
-    console.log('Dropdown is shown');
+    this.logger.log('Dropdown is shown');
   }
   public isOpenChange(): void {
-    console.log('Dropdown state is changed');
+    this.logger.log('Dropdown state is changed');
+  }
+
+  public getBarActions(): BarAction[] {
+    return HunterTableUtil.getBarActions();
   }
 
 

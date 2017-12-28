@@ -150,7 +150,9 @@
     border-radius:4px;
 }
 
-
+.hunterTableMiddleDivCover {
+    overflow-y: scroll;
+}
 
 
 

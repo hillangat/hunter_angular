@@ -2,26 +2,27 @@ import { Injectable } from '@angular/core';
 import {Http, Response, Headers} from '@angular/http';
 import { WorkflowStep } from '../beans/workflow-tree';
 import 'rxjs/add/operator/toPromise';
-import { ServerResponse } from '../beans/ServerResponse';
+import { HunterServerResponse } from '../beans/ServerResponse';
+import { LoggerService } from '../common/logger.service';
 
 @Injectable()
 export class WorkflowTreeService {
 
     private wtURL = 'http://localhost:8080/Hunter/restful/workflow/tree/read';
 
-    constructor(private http: Http) { }
+    constructor( private http: Http, private logger: LoggerService ) { }
 
-    getWorkflowTrees(): Promise<ServerResponse> {
+    getWorkflowTrees(): Promise<HunterServerResponse> {
       const headers = this.getHeaders();
       const creds   = this.getReqParams();
       return this.http.post(this.wtURL, creds, {headers: headers} )
           .toPromise()
-          .then(response => response.json() as ServerResponse[])
+          .then(response => response.json() as HunterServerResponse[])
           .catch(this.handleError);
     }
 
       private handleError(error: any): Promise<any> {
-        console.error('An error occurred' + JSON.stringify(error)); // for demo purposes only
+        this.logger.error('An error occurred' + JSON.stringify(error)); // for demo purposes only
         return Promise.reject(error.message || error);
       }
 

@@ -1,25 +1,37 @@
+import { HunterServerResponse } from './../../beans/ServerResponse';
 import { HunterTableConfig } from './../../beans/hunter-table-configs';
 import { Component, Input, Output, OnInit, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { taskHistory } from '../../data/mocked-task-history';
+import { LoggerService } from '../../common/logger.service';
+import BarAction from 'app/components/hunter-table-component/shared/BarAction';
+import { ServerStatuses } from '../../beans/server-status-response';
 
 
 @Component({
     moduleId: module.id,
     selector: 'app-hunter-table',
-    templateUrl: 'hunter-table.html',
-    styleUrls: ['hunter-table.css']
+    templateUrl: './hunter-table.html',
+    styleUrls: ['./hunter-table.css']
 })
 export class HunterTableComponent implements OnInit {
 
-    @Output() handleGridAction = new EventEmitter<any[]>();
-    @Output() createNewAction = new EventEmitter<string>();
+    /**
+     * Note: this is for exportingh to excel using jQuery
+     * http://www.jquerybyexample.net/2012/10/export-table-data-to-excel-using-jquery.html
+     */
 
+    @Output() handleGridAction = new EventEmitter<any[]>();
+    @Output() handleBarAction = new EventEmitter<BarAction>();
+
+    @Input ('barActions') barActions: BarAction[] = [];
+    @Input ('height') height = 0;
     @Input ('headers') headers: any[];
-    @Input('hunterTableData') hunterTableData: any[];
-    @Input('dataBeanName') dataBeanName = 'Record';
+    @Input('hunterTableData') hunterTableData: any[] = [];
+    @Input('serverResponse') serverResponse: HunterServerResponse;
 
     @ViewChild('closePopupButton') closePopupButton: ElementRef;
 
+    private _loadingData = false;
     private visibleHunterTableData: any[];
     private overlayIsOn = false;
     private hasNewRowButton = true;
@@ -36,29 +48,49 @@ export class HunterTableComponent implements OnInit {
     private startIndex = 0 ;
     private endIndex = 0;
 
-    constructor( private ref: ElementRef ) {
-        console.log( 'Starting it up...' );
+    constructor( private ref: ElementRef, private logger: LoggerService ) {
+        this.logger.log( 'Starting it up...' );
+    }
+
+    @Input('loadingData') public set loadingData ( loadingData: boolean  ) {
+        this._loadingData = loadingData;
+        if ( !this._loadingData ) {
+            this.initializeDataGrid();
+        }
+    };
+
+    public get loadingData(): boolean {
+        return this._loadingData;
     }
 
     public ngOnInit() {
+        this.setDefaults();
         this.initializeDataGrid();
+    }
+
+    public setDefaults(): void {
+        if ( this.serverResponse && this.serverResponse.status === 'Success' ) {
+            this.hunterTableData = this.serverResponse.data;
+            this.headers = this.serverResponse.headers;
+        }
+        this.height = this.height === 0 ? this.height = 400 : this.height;
     }
 
     public initializeDataGrid() {
         this.calculatePageNumbers();
         this.redrawBubblePages();
         this.updateVisibleHunterTableData();
-        console.log( 'Table initialized!!!' );
+        this.logger.log( 'Table initialized!!!' );
     }
 
-    calculatePageNumbers() {
+    public calculatePageNumbers() {
 
         this.totalRowNum = this.hunterTableData.length;
 
         /** If the user selects 'All', then the page number is equal to 1 */
         if ( this.selItemsPerPage === 0 ) {
             this.calculatedPageNumbers = 1;
-            console.log( this.calculatedPageNumbers );
+            this.logger.log( JSON.stringify( this.calculatedPageNumbers ) );
             this.redrawBubblePages();
             return;
         }
@@ -77,14 +109,14 @@ export class HunterTableComponent implements OnInit {
         this.calculatedPageNumbers = this.calculatedPageNumbers < 1 ? 1 : this.calculatedPageNumbers;
     }
 
-    setItemsPerPage( _selItemsPerPage ) {
+    public setItemsPerPage( _selItemsPerPage ) {
         this.selItemsPerPage = _selItemsPerPage;
         this.displaySelItemsPerPage = _selItemsPerPage === 0 ? 'All' : _selItemsPerPage + '';
         this.currentPageNo = 1;
         this.initializeDataGrid();
     }
 
-    updateVisibleHunterTableData() {
+    public updateVisibleHunterTableData() {
 
         if ( this.calculatedPageNumbers === 1 ) {
             this.startIndex = 0;
@@ -109,17 +141,17 @@ export class HunterTableComponent implements OnInit {
         }
     }
 
-    getStyleForSelPageCircle( pageNo ) {
+    public getStyleForSelPageCircle( pageNo ) {
         return this.currentPageNo === pageNo ? '#D6F0F2' : '';
     }
 
-    setCurrentPage( selPageNo ) {
+    public setCurrentPage( selPageNo ) {
         this.currentPageNo = selPageNo;
         // this.updateVisibleHunterTableData();
         this.initializeDataGrid();
     }
 
-    redrawBubblePages() {
+    public redrawBubblePages() {
 
         this.calculatedPageNumberArray = [];
 
@@ -129,14 +161,14 @@ export class HunterTableComponent implements OnInit {
 
         this.visiblePageNumbers = [];
 
-        const totalPages  = this.calculatedPageNumberArray.length;
-        let maxBlocks   = totalPages / this.maxVisiblePageNos;
-        const decimal     = maxBlocks - Math.floor(maxBlocks);
-        maxBlocks   = decimal > 0 ? maxBlocks : maxBlocks + 1;
+        const totalPages    = this.calculatedPageNumberArray.length;
+        let maxBlocks       = totalPages / this.maxVisiblePageNos;
+        const decimal       = maxBlocks - Math.floor(maxBlocks);
+        maxBlocks       = decimal > 0 ? maxBlocks : maxBlocks + 1;
         let minPage     = 1,
         maxPage     = minPage + this.maxVisiblePageNos - 1;
 
-        console.log( 'currentPageNo = ' + this.currentPageNo );
+        this.logger.log( 'currentPageNo = ' + this.currentPageNo );
 
         let isWithinRange = this.currentPageNo >= minPage;
         const counter = 0;
@@ -144,8 +176,8 @@ export class HunterTableComponent implements OnInit {
         while ( isWithinRange ) {
             const nextMinPage   = maxPage + 1;
             const nextMaxPage   = nextMinPage + this.maxVisiblePageNos - 1;
-            console.log( 'Next minPage = ' + minPage );
-            console.log( 'Next maxPage = ' + maxPage );
+            this.logger.log( 'Next minPage = ' + minPage );
+            this.logger.log( 'Next maxPage = ' + maxPage );
             isWithinRange    = this.currentPageNo >= nextMinPage;
             if ( isWithinRange ) {
                 minPage = nextMinPage;
@@ -153,8 +185,8 @@ export class HunterTableComponent implements OnInit {
             }
         }
 
-        console.log( 'minPage = ' + minPage );
-        console.log( 'maxPage = ' + maxPage );
+        this.logger.log( 'minPage = ' + minPage );
+        this.logger.log( 'maxPage = ' + maxPage );
 
         for ( let i = minPage; i <= maxPage; i++) {
             if (this.calculatedPageNumberArray.length >= i) {
@@ -162,57 +194,56 @@ export class HunterTableComponent implements OnInit {
             }
         }
 
-        console.log( JSON.stringify( this.visiblePageNumbers ) );
+        this.logger.log( JSON.stringify( this.visiblePageNumbers ) );
     }
 
-    getBootstrapClass(name: string) {
+    public getBootstrapClass(name: string) {
         return 'glyphicon glyphicon-' + name;
     }
 
-    getDatumForHeader( header: HunterTableConfig, row: any) {
+    public getDatumForHeader( header: HunterTableConfig, row: any) {
         const fieldId = header['headerId']; // history ID
         const value = row[fieldId]; // 49484
     }
 
-    getRowDataId(datum, header) {
+    public getRowDataId(datum, header) {
         if (datum == null || datum.length === 0) {
-            console.log('getRowDataId empty datum argument');
+            this.logger.log('getRowDataId empty datum argument');
         }
         if (header == null || header.length === 0) {
-            console.log('getRowDataId empty header argument');
+            this.logger.log('getRowDataId empty header argument');
         }
         return datum[header.dataId]
     }
 
-    onClickButton(funcName: string, dataId: any) {
+    public onClickButton(funcName: string, dataId: any) {
         this.handleGridAction.emit([funcName, dataId]);
         this.initializeDataGrid();
     }
 
-    removeOverlay() {
+    public onClickBarAction( action: BarAction ) {
+        this.handleBarAction.emit( action );
+    }
+
+    public removeOverlay() {
         this.overlayIsOn = false;
     }
 
-    showOverlay() {
+    public showOverlay() {
         this.overlayIsOn = true;
         this.onClickButton( 'refresh', -1 );
     }
 
-    showFilterDropdown() {
+    public showFilterDropdown() {
         //
     }
 
-    displayNewCreationWidget() {
-        this.createNewAction.emit(this.dataBeanName);
-        this.initializeDataGrid();
-    }
-
-    goToPageOne() {
+    public goToPageOne() {
         this.currentPageNo = 1;
         this.initializeDataGrid();
     }
 
-    goToPreviousPage() {
+    public goToPreviousPage() {
         if ( this.currentPageNo > 1 ) {
             this.currentPageNo--;
         } else {
@@ -221,7 +252,7 @@ export class HunterTableComponent implements OnInit {
         this.initializeDataGrid();
     }
 
-    goToNextPage() {
+    public goToNextPage() {
         if ( this.currentPageNo < this.calculatedPageNumbers ) {
             this.currentPageNo++;
         } else {
@@ -230,12 +261,12 @@ export class HunterTableComponent implements OnInit {
         this.initializeDataGrid();
     }
 
-    goToLastPage() {
+    public goToLastPage() {
         this.currentPageNo = this.calculatedPageNumberArray[this.calculatedPageNumberArray.length - 1];
         this.initializeDataGrid();
     }
 
-    getCurrentPageCount() {
+    public getCurrentPageCount() {
         const
         startNo =  ( this.currentPageNo - 1 ) * this.selItemsPerPage + 1,
         endNo   =  startNo + this.visibleHunterTableData.length - 1;
@@ -247,13 +278,13 @@ export class HunterTableComponent implements OnInit {
     }
 
     public onFilterDropdownHidden(): void {
-        console.log('Dropdown is hidden');
+        this.logger.log('Dropdown is hidden');
     }
     public onShown(): void {
-        console.log('Dropdown is shown');
+        this.logger.log('Dropdown is shown');
     }
     public isOpenChange(): void {
-        console.log('Dropdown state is changed');
+        this.logger.log('Dropdown state is changed');
     }
 
 
