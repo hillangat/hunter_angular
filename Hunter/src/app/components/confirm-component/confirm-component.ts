@@ -10,6 +10,9 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 
 export class ConfirmComponent implements OnInit {
 
+    @Input('titleIconClass') titleIconClass: string;
+    @Input('preTexIconClass') preTexIconClass: string;
+    @Input('textColor') textColor: string;
     @Input('message') message: string;
     @Input('title') title: string;
     @Input('yesText') yesText: string;
@@ -23,21 +26,19 @@ export class ConfirmComponent implements OnInit {
 
     private yes = 'yes';
     private no = 'no';
-    private showAlert = true;
+    private showAlert = false;
     private configs: { show: true };
 
     @Output() onConfirm = new EventEmitter<any[]>();
 
-    ngOnInit() {
-        this.showModal();
-    }
+    public ngOnInit() {}
 
-    onConfirm_(type: any) {
+    public onConfirm_(type: any) {
         this.hideModal();
         this.onConfirm.emit([type, this.marker, this.dataId]);
     }
 
-    getActionButtonClass(type: string) {
+    public getActionButtonClass(type: string) {
         if ( type === 'yes' ) {
             return this.yesButtonClass;
         } else {
@@ -45,7 +46,7 @@ export class ConfirmComponent implements OnInit {
         }
     }
 
-    getBoostrapIcon( type: string ) {
+    public getBoostrapIcon( type: string ) {
         if ( type === 'yes' ) {
             return this.yesBootstrapClass;
         } else {
@@ -53,11 +54,11 @@ export class ConfirmComponent implements OnInit {
         }
     }
 
-    hideModal() {
+    public hideModal() {
         this.showAlert = false;
     }
 
-    showModal() {
+    public showModal() {
         this.showAlert = true;
     }
 

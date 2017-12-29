@@ -6,14 +6,19 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pull-left"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; {{title}}</h4>
+                <h4 class="modal-title pull-left"><span [class]="titleIconClass" aria-hidden="true"></span>&nbsp; {{title}}</h4>
                 <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div id="modalBodyContent" >
-                    <h4 style="color:#125B66;" >{{ message }}</h4>
+                    <table>
+                        <tr>
+                            <td [style.color]='textColor' style='font-size:20px;' ><span [class]="preTexIconClass" ></span>&nbsp;&nbsp; </td>
+                            <td [style.color]='textColor' ><h4>{{ message }}</h4></td>
+                        </tr>
+                    </table>                    
                 </div>
             </div>            
             <div class="modal-footer">

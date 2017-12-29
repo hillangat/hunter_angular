@@ -1,5 +1,6 @@
+import { AlertService } from './../../services/alert-service';
 
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { TaskFieldsModel } from '../../beans/task-field-model';
 import { messageTypes } from '../../beans/dropdowns-values';
@@ -7,6 +8,10 @@ import { taskTypes } from '../../beans/dropdowns-values';
 import { lifeStatuses } from '../../beans/dropdowns-values';
 import { utilFuncs } from '../../utilities/util-functions';
 import { LoggerService } from 'app/common/logger.service';
+import { ConfirmComponent } from 'app/components/confirm-component/confirm-component';
+import { AbstractControl } from '@angular/forms/src/model';
+import { TasksService } from '../../services/tasks-service';
+import { Task } from '../../beans/Task';
 
 @Component({
     moduleId: module.id,
@@ -17,7 +22,8 @@ import { LoggerService } from 'app/common/logger.service';
 })
 export class TaskFieldsEditComponent implements OnInit {
 
-    @Input() task: any;
+    @ViewChild('lgModal') lgModal: any;
+    @ViewChild('confirmAlert') confirmAlert: ConfirmComponent;
     @Output() setEditMode = new EventEmitter<{ sectionName: string, _isEditMode: boolean }>();
 
     public taskFieldsForm: FormGroup;
@@ -25,6 +31,8 @@ export class TaskFieldsEditComponent implements OnInit {
     public events: any[] = [];
     public messageTypes_: string[] = messageTypes;
     public taskTypes_: string[] = taskTypes;
+    public isNew = false;
+    public task: Task;
 
     public customValidatorMessages = {
         taskName: 'Task name is requried. 5 characters minimum',
@@ -36,12 +44,24 @@ export class TaskFieldsEditComponent implements OnInit {
     };
 
 
-    constructor(private _fb: FormBuilder, private logger: LoggerService) { }
+    constructor(
+        private _fb: FormBuilder,
+        private logger: LoggerService,
+        private alertService: AlertService,
+        private taskService: TasksService
+    ) { }
 
     /*
         Please see this link for custom validatoros:
         https://blog.thoughtram.io/angular/2016/03/14/custom-validators-in-angular-2.html
     */
+
+    public open( isNew: boolean, task: any ) {
+        this.isNew = isNew;
+        this.task = task;
+        this.setValues();
+        this.lgModal.show();
+    }
 
     public _setEditMode( params: { sectionName: string, _isEditMode: boolean } ) {
         this.logger.log( JSON.stringify( params ) );
@@ -53,18 +73,21 @@ export class TaskFieldsEditComponent implements OnInit {
         return has === true ? null : { validateMsgType: false };
     }
 
-    validateTaskType( fc: FormControl ) {
+    public validateTaskType( fc: FormControl ) {
         const has = utilFuncs.constains(fc.value, taskTypes);
         return has === true ? null : { validateTaskType: false };
     }
 
-    validateLifeStatus( fc: FormControl ) {
+    public validateLifeStatus( fc: FormControl ) {
         const has = utilFuncs.constains(fc.value, lifeStatuses);
         return has === true ? null : { validateLifeStatus: false };
     }
 
-    ngOnInit() {
+    public ngOnInit() {
+        this.createForm();
+    }
 
+    public createForm() {
         this.taskFieldsForm = this._fb.group({
             taskType:  ['', this.validateTaskType ],
             taskName: ['', [ <any>Validators.required, <any>Validators.minLength(10) ] ],
@@ -86,32 +109,86 @@ export class TaskFieldsEditComponent implements OnInit {
             confirmedReceiverCount: 0,
             srlzdTskPrcssJbObjsFilLoc: 0
         });
-
-        this.taskFieldsForm.controls['taskLifeStatus'].setValue( this.task.taskLifeStatus );
-        this.taskFieldsForm.controls['taskName'].setValue( this.task.taskName );
-        this.taskFieldsForm.controls['taskType'].setValue( this.task.taskType );
-        this.taskFieldsForm.controls['taskObjective'].setValue( this.task.taskObjective );
-        this.taskFieldsForm.controls['description'].setValue( this.task.description );
-        this.taskFieldsForm.controls['tskAgrmntLoc'].setValue( this.task.tskAgrmntLoc );
-        this.taskFieldsForm.controls['tskMsgType'].setValue( this.task.tskMsgType );
-        this.taskFieldsForm.controls['taskBudget'].setValue( this.task.taskBudget );
-        this.taskFieldsForm.controls['taskCost'].setValue( this.task.taskCost );
-        this.taskFieldsForm.controls['recurrentTask'].setValue( this.task.recurrentTask );
-        this.taskFieldsForm.controls['taskDateline'].setValue( this.task.taskDateline );
-        this.taskFieldsForm.controls['taskDeliveryStatus'].setValue( this.task.taskDeliveryStatus );
-        this.taskFieldsForm.controls['taskApproved'].setValue( this.task.taskApproved === 'Y' ?  true : false );
-        this.taskFieldsForm.controls['taskApprover'].setValue( this.task.taskApprover );
-        this.taskFieldsForm.controls['gateWayClient'].setValue( this.task.gateWayClient );
-        this.taskFieldsForm.controls['desiredReceiverCount'].setValue( this.task.desiredReceiverCount );
-        this.taskFieldsForm.controls['availableReceiverCount'].setValue( this.task.availableReceiverCount );
-        this.taskFieldsForm.controls['confirmedReceiverCount'].setValue( this.task.confirmedReceiverCount );
-        this.taskFieldsForm.controls['srlzdTskPrcssJbObjsFilLoc'].setValue( this.task.tasksrlzdTskPrcssJbObjsFilLocType );
-
     }
 
-    save(model: TaskFieldsModel, isValid: boolean) {
+    public setValues() {
+        if ( !this.isNew && this.task ) {
+            this.taskFieldsForm.controls['taskLifeStatus'].setValue( this.task.taskLifeStatus );
+            this.taskFieldsForm.controls['taskName'].setValue( this.task.taskName );
+            this.taskFieldsForm.controls['taskType'].setValue( this.task.taskType );
+            this.taskFieldsForm.controls['taskObjective'].setValue( this.task.taskObjective );
+            this.taskFieldsForm.controls['description'].setValue( this.task.description );
+            this.taskFieldsForm.controls['tskAgrmntLoc'].setValue( this.task.tskAgrmntLoc );
+            this.taskFieldsForm.controls['tskMsgType'].setValue( this.task.tskMsgType );
+            this.taskFieldsForm.controls['taskBudget'].setValue( this.task.taskBudget );
+            this.taskFieldsForm.controls['taskCost'].setValue( this.task.taskCost );
+            this.taskFieldsForm.controls['recurrentTask'].setValue( this.task.recurrentTask );
+            this.taskFieldsForm.controls['taskDeliveryStatus'].setValue( this.task.taskDeliveryStatus );
+            this.taskFieldsForm.controls['taskApproved'].setValue( this.task.taskApproved ?  true : false );
+            this.taskFieldsForm.controls['taskApprover'].setValue( this.task.taskApprover );
+            this.taskFieldsForm.controls['gateWayClient'].setValue( this.task.gateWayClient );
+            this.taskFieldsForm.controls['desiredReceiverCount'].setValue( this.task.desiredReceiverCount );
+            this.taskFieldsForm.controls['availableReceiverCount'].setValue( this.task.availableReceiverCount );
+            this.taskFieldsForm.controls['confirmedReceiverCount'].setValue( this.task.confirmedReceiverCount );
+            this.taskFieldsForm.controls['srlzdTskPrcssJbObjsFilLoc'].setValue( this.task.tasksrlzdTskPrcssJbObjsFilLocType );
+            this.setDate( 'taskDateline' );
+        }
+    }
+
+    public save() {
+        const saveModel: TaskFieldsModel = this.taskFieldsForm.value as TaskFieldsModel;
+        if ( this.isNew ) {
+            this.taskService.createTask( saveModel );
+        } else {
+            saveModel.taskId = ( this.task as Task ).taskId;
+            this.taskService.updateTaskFields( saveModel );
+        }
         this.submitted = true;
-        this.logger.log(JSON.stringify(model) + ' : ' + isValid);
+
     }
+
+    public cancelAndClose() {
+        if ( this.taskFieldsForm.dirty ) {
+            this.confirmAlert.showModal();
+        } else {
+            this.lgModal.hide();
+        }
+    }
+
+    public saveAndClose() {
+        if ( !this.taskFieldsForm.valid ) {
+            this.alertService.error( 'Please fix error and try again.', false );
+        } else {
+            this.save();
+            this.lgModal.hide();
+        }
+    }
+
+    public onConfirm(params: string[]) {
+        const type = params[0];
+        const marker = params[1];
+        const dataId = params[2];
+
+        if ( type === 'yes' ) {
+            this.alertService.success( 'Changes successfully discarded', false );
+            this.lgModal.hide();
+        } else {
+            this.confirmAlert.hideModal();
+        }
+        // alert( 'marker = ' + marker + ', ' + 'dataId = ' + dataId + ', type = ' + type );
+        // this.onConfirm.emit([type, this.marker, this.dataId]);
+      }
+
+    /** Re-initialize the form on closing the window */
+    public onHidden() {
+        this.createForm();
+    }
+
+    public setDate( key: string ) {
+        const formControl: AbstractControl = this.taskFieldsForm.controls[key];
+        const dateVal: any = ( this.isNew || !this.task || !this.task[key] ) ? new Date() : new Date( this.task[key] + '' );
+        formControl.setValue( dateVal );
+    }
+
 
 }

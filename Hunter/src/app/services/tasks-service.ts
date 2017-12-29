@@ -1,3 +1,5 @@
+import { HunterServerResponse } from './../beans/ServerResponse';
+import { TaskFieldsModel } from './../beans/task-field-model';
 import { Observable } from 'rxjs/Observable';
 import { Injectable, OnInit } from '@angular/core';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
@@ -10,14 +12,16 @@ import { TaskCloneModel } from '../beans/clone-task-model';
 
 import 'rxjs/add/operator/map';
 import { LoggerService } from '../common/logger.service';
-import { HunterServerResponse } from '../beans/ServerResponse';
 
 @Injectable()
 
 export class TasksService {
 
   private taskBaseURL = 'http://localhost:8080/Hunter/task/';
-  private cloneTaskURL = this.taskBaseURL + 'action/clone';
+  private deleteTaskURL = this.taskBaseURL + 'action/task/destroy';
+  private cloneTaskURL = this.taskBaseURL + 'action/task/clone';
+  private updateTaskFieldsURL = this.taskBaseURL + 'action/updateFields';
+  private createTaskFieldsURL = this.taskBaseURL + 'action/createNewTask';
   private tasks: any[];
   private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
   private currAccessToke = 'YWRtaW46OTk5OTk5';
@@ -53,6 +57,23 @@ export class TasksService {
     return tasks;
   }
 
+
+  public updateTaskFields( fieldsModel: TaskFieldsModel ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .post( this.updateTaskFieldsURL, JSON.stringify( fieldsModel ) )
+          .map( (response: Response) => response.json() as HunterServerResponse)
+    );
+  }
+
+  public createTask( fieldsModel: TaskFieldsModel ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .post( this.createTaskFieldsURL, JSON.stringify( fieldsModel ) )
+          .map( (response: Response) => response.json() as HunterServerResponse)
+    );
+  }
+
   public getTaskHistoryForTaskId( taskId: number ) {
     const events = taskHistory[0].events;
     return events;
@@ -73,13 +94,20 @@ export class TasksService {
 
   }
 
-  public cloneTask<ServerStatusResponse>( cloneTask: TaskCloneModel ) {
-    this.logger.log( 'Cloning task...' );
-    const response = new ServerStatusResponse();
-    response.status  = 'Failed';
-    response.message = 'Task name already taken!';
-    this.logger.log( 'Response from cloning...' + JSON.stringify(response) );
-    return response;
+  public cloneTask( cloneTask: TaskCloneModel ): Observable<ServerStatusResponse> {
+    return (
+      this.http
+          .post( this.cloneTaskURL, JSON.stringify(cloneTask) )
+          .map( ( resp: Response) => resp.json() as ServerStatusResponse )
+    );
+  }
+
+  public deleteTask( taskId: number ): Observable<ServerStatusResponse> {
+    return (
+      this.http
+          .post( this.deleteTaskURL, JSON.stringify({ taskId: taskId }) )
+          .map( ( resp: Response) => resp.json() as ServerStatusResponse )
+    );
   }
 
   public getAllTaskIds() {

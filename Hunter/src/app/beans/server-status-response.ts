@@ -1,6 +1,6 @@
 
 export class ServerStatusResponse {
-    status: string;
+    status: ServerStatuses;
     message: string;
 }
 

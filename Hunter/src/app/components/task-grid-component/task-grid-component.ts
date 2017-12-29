@@ -1,3 +1,5 @@
+import { ServerStatusResponse } from './../../beans/server-status-response';
+import { TaskFieldsEditComponent } from './../task-fields/task-fields-edit';
 import { HunterServerResponse } from './../../beans/ServerResponse';
 import { Component, OnInit, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
 import { TasksService } from '../../services/tasks-service';
@@ -11,6 +13,7 @@ import { LoggerService } from '../../common/logger.service';
 import HunterTableUtil from 'app/components/hunter-table-component/shared/HunterTableUtil';
 import BarAction from '../hunter-table-component/shared/BarAction';
 import { HunterTableComponent } from 'app/components/hunter-table-component/hunter-table';
+import { ActionTypeEnum } from 'app/components/hunter-table-component/shared/ActionTypeEnum';
 
 
 
@@ -24,6 +27,7 @@ import { HunterTableComponent } from 'app/components/hunter-table-component/hunt
 })
 export class TaskGridComponent implements OnInit {
 
+  @ViewChild('taskFieldsEdit') taskFieldsEdit: TaskFieldsEditComponent;
   @ViewChild('cloneTask') cloneTaskComponent;
   @ViewChild('hunterTable') public hunterTable: HunterTableComponent;
   public tasks: HunterServerResponse;
@@ -68,15 +72,18 @@ export class TaskGridComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.loadAllTasks();
+      this.loadAllTasks( false );
   }
 
-  public loadAllTasks() {
+  public loadAllTasks( initGrid: boolean ) {
     this.loadingTasks = true;
     this.taskService.getAllTasks().subscribe(
       ( tasks: HunterServerResponse ) => {
         this.tasks = tasks;
         this.loadingTasks = false;
+        if ( initGrid ) {
+          this.hunterTable.initializeDataGrid();
+        }
       },
       (error: HunterServerResponse) => {
         this.tasks = error;
@@ -87,7 +94,13 @@ export class TaskGridComponent implements OnInit {
   }
 
   public handleBarAction( action: BarAction ) {
-    alert( JSON.stringify( action ) );
+    if ( action.type === ActionTypeEnum.CREATE ) {
+      this.taskFieldsEdit.open( true, undefined );
+    }
+  }
+
+  public doneCloning( success: boolean ) {
+    this.loadAllTasks( true );
   }
 
 
@@ -134,7 +147,7 @@ export class TaskGridComponent implements OnInit {
         this.hideModal();
         switch ( this.modalAction ) {
           case 'DeleteTask' :
-            this.deleteTask();
+            this.deleteTask( this.currDataId );
             break;
           case 'EditTask' :
             this.logger.log( 'Editing task not allowed here. Doing nothing' );
@@ -148,10 +161,20 @@ export class TaskGridComponent implements OnInit {
       }
     }
 
-    public deleteTask() {
-      this.logger.log( 'Deleting tasks....index = ' + this.index );
-      this.tasks.data.splice( this.index, 1 );
-      this.alertSuccess( 'Successfully deleted task!' );
+    public deleteTask( taskId: number ) {
+      this.taskService.deleteTask( taskId ).subscribe(
+        ( status: ServerStatusResponse ) => {
+          if ( status.status.toString() === 'Success' ) {
+            this.alertService.success( status.message );
+            this.loadAllTasks( true );
+          } else {
+            this.alertService.error( status.message );
+          }
+        },
+        (error: ServerStatusResponse) => {
+          this.alertService.error( 'Error: ' + error.message );
+        }
+      );
     }
 
     public processTask() {

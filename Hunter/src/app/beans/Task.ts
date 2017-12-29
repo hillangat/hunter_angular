@@ -32,4 +32,5 @@ export class Task {
     taskCost: number;
     taskBudget: number;
     cretDate: string;
+    tasksrlzdTskPrcssJbObjsFilLocType: string;
 }

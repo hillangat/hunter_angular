@@ -99,4 +99,8 @@ body{
   text-align: center;
 }
 
+.centeredContent {
+  text-align: center !important;
+}
+
 

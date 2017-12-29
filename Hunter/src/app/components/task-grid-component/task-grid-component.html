@@ -25,7 +25,7 @@
 
 
 <div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
-    <app-clone-task [taskId]="currDataId" [isModalShown] = true #cloneTask></app-clone-task>
+    <app-clone-task (doneCloning)='doneCloning($event)' [taskId]="currDataId" [isModalShown] = true #cloneTask></app-clone-task>
 </div>
 
 
@@ -47,7 +47,7 @@
                 </div>
                 
                 <div *ngIf="modalAction == 'DeleteTask'"  id="confirmTaskDelete" >
-                    <h3 style="color:red;">The selected task will be deleted<br/> Are you sure?</h3>
+                    <h5 style="color:red;">The selected task will be deleted. Are you sure?</h5>
                 </div>
                 
                 <div *ngIf="modalAction == 'ProcessTask'" id="processTask" >
@@ -64,4 +64,4 @@
     </div>
 </div>
 
-
+<app-task-fields-edit #taskFieldsEdit ></app-task-fields-edit>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { TasksService } from '../../services/tasks-service';
 import { TaskCloneModel } from '../../beans/clone-task-model';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
@@ -19,6 +19,9 @@ import { LoggerService } from '../../common/logger.service';
 })
 
 export class CloneTaskComponent implements OnInit {
+
+    public title: 'Clone Task';
+    @Output('doneCloning') doneCloning: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @Input('taskId') public taskId: number;
     @ViewChild('autoShownModal')  public autoShownModal: ModalDirective;
@@ -49,50 +52,52 @@ export class CloneTaskComponent implements OnInit {
         private logger: LoggerService
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.task = this.taskService.getNewTask();
         this.clients = this.taskService.getClients();
         this.logger.log( JSON.stringify( this.clients ) );
         this.initForm();
     }
 
-    clone(cloneModel: TaskCloneModel, isValid: boolean) {
+    public clone(cloneModel: TaskCloneModel, isValid: boolean) {
         this.submitted = true;
         this.taskService.cloneTask(cloneModel);
     }
 
-    validateClientUserName( fc: FormControl ) {
+    public validateClientUserName( fc: FormControl ) {
         const empty = fc.value == null || fc.value.trim() === '';
         return !empty && this.serverErrors.newClientUserName == null ? null : {validateClientUserName: false};
     }
 
-    initForm() {
+    public initForm() {
         this.cloneTaskFieldsForm = this.formBuilder.group({
-            newTaskId:  [this.taskId ],
-            newTaskName: [this.task.taskName, [ <any>Validators.required, <any>Validators.minLength(5), <any>Validators.maxLength(50) ] ],
-            newTaskDesc: [this.task.description, [ <any>Validators.required, <any>Validators.maxLength(100) ] ],
-            newClientUserName: ['', undefined ]
+            taskId:  [this.taskId ],
+            taskName: [this.task.taskName, [ <any>Validators.required, <any>Validators.minLength(5), <any>Validators.maxLength(50) ] ],
+            taskDescription: [this.task.description, [ <any>Validators.required, <any>Validators.maxLength(100) ] ],
+            newOwner: ['', undefined ]
         });
     }
 
-    cloneSelectedTask() {
+    public cloneSelectedTask() {
         if ( this.cloneTaskFieldsForm.valid ) {
-            const cloneTask: TaskCloneModel = {
-                newTaskId: this.cloneTaskFieldsForm.controls['newTaskId'].value,
-                newTaskName: this.cloneTaskFieldsForm.controls['newTaskName'].value,
-                newTaskDesc: this.cloneTaskFieldsForm.controls['newTaskDesc'].value,
-                newClientUserName: this.cloneTaskFieldsForm.controls['newClientUserName'].value
-            };
-            const response = this.taskService.cloneTask(cloneTask);
-            const status = response.status;
-            const message = response.message;
-            if ( status === 'Success' ) {
-                this.alertService.success( message );
-                this.hideModal();
-            } else {
-                this.serverErrors.newClientUserName = 'Server errorr found!';
-                this.alertService.error( message );
-            }
+            const cloneTask: TaskCloneModel = this.cloneTaskFieldsForm.value as TaskCloneModel;
+            this.taskService
+                .cloneTask(cloneTask)
+                .subscribe(
+                    ( resp: ServerStatusResponse ) => {
+                        if ( resp.status + '' === 'Success' ) {
+                            this.alertService.success( resp.message );
+                            this.doneCloning.emit( true );
+                        } else {
+                            this.alertService.error( resp.message );
+                        }
+                        this.hideModal();
+                    },
+                    ( error: any ) => {
+                        this.doneCloning.emit( false );
+                        this.alertService.error( 'Application error occurred' );
+                    }
+                );
         } else {
             this.alertService.warn('Please correct errors before submitting!', false);
         }

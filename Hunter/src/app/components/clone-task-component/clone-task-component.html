@@ -13,28 +13,28 @@
                 <div id="cloneTaskContent" >    
                     <form [formGroup]="cloneTaskFieldsForm" novalidate (ngSubmit)="clone(taskFieldsForm.value, taskFieldsForm.valid)" id="taskFieldsForm" style="width:80%;margin-left:10%;" >
                         <div class="form-group">
-                            <label for="newTaskName" style="color:#41ABBC;font-size:1.05em;;">New Task Name</label>
-                            <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="newTaskName" formControlName="newTaskName"
+                            <label for="taskName" style="color:#41ABBC;font-size:1.05em;;">New Task Name</label>
+                            <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="taskName" formControlName="taskName"
                                 type="text" placeholder="Enter new task name..">
-                            <small [hidden]="cloneTaskFieldsForm.controls.newTaskName.valid || (cloneTaskFieldsForm.controls.newTaskName.pristine && !submitted)">
-                                {{ customValidatorMessages.newTaskName }}
+                            <small [hidden]="cloneTaskFieldsForm.controls.taskName.valid || (cloneTaskFieldsForm.controls.taskName.pristine && !submitted)">
+                                {{ customValidatorMessages.taskName }}
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="newTaskDesc" style="color:#41ABBC;font-size:1.05em;;">New Task Description</label>
-                            <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="newTaskDesc" formControlName="newTaskDesc"
+                            <label for="taskDescription" style="color:#41ABBC;font-size:1.05em;;">New Task Description</label>
+                            <input style="border:1px solid #E6F1F3 !important;" class="form-control input-md" id="taskDescription" formControlName="taskDescription"
                                 type="text" placeholder="Enter new task description..">
-                            <small [hidden]="cloneTaskFieldsForm.controls.newTaskDesc.valid || (cloneTaskFieldsForm.controls.newTaskDesc.pristine && !submitted)">
-                                {{ customValidatorMessages.newTaskDesc }}
+                            <small [hidden]="cloneTaskFieldsForm.controls.taskDescription.valid || (cloneTaskFieldsForm.controls.taskDescription.pristine && !submitted)">
+                                {{ customValidatorMessages.taskDescription }}
                             </small>
                         </div>
                         <div class="form-group">
-                            <label for="newClientUserName" style="color:#41ABBC;font-size:1.05em;;">New Task Client</label>            
-                            <select style="border:1px solid #E6F1F3 !important;max-width: 50%" class="form-control" id="newClientUserName" formControlName="newClientUserName" placeholder="Select New Client...">
+                            <label for="newOwner" style="color:#41ABBC;font-size:1.05em;;">New Task Client</label>            
+                            <select style="border:1px solid #E6F1F3 !important;max-width: 50%" class="form-control" id="newOwner" formControlName="newOwner" placeholder="Select New Client...">
                                 <option style="border:1px solid #E6F1F3 !important;" *ngFor="let client of clients" [value]="client.clientId" >{{client.firstName}} {{ client.lastName }} ( {{ client.userName }} ) </option>
                             </select>
-                            <small [hidden]="cloneTaskFieldsForm.controls.newClientUserName.value != '' ">
-                                {{ customValidatorMessages.newClientUserName }}
+                            <small [hidden]="cloneTaskFieldsForm.controls.newOwner.value != '' ">
+                                {{ customValidatorMessages.newOwner }}
                             </small>
                         </div>
                     </form>

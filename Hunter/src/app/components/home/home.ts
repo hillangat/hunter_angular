@@ -48,7 +48,7 @@ export class HomeComponent {
       'bootstrapIconName': null,
       'dataType': 'number',
       'currentOrder': false,
-      'isActionCol': false,
+      'actionCol': false,
       'actionColIconName': null,
       'width': '80px'
     },
@@ -62,7 +62,7 @@ export class HomeComponent {
       'bootstrapIconName': 'search',
       'dataType': 'string',
       'currentOrder': false,
-      'isActionCol': false,
+      'actionCol': false,
       'actionColIconName': null,
       'width': null
     },
@@ -76,7 +76,7 @@ export class HomeComponent {
       'bootstrapIconName': 'remove',
       'dataType': 'string',
       'currentOrder': false,
-      'isActionCol': false,
+      'actionCol': false,
       'actionColIconName': null,
       'width': null
     },
@@ -90,7 +90,7 @@ export class HomeComponent {
       'bootstrapIconName': 'calendar',
       'dataType': 'string',
       'currentOrder': false,
-      'isActionCol': false,
+      'actionCol': false,
       'actionColIconName': null,
       'width': null
     },
@@ -104,7 +104,7 @@ export class HomeComponent {
       'bootstrapIconName': 'user',
       'dataType': 'string',
       'currentOrder': false,
-      'isActionCol': false,
+      'actionCol': false,
       'actionColIconName': null,
       'width': null
     },
@@ -118,7 +118,7 @@ export class HomeComponent {
       'bootstrapIconName': 'clock',
       'dataType': 'string',
       'currentOrder': true,
-      'isActionCol': false,
+      'actionCol': false,
       'actionColIconName': null,
       'width': null
     },
@@ -132,7 +132,7 @@ export class HomeComponent {
       'bootstrapIconName': 'edit',
       'dataType': 'string',
       'currentOrder': false,
-      'isActionCol': true,
+      'actionCol': true,
       'actionColIconName': 'pencil',
       'width': null
     },
@@ -146,7 +146,7 @@ export class HomeComponent {
       'bootstrapIconName': 'remove',
       'dataType': 'string',
       'currentOrder': false,
-      'isActionCol': true,
+      'actionCol': true,
       'actionColIconName': 'remove',
       'width': null
     }

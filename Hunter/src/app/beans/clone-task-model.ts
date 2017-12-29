@@ -1,7 +1,7 @@
 
 export class TaskCloneModel {
-    newTaskId: number;
-    newTaskName: string;
-    newTaskDesc: string;
-    newClientUserName: string;
+    taskId: number;
+    newOwner: string;
+    taskDescription: string;
+    taskName: string;
 }

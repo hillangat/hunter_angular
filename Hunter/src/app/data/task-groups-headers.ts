@@ -11,7 +11,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName':  null,
         'dataType': 'number',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName':  null,
         'width': '80px'
     }, {
@@ -24,7 +24,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName':  null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName':  null,
         'width':   null
     }, {
@@ -37,7 +37,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName':  null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName':  null,
         'width':   null
     }, {
@@ -50,7 +50,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName':  null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName':  null,
         'width':   null
     }, {
@@ -63,7 +63,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName':  null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName':  null,
         'width':   null
     }, {
@@ -76,7 +76,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName':  null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName':  null,
         'width':   null
     }, {
@@ -89,7 +89,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName':  null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName':  null,
         'width':  null
     }, {
@@ -102,7 +102,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName': null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName': null,
         'width':  null
     }, {
@@ -115,7 +115,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName': null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': false,
+        'actionCol': false,
         'actionColIconName': null,
         'width':  null
     }, {
@@ -128,7 +128,7 @@ export const TasksGroupHeaders: HunterTableConfig[] = [
         'bootstrapIconName': null,
         'dataType': 'string',
         'currentOrder': false,
-        'isActionCol': true,
+        'actionCol': true,
         'actionColIconName': 'remove',
         'width': '80px'
     }

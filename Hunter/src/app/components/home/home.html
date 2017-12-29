@@ -164,5 +164,7 @@
 <br/>
 <br/>
 
-<button class="btn huntSmlBttn" ><i class='fa fa-remove hntSmlAwesom' ></i></button>
+<button class="btn huntSmlBttn" (click)='taskFieldsEdit.open(true, undefined)' ><i class='fa fa-remove hntSmlAwesom' ></i></button>
 <button class="btn huntSmlBttn" ><i class='fa fa-pencil hntSmlAwesom' ></i></button>
+
+<app-task-fields-edit #taskFieldsEdit ></app-task-fields-edit>
