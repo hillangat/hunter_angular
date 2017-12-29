@@ -22,6 +22,7 @@ export class HunterTableComponent implements OnInit {
 
     @Output() handleGridAction = new EventEmitter<any[]>();
     @Output() handleBarAction = new EventEmitter<BarAction>();
+    @Output() reloadData = new EventEmitter<void>();
 
     @Input ('barActions') barActions: BarAction[] = [];
     @Input ('height') height = 0;
@@ -32,7 +33,7 @@ export class HunterTableComponent implements OnInit {
     @ViewChild('closePopupButton') closePopupButton: ElementRef;
 
     private _loadingData = false;
-    private visibleHunterTableData: any[];
+    private visibleHunterTableData: any[] = [];
     private overlayIsOn = false;
     private hasNewRowButton = true;
     private calculatedPageNumbers = 0;
@@ -96,7 +97,6 @@ export class HunterTableComponent implements OnInit {
         }
         if ( this.selItemsPerPage >= this.totalRowNum ) {
             this.calculatedPageNumbers = 1;
-            this.redrawBubblePages();
             return;
         }
 
@@ -232,6 +232,11 @@ export class HunterTableComponent implements OnInit {
     public showOverlay() {
         this.overlayIsOn = true;
         this.onClickButton( 'refresh', -1 );
+    }
+
+    public refresh(): void {
+        this.loadingData = true;
+        this.reloadData.emit();
     }
 
     public showFilterDropdown() {

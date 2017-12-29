@@ -12,6 +12,28 @@ export default class Utility {
     return url;
   }
 
+  public static getFormatedDate(date: Date) {
+
+    const
+    year: string     = date.getFullYear() + '',
+    hour: string     = date.getHours() + '';
+
+    let
+    month: string    = date.getMonth() + '',
+    date_: string    = date.getDate() + '',
+    minute: string   = date.getMinutes() + '',
+    secs: string     = date.getSeconds() + '';
+
+    const formatedDate    = year + '-' + month + '-' + date_ + ' ' + hour + ':' + minute + ':' + secs;
+
+    month  = month.length  < 2 ? '0' + month  : month;
+    date_  = date_.length  < 2 ? '0' + date_  : date_;
+    minute = minute.length < 2 ? '0' + minute : minute;
+    secs   = secs.length   < 2 ? '0' + secs   : secs;
+
+    return formatedDate;
+  }
+
   constructor( private logger: LoggerService ) {
     Utility.logger = logger;
   }

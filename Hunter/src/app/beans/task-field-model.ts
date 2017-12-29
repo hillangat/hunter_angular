@@ -1,6 +1,7 @@
 
 export interface TaskFieldsModel {
     taskId?: number;
+    clientId: number,
     taskType: string;
     taskName: string;
     taskObjective: string;
@@ -10,7 +11,8 @@ export interface TaskFieldsModel {
     taskBudget: number;
     taskCost: number;
     recurrentTask: boolean;
-    taskDateline: Date;
+    taskDateline: Date | string;
+    taskDatelineStr: string;
     taskLifeStatus: string;
     taskDeliveryStatus: string;
     taskApproved: boolean;

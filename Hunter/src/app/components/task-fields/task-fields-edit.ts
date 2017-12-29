@@ -1,3 +1,4 @@
+import { ServerStatusResponse } from './../../beans/server-status-response';
 import { AlertService } from './../../services/alert-service';
 
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
@@ -12,6 +13,7 @@ import { ConfirmComponent } from 'app/components/confirm-component/confirm-compo
 import { AbstractControl } from '@angular/forms/src/model';
 import { TasksService } from '../../services/tasks-service';
 import { Task } from '../../beans/Task';
+import Utility from '../../utilities/Utility';
 
 @Component({
     moduleId: module.id,
@@ -40,7 +42,8 @@ export class TaskFieldsEditComponent implements OnInit {
         msgType: 'Message type must be one of : ' + utilFuncs.arrayCSV(messageTypes),
         taskObjective: 'Task objective is required. 10 characters minimum.' ,
         taskBudget: 'Budget is required. Cannot be less than $100',
-        desiredReceiverCount: 'Desired receiver count is required. Must be more 0'
+        desiredReceiverCount: 'Desired receiver count is required. Must be more 0',
+        clientId: 'Task client is required'
     };
 
 
@@ -109,6 +112,16 @@ export class TaskFieldsEditComponent implements OnInit {
             confirmedReceiverCount: 0,
             srlzdTskPrcssJbObjsFilLoc: 0
         });
+        this.hasClientId();
+    }
+
+    public hasClientId(): boolean  {
+        if ( this.isNew ) {
+            const formConstrol: AbstractControl = new FormControl( undefined, Validators.required ) as AbstractControl;
+            this.taskFieldsForm.addControl( 'clientId', formConstrol );
+            return true;
+        }
+        return false;
     }
 
     public setValues() {
@@ -135,18 +148,6 @@ export class TaskFieldsEditComponent implements OnInit {
         }
     }
 
-    public save() {
-        const saveModel: TaskFieldsModel = this.taskFieldsForm.value as TaskFieldsModel;
-        if ( this.isNew ) {
-            this.taskService.createTask( saveModel );
-        } else {
-            saveModel.taskId = ( this.task as Task ).taskId;
-            this.taskService.updateTaskFields( saveModel );
-        }
-        this.submitted = true;
-
-    }
-
     public cancelAndClose() {
         if ( this.taskFieldsForm.dirty ) {
             this.confirmAlert.showModal();
@@ -155,12 +156,44 @@ export class TaskFieldsEditComponent implements OnInit {
         }
     }
 
-    public saveAndClose() {
+    public saveAndClose( saveModel: TaskFieldsModel, valid: boolean ) {
         if ( !this.taskFieldsForm.valid ) {
             this.alertService.error( 'Please fix error and try again.', false );
         } else {
-            this.save();
-            this.lgModal.hide();
+            if ( this.isNew ) {
+                saveModel.taskId    = 0;
+                saveModel.taskDateline = Utility.getFormatedDate( saveModel.taskDateline as Date );
+                this.taskService.createOrUpdateTask( saveModel ).subscribe(
+                    ( resp: ServerStatusResponse ) => {
+                        this.alertService.success( resp.message );
+                        this.submitted = true;
+                        this.lgModal.hide();
+                    },
+                    ( error: any ) => {
+                        this.alertService.error( 'Could not save changes. An error occurred!' );
+                    }
+                );
+            } else {
+
+                saveModel.clientId = this.task.clientId
+                saveModel.taskId = this.task.taskId;
+                saveModel.taskDateline = Utility.getFormatedDate( saveModel.taskDateline as Date );
+
+                this.taskService.createOrUpdateTask( saveModel ).subscribe(
+                    ( resp: ServerStatusResponse ) => {
+                        this.alertService.success( resp.message );
+                        this.submitted = true;
+                        this.lgModal.hide();
+                    },
+                    ( error: any ) => {
+                        this.submitted = true;
+                        this.lgModal.hide();
+                        saveModel.taskId = ( this.task as Task ).taskId;
+                        this.alertService.error( 'Could not save changes. An error occurred!' );
+                    }
+                );
+
+            }
         }
     }
 

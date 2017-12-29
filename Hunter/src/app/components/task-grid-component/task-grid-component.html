@@ -18,9 +18,6 @@
     (handleBarAction)="handleBarAction($event)"
     (handleGridAction)="handleGridAction($event)">
 </app-hunter-table>
-<div *ngIf='loadingTasks' class='loadingDataSpinner' >
-    <i class="fa fa-spinner fa-pulse fa-2x fa-fw hntrColor" ></i>
-</div>
 
 
 
@@ -47,13 +44,13 @@
                 </div>
                 
                 <div *ngIf="modalAction == 'DeleteTask'"  id="confirmTaskDelete" >
-                    <h5 style="color:red;">The selected task will be deleted. Are you sure?</h5>
+                    <h4 style="color:red;">The selected task will be deleted. Are you sure?</h4>
                 </div>
                 
                 <div *ngIf="modalAction == 'ProcessTask'" id="processTask" >
-                    <h3 style="color:green;">The selected action will be submitted for processing.<br>
+                    <h4 style="color:green;">The selected action will be submitted for processing.<br>
                         Are you sure?
-                    </h3>
+                    </h4>
                 </div>
             </div>            
             <div class="modal-footer">

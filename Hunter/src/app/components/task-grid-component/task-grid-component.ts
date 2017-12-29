@@ -75,13 +75,17 @@ export class TaskGridComponent implements OnInit {
       this.loadAllTasks( false );
   }
 
+  public reloadData() {
+    this.loadAllTasks( true );
+  }
+
   public loadAllTasks( initGrid: boolean ) {
     this.loadingTasks = true;
     this.taskService.getAllTasks().subscribe(
       ( tasks: HunterServerResponse ) => {
         this.tasks = tasks;
         this.loadingTasks = false;
-        if ( initGrid ) {
+        if ( initGrid && this.hunterTable ) {
           this.hunterTable.initializeDataGrid();
         }
       },

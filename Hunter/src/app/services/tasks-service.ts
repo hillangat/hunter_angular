@@ -21,7 +21,7 @@ export class TasksService {
   private deleteTaskURL = this.taskBaseURL + 'action/task/destroy';
   private cloneTaskURL = this.taskBaseURL + 'action/task/clone';
   private updateTaskFieldsURL = this.taskBaseURL + 'action/updateFields';
-  private createTaskFieldsURL = this.taskBaseURL + 'action/createNewTask';
+  private createOrUpdateTaskFieldsURL = this.taskBaseURL + 'action/createOrUpdate';
   private tasks: any[];
   private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
   private currAccessToke = 'YWRtaW46OTk5OTk5';
@@ -58,19 +58,11 @@ export class TasksService {
   }
 
 
-  public updateTaskFields( fieldsModel: TaskFieldsModel ): Observable<HunterServerResponse> {
+  public createOrUpdateTask( fieldsModel: TaskFieldsModel ): Observable<ServerStatusResponse> {
     return (
       this.http
-          .post( this.updateTaskFieldsURL, JSON.stringify( fieldsModel ) )
-          .map( (response: Response) => response.json() as HunterServerResponse)
-    );
-  }
-
-  public createTask( fieldsModel: TaskFieldsModel ): Observable<HunterServerResponse> {
-    return (
-      this.http
-          .post( this.createTaskFieldsURL, JSON.stringify( fieldsModel ) )
-          .map( (response: Response) => response.json() as HunterServerResponse)
+          .post( this.createOrUpdateTaskFieldsURL, JSON.stringify( fieldsModel ) )
+          .map( (response: Response) => response.json() as ServerStatusResponse)
     );
   }
 

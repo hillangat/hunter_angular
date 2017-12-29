@@ -11,7 +11,7 @@
             </button>
         </div>
         <div class="modal-body">
-                <form [formGroup]="taskFieldsForm" novalidate (ngSubmit)="save(taskFieldsForm.value, taskFieldsForm.valid)" id="taskFieldsForm">
+                <form [formGroup]="taskFieldsForm" novalidate (ngSubmit)="saveAndClose(taskFieldsForm.value, taskFieldsForm.valid)" id="taskFieldsForm">
                         <br/>
                         <div class='row col-md-offset-1'>
                             <div class="col-sm-5" style='border-right:1px solid #E6F1F3;' >
@@ -86,17 +86,28 @@
                                 </div>    
                                 <div class="form-group">
                                     <label for="taskObjective" style="color:#41ABBC;font-size:1.05em;">Task Objective</label>
-                                    <textarea   style="border:1px solid #E6F1F3 !important;" class="form-control" rows="5" id="taskObjective" formControlName="taskObjective" placeholder="Enter Task Objective...">
+                                    <textarea   style="border:1px solid #E6F1F3 !important;" class="form-control" rows="3" id="taskObjective" formControlName="taskObjective" placeholder="Enter Task Objective...">
                                                         
                                     </textarea>
                                     <small [hidden]="taskFieldsForm.controls.taskObjective.valid || (taskFieldsForm.controls.taskObjective.pristine && !submitted)">
                                         {{ customValidatorMessages.taskObjective }}
                                     </small>
-                                </div>        
+                                </div>
+                                <div class="form-group" *ngIf='hasClientId()' >
+                                    <label for="clientId" style="color:#41ABBC;font-size:1.05em;;">Task Client</label>
+                                    <select  style="border:1px solid #E6F1F3 !important;max-width: 50%" class="form-control" id="clientId" formControlName="clientId" placeholder="Select Task Client...">
+                                        <option style="border:1px solid #E6F1F3 !important;" value="1">Hunter Admin</option>
+                                        <option style="border:1px solid #E6F1F3 !important;" value="2">Elija Matagei</option>
+                                        <option style="border:1px solid #E6F1F3 !important;" value="3">Andas Langat</option>
+                                    </select>
+                                    <small [hidden]="taskFieldsForm.controls.clientId.valid || (taskFieldsForm.controls.clientId.pristine && !submitted)">
+                                        {{ customValidatorMessages.clientId }}
+                                    </small>
+                                </div>         
                                 <label for="taskDateline" style="color:#41ABBC;font-size:1.05em;;">Task Dateline</label>
                                 <div class="form-group" style="margin-bottom:-30px;">
                                     <div style="display:inline-block; min-height:290px;">
-                                        <datepicker formControlName="taskDateline" [minDate]="minDate" [showWeeks]="true" [dateDisabled]="false"></datepicker>
+                                        <datepicker [formControl]="taskFieldsForm.controls['taskDateline']" [minDate]="minDate" [showWeeks]="true" [dateDisabled]="false"></datepicker>
                                     </div>
                                 </div> 
                             </div>
@@ -104,7 +115,7 @@
                         <div class='row' >
                             <div class="col-sm-6 col-md-offset-3" style='text-align:center;' >
                                 <br/>
-                                <button class="btn btn-primary btn-success" (click)='saveAndClose()' type="submit"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp; Submit</button>    &nbsp;&nbsp;
+                                <button class="btn btn-primary btn-success" type="submit"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp; Submit</button>    &nbsp;&nbsp;
                                 <button class="btn btn-primary" type="button" (click)='cancelAndClose()' ><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp; Cancel</button>
                             </div>
                         </div>  
