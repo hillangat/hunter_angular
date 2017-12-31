@@ -1,5 +1,5 @@
-
 <div *ngIf="firebaseService.isUserLoggedIn()" >
+    <app-overlay></app-overlay>
     <app-alerts></app-alerts>
     <app-navbar-component></app-navbar-component>
     <router-outlet></router-outlet>

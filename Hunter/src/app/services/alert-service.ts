@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { Observable } from 'Rxjs';
-import { Subject } from 'rxjs/subject';
+import { Observable, Subject } from 'Rxjs';
 
 import { Alert, AlertType } from '../beans/alert';
 

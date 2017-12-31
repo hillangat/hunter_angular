@@ -34,6 +34,17 @@ export default class Utility {
     return formatedDate;
   }
 
+  public static getFormatedFromNumber( date: number ): string {
+    if ( date ) {
+      return Utility.getFormatedDate( new Date( date ) );
+    }
+    return '';
+  }
+
+  public static isNotEmpty( array: any[] ): boolean {
+    return array !== null && array !== undefined && array.length > 0 ;
+  }
+
   constructor( private logger: LoggerService ) {
     Utility.logger = logger;
   }

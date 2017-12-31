@@ -36,6 +36,7 @@ import { LoggerService } from 'app/common/logger.service';
 
 
 
+
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 
@@ -52,6 +53,8 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { HunterClientService } from './services/hunter-client-service';
 import { AnimationComponent } from './components/animation-component/animation-component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { OverlayComponent } from './components/overlay/overlay.component';
+import { OverlayService } from 'app/services/overlay-service';
 
 
 @NgModule({
@@ -75,7 +78,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     ClientComponent,
     ClickOutsideDirective,
     AnimationComponent,
-    HunterGridComponent
+    HunterGridComponent,
+    OverlayComponent
   ],
   imports: [
     PopoverModule.forRoot(),
@@ -94,6 +98,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     // InMemoryWebApiModule.forRoot(InMemHeroService, { delay:2500 })
   ],
   providers: [
+    OverlayService,
     LoggerService,
     FirebaseService,
     AlertService,

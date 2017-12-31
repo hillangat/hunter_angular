@@ -1,25 +1,10 @@
-<div class="panel panel-default" *ngIf="addingGroup">
-    <div class="panel-heading">
-        <h3 class="panel-title" style='color:#136398;'>Add Task Group</h3>
-    </div>
-    <div class="panel-body">
-        <form>
-            <div class="form-group">
-                <label for="groupName">Group Name:</label>
-                <input type="text" class="form-control" id="groupName" placeholder="Enter group name...">
-            </div>            
-        </form>
-    </div>
-    <div class="panel-footer">
-        <button (click)="addGroupAndSave()" class="btn hunterButton"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Selected Group</button>
-    </div>
-</div>
-
 
 <app-hunter-table *ngIf="!addingGroup" 
+    [barActions]="getBarActions()"
+    (handleBarAction)="handleBarAction($event)"
     [height]='400'
     [headers]="headers" 
-    [hunterTableData]="taskGroups_" 
+    [hunterTableData]="taskGroups" 
     (handleGridAction)="handleGridAction($event)"
     #hunterTableConfig
     >
@@ -39,6 +24,39 @@
     [marker]="'RemoveGroup'"
     [dataId]="getCurrentDataId()"
     (onConfirm)="onConfirm($event)"
-
     #confirmAlert
 ></app-confirm-alert>
+
+<div 
+    class="modal fade minWidthHunterTableInModal"
+    [config]="{ show: false }" 
+    role="dialog"
+    (onHidden)="onHiddenAddGroup()"
+    bsModal
+    #addGroupModal="bs-modal"
+    >
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Select groups to apply to this task.</h4>
+            </div>
+            <div class="modal-body" >
+                <app-hunter-table
+                    #availGroupGrid
+                    *ngIf='availTaskGroups'
+                    [pageSize]='20'
+                    [height]='400'
+                    (selectedItems) = 'selectedItems($event)'
+                    [serverResponse]="availTaskGroups"
+                    (handleGridAction)="handleGridAction($event)">
+            </app-hunter-table>
+            </div>
+            <div class="modal-footer">
+                <button (click)='addGroupAndClose()' type="button" class="btn hunterButton" data-dismiss="modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Group</button>
+                <button (click)='cancelAddGroup()' type="button" class="btn hunterButton" data-dismiss="modal"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>&nbsp; Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

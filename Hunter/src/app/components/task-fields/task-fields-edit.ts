@@ -109,8 +109,7 @@ export class TaskFieldsEditComponent implements OnInit {
             gateWayClient: 0,
             desiredReceiverCount: [1, [ <any>Validators.required, <any>Validators.min(1) ] ],
             availableReceiverCount: 0,
-            confirmedReceiverCount: 0,
-            srlzdTskPrcssJbObjsFilLoc: 0
+            confirmedReceiverCount: 0
         });
         this.hasClientId();
     }
@@ -143,7 +142,6 @@ export class TaskFieldsEditComponent implements OnInit {
             this.taskFieldsForm.controls['desiredReceiverCount'].setValue( this.task.desiredReceiverCount );
             this.taskFieldsForm.controls['availableReceiverCount'].setValue( this.task.availableReceiverCount );
             this.taskFieldsForm.controls['confirmedReceiverCount'].setValue( this.task.confirmedReceiverCount );
-            this.taskFieldsForm.controls['srlzdTskPrcssJbObjsFilLoc'].setValue( this.task.tasksrlzdTskPrcssJbObjsFilLocType );
             this.setDate( 'taskDateline' );
         }
     }
@@ -219,7 +217,7 @@ export class TaskFieldsEditComponent implements OnInit {
 
     public setDate( key: string ) {
         const formControl: AbstractControl = this.taskFieldsForm.controls[key];
-        const dateVal: any = ( this.isNew || !this.task || !this.task[key] ) ? new Date() : new Date( this.task[key] + '' );
+        const dateVal: any = ( this.isNew || !this.task || !this.task[key] ) ? new Date() : new Date( Number(this.task[key]) );
         formControl.setValue( dateVal );
     }
 

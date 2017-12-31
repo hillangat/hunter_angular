@@ -11,6 +11,7 @@
 <app-hunter-table
     #hunterTable
     *ngIf='!loadingTasks'
+    [pageSize]='20'
     [barActions]="getBarActions()"
     [height]='420'
     [loadingData]='loadingTasks'
@@ -22,7 +23,13 @@
 
 
 <div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
-    <app-clone-task (doneCloning)='doneCloning($event)' [taskId]="currDataId" [isModalShown] = true #cloneTask></app-clone-task>
+    <app-clone-task
+        (doneCloning)='doneCloning($event)'
+        [isModalShown] = true 
+        #cloneTaskComponent
+        [task]='currSelRow'
+        [taskId]='currDataId' >
+    </app-clone-task>
 </div>
 
 
@@ -39,12 +46,8 @@
             </div>
             <div class="modal-body">
                 
-                <div id="cloneTaskContent" *ngIf="modalAction == 'CloneTask'">
+                <div #cloneTaskContent *ngIf="modalAction == 'CloneTask'">
                     <app-clone-task [taskId]="currDataId" ></app-clone-task>
-                </div>
-                
-                <div *ngIf="modalAction == 'DeleteTask'"  id="confirmTaskDelete" >
-                    <h4 style="color:red;">The selected task will be deleted. Are you sure?</h4>
                 </div>
                 
                 <div *ngIf="modalAction == 'ProcessTask'" id="processTask" >

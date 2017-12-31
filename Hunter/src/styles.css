@@ -103,4 +103,16 @@ body{
   text-align: center !important;
 }
 
+.successColor {
+  color: green;
+}
+
+.failureColor {
+  color: red;
+}
+
+.minWidthHunterTableInModal {
+  min-width: 1200px !important;
+}
+
 

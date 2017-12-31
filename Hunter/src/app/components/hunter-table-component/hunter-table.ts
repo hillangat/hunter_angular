@@ -1,10 +1,15 @@
+import { OverlayService } from './../../services/overlay-service';
 import { HunterServerResponse } from './../../beans/ServerResponse';
-import { HunterTableConfig } from './../../beans/hunter-table-configs';
 import { Component, Input, Output, OnInit, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { taskHistory } from '../../data/mocked-task-history';
 import { LoggerService } from '../../common/logger.service';
 import BarAction from 'app/components/hunter-table-component/shared/BarAction';
 import { ServerStatuses } from '../../beans/server-status-response';
+import { OverlayComponent } from '../overlay/overlay.component';
+import Utility from '../../utilities/Utility';
+import { HunterTableConfig } from '../../beans/hunter-table-configs';
+import { HunterTableSelItem } from '../../beans/HunterTableSelItem';
+import { SelField } from '../../beans/SelField';
 
 
 @Component({
@@ -19,11 +24,14 @@ export class HunterTableComponent implements OnInit {
      * Note: this is for exportingh to excel using jQuery
      * http://www.jquerybyexample.net/2012/10/export-table-data-to-excel-using-jquery.html
      */
+    public allSelHeaders: string[] = [];
 
     @Output() handleGridAction = new EventEmitter<any[]>();
     @Output() handleBarAction = new EventEmitter<BarAction>();
     @Output() reloadData = new EventEmitter<void>();
+    @Output() selectedItems = new EventEmitter<HunterTableSelItem[]>();
 
+    @Input ('pageSize') pageSize: number;
     @Input ('barActions') barActions: BarAction[] = [];
     @Input ('height') height = 0;
     @Input ('headers') headers: any[];
@@ -31,6 +39,7 @@ export class HunterTableComponent implements OnInit {
     @Input('serverResponse') serverResponse: HunterServerResponse;
 
     @ViewChild('closePopupButton') closePopupButton: ElementRef;
+    @ViewChild('hunterTableOveraly') hunterTableOveraly: OverlayComponent;
 
     private _loadingData = false;
     private visibleHunterTableData: any[] = [];
@@ -48,8 +57,13 @@ export class HunterTableComponent implements OnInit {
     private currentPageNo = 1;
     private startIndex = 0 ;
     private endIndex = 0;
+    private currSelItems: HunterTableSelItem[] = [];
 
-    constructor( private ref: ElementRef, private logger: LoggerService ) {
+    constructor(
+        private ref: ElementRef,
+        private logger: LoggerService,
+        private overlayService: OverlayService
+    ) {
         this.logger.log( 'Starting it up...' );
     }
 
@@ -64,9 +78,17 @@ export class HunterTableComponent implements OnInit {
         return this._loadingData;
     }
 
+    public isAllSel( header: HunterTableConfig ): boolean {
+        return this.allSelHeaders.find( (headerKey: string) => headerKey === header.headerId ) !== null;
+    }
+
     public ngOnInit() {
         this.setDefaults();
         this.initializeDataGrid();
+    }
+
+    public openCloseOverlay() {
+        this.overlayService.openCloseOverlay( { wholeScreen: true, message: 'Loading Data. Please wait...' } );
     }
 
     public setDefaults(): void {
@@ -74,7 +96,81 @@ export class HunterTableComponent implements OnInit {
             this.hunterTableData = this.serverResponse.data;
             this.headers = this.serverResponse.headers;
         }
+        this.retrieveSelItems();
+        this.selItemsPerPage = this.pageSize ? this.pageSize : this.itemsPerPage[0];
         this.height = this.height === 0 ? this.height = 400 : this.height;
+    }
+
+
+    /**
+     * if there is a checkbox for specific column
+     * [
+        {
+            "dataId": 1,
+            "selFields": [
+            {
+                "header": "groupId",
+                "selected": true
+            }
+            ]
+        }
+        ]
+    */
+    public retrieveSelItems() {
+        if ( Utility.isNotEmpty( this.headers ) ) {
+            const  checkboxes: HunterTableConfig[] = this.headers.filter(  (header: HunterTableConfig) => header.checkBox );
+            if ( Utility.isNotEmpty( checkboxes ) && Utility.isNotEmpty( this.hunterTableData ) ) {
+                const selItems: HunterTableSelItem[] = [];
+                checkboxes.forEach( ( header: HunterTableConfig ) => {
+                    this.hunterTableData.forEach( datum => {
+
+                        // dataId and headerId are mostly the same.
+                        const dataIdKey: string  = Object.keys(datum).filter( (k: string) => k === header.dataId )[0];
+                        const headerId: string = Object.keys(datum).filter( (k: string) => k === header.headerId )[0];
+                        const dataId: any = datum[dataIdKey];
+
+                        const prevSels: HunterTableSelItem[] = selItems.filter(
+                            ( selItem: HunterTableSelItem ) => selItem.dataId ===  selItem.dataId === dataId
+                        );
+
+                        const prevSel: boolean = prevSels.length > 0;
+
+                        const selItem: HunterTableSelItem = Utility.isNotEmpty( prevSels ) ? prevSels[0] : new HunterTableSelItem();
+                        selItem.dataId = datum[dataIdKey];
+                        selItem.selFields = Utility.isNotEmpty( selItem.selFields ) ? selItem.selFields : [];
+                        selItem.selFields.push( { header: headerId, selected: false } );
+                        selItem.dataId = datum[header.headerId];
+
+                        if ( !prevSel ) {
+                            selItems.push( selItem );
+                        }
+
+                    });
+                });
+                this.currSelItems = selItems;
+                this.logger.log( 'Initial selected items: ' + JSON.stringify( this.currSelItems ) );
+            }
+        }
+    }
+
+    public isRowFieldSel( datum: any, header: HunterTableConfig ): boolean {
+        const sels: HunterTableSelItem[] = this.currSelItems.filter(
+            ( selItem: HunterTableSelItem ) => selItem.dataId === datum[header.dataId]
+        );
+        if ( Utility.isNotEmpty( sels ) ) {
+            const firstItem: HunterTableSelItem = sels[0];
+            const selFields: SelField[] = firstItem.selFields.filter(
+                (selField: SelField) => selField.header === header.headerId && selField.selected
+            );
+            return Utility.isNotEmpty( selFields );
+        }
+        return false;
+    }
+
+    public refreshGrid( serverResponse: HunterServerResponse ): void {
+        alert( 'refreshing!' );
+        this.serverResponse = serverResponse;
+        this.ngOnInit();
     }
 
     public initializeDataGrid() {
@@ -82,6 +178,18 @@ export class HunterTableComponent implements OnInit {
         this.redrawBubblePages();
         this.updateVisibleHunterTableData();
         this.logger.log( 'Table initialized!!!' );
+    }
+
+    public selectAll() {
+        this.selectedItems.emit( this.visibleHunterTableData );
+    }
+
+    public saveSelField( datum: any, header: HunterTableConfig ) {
+        this.logger.log( JSON.stringify( this.currSelItems ) );
+        const selIItem: HunterTableSelItem = this.currSelItems.find( ( sel: HunterTableSelItem ) => sel.dataId === datum[header.dataId] );
+        const selField = selIItem.selFields.find( (field: SelField) => field.header === header.headerId );
+        selField.selected = !selField.selected;
+        this.selectedItems.emit( this.currSelItems );
     }
 
     public calculatePageNumbers() {
@@ -216,8 +324,8 @@ export class HunterTableComponent implements OnInit {
         return datum[header.dataId]
     }
 
-    public onClickButton(funcName: string, dataId: any) {
-        this.handleGridAction.emit([funcName, dataId]);
+    public onClickButton(funcName: string, dataId: any, datum) {
+        this.handleGridAction.emit([funcName, dataId, datum]);
         this.initializeDataGrid();
     }
 
@@ -231,7 +339,7 @@ export class HunterTableComponent implements OnInit {
 
     public showOverlay() {
         this.overlayIsOn = true;
-        this.onClickButton( 'refresh', -1 );
+        this.onClickButton( 'refresh', -1, null );
     }
 
     public refresh(): void {
@@ -282,6 +390,10 @@ export class HunterTableComponent implements OnInit {
         this.closePopupButton.nativeElement.click();
     }
 
+    public getDateNumFormat( numb: number ): string {
+        return Utility.getFormatedFromNumber( numb );
+    }
+
     public onFilterDropdownHidden(): void {
         this.logger.log('Dropdown is hidden');
     }
@@ -294,3 +406,4 @@ export class HunterTableComponent implements OnInit {
 
 
 }
+

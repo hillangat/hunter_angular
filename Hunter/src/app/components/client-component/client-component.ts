@@ -12,6 +12,7 @@ import { Client } from '../../beans/client';
 import { fail } from 'assert';
 import { LoggerService } from '../../common/logger.service';
 import Utility from 'app/utilities/Utility';
+import { OverlayService } from '../../services/overlay-service';
 
 
 
@@ -65,16 +66,18 @@ export class ClientComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private clientsService: HunterClientService,
-        private logger: LoggerService
+        private logger: LoggerService,
+        private overlayService: OverlayService
     ) { }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.loadAllClients();
         this.initClientForm();
     }
 
     public loadAllClients() {
         this.loadingData = true;
+        this.openCloseOverlay();
         this.clientsService.getAllClients().then(
             ( serverResp: HunterServerResponse )  => {
                 this.logger.log( JSON.stringify(serverResp) );
@@ -89,13 +92,19 @@ export class ClientComponent implements OnInit {
                     this.alertService.error('Error: ' + serverResp.message, false);
                   }
                 this.loadingData = false;
+                this.openCloseOverlay();
             },
             error => {
                 this.alertService.error( JSON.stringify(error) );
                 this.loadingData = false;
+                this.openCloseOverlay();
             }
         );
     }
+
+    public openCloseOverlay(): void {
+        this.overlayService.openCloseOverlay( { wholeScreen: true, message: 'Loading Task Clients...' } );
+      }
 
     public removeHuntaTableOverlay() {
         if ( this.hunterTable ) {
@@ -149,7 +158,7 @@ export class ClientComponent implements OnInit {
     }
 
 
-    getCurrTaskIdAndSetIndex() {
+    public getCurrTaskIdAndSetIndex() {
         for ( let i = 0; i < this.clients.length; i++ ) {
           const clientId = this.clients[i].clientId;
           if ( clientId === this.currDataId ) {
@@ -159,11 +168,11 @@ export class ClientComponent implements OnInit {
         }
     }
 
-    getCurrentDataId() {
+    public getCurrentDataId() {
         return this.currDataId;
     }
 
-    onConfirm( params: any[] ) {
+    public onConfirm( params: any[] ) {
 
         const type = params[0];
         const marker = params[1];
@@ -177,20 +186,20 @@ export class ClientComponent implements OnInit {
         }
       }
 
-      closeConfirmAlertModal() {
+    public closeConfirmAlertModal() {
         this.confirmingDelete = false;
         this.confirmAlert.hideModal();
         this.hunterTable.initializeDataGrid();
-      }
+    }
 
-      openConfirmAlertModal() {
+    public openConfirmAlertModal() {
         this.confirmingDelete = true;
         if ( this.confirmAlert ) {
             this.confirmAlert.showModal();
         }
     }
 
-    removeClientWithId(clientId: number) {
+    public removeClientWithId(clientId: number) {
         const client = this.getClientForClientId(clientId);
         if ( client ) {
             this.clientsService.removeClient(client.clientId).then(response => {
@@ -201,7 +210,7 @@ export class ClientComponent implements OnInit {
         }
     }
 
-    getClientForClientId( clientId: number ) {
+    public getClientForClientId( clientId: number ) {
         for ( let i = 0; i < this.clients.length; i++) {
             const client = this.clients[i];
             if (client.clientId === clientId) {
@@ -210,7 +219,7 @@ export class ClientComponent implements OnInit {
         }
     }
 
-    initClientForm() {
+    public initClientForm() {
         this.clientEditForm = this.formBuilder.group({
             firstName:  ['',  [ <any>Validators.required ] ],
             lastName: ['', [ <any>Validators.required ] ],
@@ -219,30 +228,30 @@ export class ClientComponent implements OnInit {
             userName: ['', [ <any>Validators.required ] ],
             receiver: [false]
         });
-      }
+    }
 
-      initClientFormForEdit() {
-          if ( !this.clientBeingEdited ) {
-              this.alertService.error('Client to be edited not set!!');
-              return;
-          }
-          this.initClientForm();
-          const controls = this.clientEditForm.controls;
-          controls['firstName'].setValue(this.clientBeingEdited.firstName);
-          controls['lastName'].setValue(this.clientBeingEdited.lastName);
-          controls['email'].setValue(this.clientBeingEdited.email);
-          controls['userName'].setValue(this.clientBeingEdited.userName);
-          controls['receiver'].setValue(this.clientBeingEdited.receiver);
-          controls['budget'].setValue(this.clientBeingEdited.clientTotalBudget);
-      }
+    public initClientFormForEdit() {
+        if ( !this.clientBeingEdited ) {
+            this.alertService.error('Client to be edited not set!!');
+            return;
+        }
+        this.initClientForm();
+        const controls = this.clientEditForm.controls;
+        controls['firstName'].setValue(this.clientBeingEdited.firstName);
+        controls['lastName'].setValue(this.clientBeingEdited.lastName);
+        controls['email'].setValue(this.clientBeingEdited.email);
+        controls['userName'].setValue(this.clientBeingEdited.userName);
+        controls['receiver'].setValue(this.clientBeingEdited.receiver);
+        controls['budget'].setValue(this.clientBeingEdited.clientTotalBudget);
+    }
 
-      getClientFromForm() {
+    public getClientFromForm() {
 
-      }
+    }
 
-      saveClientData() {
+    public saveClientData() {
 
-          if ( this.clientEditForm.valid ) {
+        if ( this.clientEditForm.valid ) {
 
             this.hunterTable.showOverlay();
 
@@ -287,19 +296,19 @@ export class ClientComponent implements OnInit {
             this.clientEditModal.hide();
             this.initClientForm();
 
-          } else {
-              this.alertService.warn( 'Please correct errors and try again.', false );
-          }
+        } else {
+            this.alertService.warn( 'Please correct errors and try again.', false );
+        }
 
-      }
+    }
 
-      onHidden() {
-          /**
-           * Used for any functions that run once the modal closes.
-           */
-      }
+    public onHidden() {
+        /**
+         * Used for any functions that run once the modal closes.
+         */
+    }
 
-      removeOverlayAndAlert( message: string, type: string ) {
+    public removeOverlayAndAlert( message: string, type: string ) {
         this.hunterTable.removeOverlay();
         this.hunterTable.initializeDataGrid();
         switch ( type ) {
@@ -313,20 +322,20 @@ export class ClientComponent implements OnInit {
                 this.alertService.warn(message, false);
                 break;
         }
-      }
+    }
 
 
-      getFormatedDate(date: Date) {
-          return Utility.getFormatedDate( date );        
-      }
+    public getFormatedDate(date: Date) {
+        return Utility.getFormatedDate( date );
+    }
 
-      closeClientEditModal() {
+    public closeClientEditModal() {
         this.clientEditModal.hide();
-      }
+    }
 
-      showClientEditModal() {
-          this.clientEditModal.show();
-      }
+    public showClientEditModal() {
+        this.clientEditModal.show();
+    }
 
 
 

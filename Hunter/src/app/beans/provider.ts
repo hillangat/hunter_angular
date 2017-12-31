@@ -1,7 +1,7 @@
 
 export class Provider {
-    providerId: number;
-    providerName: string;
-    cstPrAudMsg: number;
-    cstPrTxtMsg: number;
+    public providerId: number;
+    public providerName: string;
+    public cstPrAudMsg: number;
+    public cstPrTxtMsg: number;
 }

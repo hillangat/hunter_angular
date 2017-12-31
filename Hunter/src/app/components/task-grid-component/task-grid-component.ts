@@ -1,3 +1,4 @@
+import { OverlayService } from 'app/services/overlay-service';
 import { ServerStatusResponse } from './../../beans/server-status-response';
 import { TaskFieldsEditComponent } from './../task-fields/task-fields-edit';
 import { HunterServerResponse } from './../../beans/ServerResponse';
@@ -28,13 +29,14 @@ import { ActionTypeEnum } from 'app/components/hunter-table-component/shared/Act
 export class TaskGridComponent implements OnInit {
 
   @ViewChild('taskFieldsEdit') taskFieldsEdit: TaskFieldsEditComponent;
-  @ViewChild('cloneTask') cloneTaskComponent;
+  @ViewChild('cloneTaskComponent') cloneTaskComponent;
   @ViewChild('hunterTable') public hunterTable: HunterTableComponent;
   public tasks: HunterServerResponse;
   public loadingTasks = false;
 
   currFunc: string = null;
   currDataId: number = null;
+  currSelRow: any = null;
   index: number;
   popupModalTitle = 'Delete Task History';
   cloneTitle = 'Clone Selected Task';
@@ -52,7 +54,8 @@ export class TaskGridComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private overlayService: OverlayService
   ) {}
 
   alertError( message: string ) {
@@ -81,6 +84,7 @@ export class TaskGridComponent implements OnInit {
 
   public loadAllTasks( initGrid: boolean ) {
     this.loadingTasks = true;
+    this.openCloseOverlay();
     this.taskService.getAllTasks().subscribe(
       ( tasks: HunterServerResponse ) => {
         this.tasks = tasks;
@@ -88,13 +92,19 @@ export class TaskGridComponent implements OnInit {
         if ( initGrid && this.hunterTable ) {
           this.hunterTable.initializeDataGrid();
         }
+        this.openCloseOverlay();
       },
       (error: HunterServerResponse) => {
         this.tasks = error;
         this.alertService.error( JSON.stringify(error) );
         this.loadingTasks = false;
+        this.openCloseOverlay();
       }
     );
+  }
+
+  public openCloseOverlay(): void {
+    this.overlayService.openCloseOverlay( { wholeScreen: true, message: 'Loading Tasks...' } );
   }
 
   public handleBarAction( action: BarAction ) {
@@ -113,6 +123,7 @@ export class TaskGridComponent implements OnInit {
       this.currFunc   = params[0];
       this.currDataId = params[1];
       this.index      = -1;
+      this.currSelRow = params[2];
 
       // this.getCurrTaskIdAndSetIndex();
 
@@ -137,7 +148,9 @@ export class TaskGridComponent implements OnInit {
           break;
         case 'clone' :
           this.modalAction = 'CloneTask'
-          this.cloneTaskComponent.showModal();
+          if ( this.cloneTaskComponent ) {
+            this.cloneTaskComponent.showModal();
+          }
           break;
       }
 

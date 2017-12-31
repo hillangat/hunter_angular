@@ -1,3 +1,4 @@
+import { TaskFieldsModel } from './../../beans/task-field-model';
 import { Component, Input, Output, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { TasksService } from '../../services/tasks-service';
 import { TaskCloneModel } from '../../beans/clone-task-model';
@@ -21,9 +22,11 @@ import { LoggerService } from '../../common/logger.service';
 export class CloneTaskComponent implements OnInit {
 
     public title: 'Clone Task';
-    @Output('doneCloning') doneCloning: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public clients: Client[] = [];
 
+    @Output('doneCloning') doneCloning: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input('taskId') public taskId: number;
+    @Input('task') public task: TaskFieldsModel;
     @ViewChild('autoShownModal')  public autoShownModal: ModalDirective;
     @Input() isModalShown = true;
 
@@ -41,9 +44,7 @@ export class CloneTaskComponent implements OnInit {
     }
 
     private submitted = false;
-    private task: any;
     private cloneTaskFieldsForm: FormGroup;
-    private clients: Client[] = [];
 
     constructor(
         private taskService: TasksService,
@@ -53,9 +54,8 @@ export class CloneTaskComponent implements OnInit {
     ) { }
 
     public ngOnInit() {
-        this.task = this.taskService.getNewTask();
         this.clients = this.taskService.getClients();
-        this.logger.log( JSON.stringify( this.clients ) );
+        alert( JSON.stringify(this.task) );
         this.initForm();
     }
 

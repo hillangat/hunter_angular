@@ -27,7 +27,7 @@ export class TasksMessageComponent implements OnInit {
     }
 
     loadTask() {
-        this.taskService.getTaskForTaskId(this.taskId);
+        this.taskService.loadTaskForId(this.taskId);
     }
 
 

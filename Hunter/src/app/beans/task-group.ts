@@ -7,8 +7,8 @@ export class TaskGroup {
     receiverCount: number;
     receiverType: string;
     receiverGroupReceiversIds: number[];
-    cretDate: Date;
+    cretDate: Number;
     createdBy: string;
-    lastUpdate: Date;
+    lastUpdate: Number;
     lastUpdatedBy: string;
 }

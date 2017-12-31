@@ -1,17 +1,7 @@
-<div id="overlay" [style.display]="overlayIsOn ? 'block':'none'">
-    <div class='hunterOverlayProgressBArDiv'>
-        <img src="../../assets/images/loadingSpinner.gif" style="width:75px;height:75px;">
-    </div>
-</div>
-
-
 <!-- https://jsfiddle.net/dPixie/byB9d/3/light/   use this to check out how to free table -->
 
 <div class='hunterTableContainer'>
-    <div *ngIf='loadingData' class='loadingDataSpinner' >
-        <i class="fa fa-spinner fa-pulse fa-2x fa-fw hntrColor" ></i>
-    </div>
-    <table class='hunterMasterTable' *ngIf='!loadingData' >
+    <table class='hunterMasterTable' >
         <tr>
             <td>
                 <div class='hunterMasterTableTitleBar'>
@@ -33,29 +23,39 @@
                     <table class='hunterTable'>
                         <thead class='hunterTableHead'>
                             <tr class='hunterTableTr'>
-                                <th class='hunterTableTd' *ngFor="let header of headers" [style.width]="header.width">
-                                    <span      
-                                        triggers="" 
-                                        #pop="bs-popover"                                   
-                                        [id] = header.headerId
-                                        [popover]="popTemplate" 
-                                        popoverTitle="Filter By {{header.displayName}}"
-                                        placement="bottom"
-                                        (click)="showFilterDropdown()" 
-                                        class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"
-                                        *ngIf="!header.actionCol"
-                                    ></span>
-                                    <span class='hunterHeaderText headerSpan cursorPointer'>{{header.displayName}}</span>
-                                    <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.actionCol && header.sortable && header.currentOrder"></span>
+                                <th class='hunterTableTd' *ngFor="let header of headers" [style.width]="header.width" [style.display]="!header.show ? 'none': 'display'" >
+                                    <div *ngIf='!header.checkBox' >
+                                            <span      
+                                            triggers="" 
+                                            #pop="bs-popover"                                   
+                                            [id] = header.headerId
+                                            [popover]="popTemplate" 
+                                            popoverTitle="Filter By {{header.displayName}}"
+                                            placement="bottom"
+                                            (click)="showFilterDropdown()" 
+                                            class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-filter" aria-hidden="true"
+                                            *ngIf="!header.actionCol"
+                                        ></span>
+                                        <span class='hunterHeaderText headerSpan cursorPointer'>{{header.displayName}}</span>
+                                        <span class="hunterSortableIcon headerSpan cursorPointer glyphicon glyphicon-triangle-bottom" aria-hidden="true" *ngIf="!header.actionCol && header.sortable && header.currentOrder"></span>
+                                    </div>
+                                    <div *ngIf='header.checkBox' >
+                                        <input type='checkbox' (change)='selectAll()' [checked]='isAllSel(header)' >
+                                    </div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let datum of visibleHunterTableData">
-                                <td class='hunterTableTd' *ngFor="let header of headers" [style.text-align]="header.actionCol || header.headerId == header.dataId ? 'center':'left'">
-                                    <span *ngIf="!header.actionCol">{{ datum[header.headerId] }}</span>
-                                    <div (click)="onClickButton(header.headerId, datum[header.dataId])" class='btn hunterButton' *ngIf="header.actionCol" style="margin:auto;">
-                                        <span [class]="getBootstrapClass(header.actionColIconName)"></span>
+                                <td class='hunterTableTd' *ngFor="let header of headers" [style.text-align]="header.actionCol || header.headerId == header.dataId ? 'center':'left'" [style.display]="!header.show ? 'none': 'display'" >
+                                    <div *ngIf='!header.checkBox' >
+                                        <span *ngIf="!header.actionCol">{{ header.dataType === 'dateNumber' ? getDateNumFormat( datum[header.headerId] ) : datum[header.headerId] }}</span>
+                                        <div (click)="onClickButton(header.headerId, datum[header.dataId], datum)" class='btn hunterButton' *ngIf="header.actionCol" style="margin:auto;">
+                                            <span [class]="getBootstrapClass(header.actionColIconName)"></span>
+                                        </div>
+                                    </div>
+                                    <div *ngIf='header.checkBox' >
+                                        <input type='checkbox' [checked]='isRowFieldSel(datum, header)' (change)='saveSelField( datum, header )' >
                                     </div>
                                 </td>
                             </tr>
@@ -133,8 +133,6 @@
         </tr>
     </table>
 </div>
-
-
 
 <ng-template #popTemplate >
     <div class="hunterBackground" >

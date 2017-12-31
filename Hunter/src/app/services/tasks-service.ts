@@ -1,6 +1,6 @@
+import { Observable } from 'Rxjs';
 import { HunterServerResponse } from './../beans/ServerResponse';
 import { TaskFieldsModel } from './../beans/task-field-model';
-import { Observable } from 'rxjs/Observable';
 import { Injectable, OnInit } from '@angular/core';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { tasks } from '../data/mocked-tasks';
@@ -22,9 +22,13 @@ export class TasksService {
   private cloneTaskURL = this.taskBaseURL + 'action/task/clone';
   private updateTaskFieldsURL = this.taskBaseURL + 'action/updateFields';
   private createOrUpdateTaskFieldsURL = this.taskBaseURL + 'action/createOrUpdate';
-  private tasks: any[];
-  private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
+  private loadTaskForTaskURL = this.taskBaseURL + 'action/task/load/';
+  private furnishTaskURL = this.taskBaseURL + 'action/task/furnish/';
+  private taskHistoryURL = this.taskBaseURL + 'action/task/history/getForTask/';
+  private getAvailTaskGroups = this.taskBaseURL + 'action/task/availGroups/';
+  private addGrpToTask = this.taskBaseURL + 'action/tskGrp/create';
   private currAccessToke = 'YWRtaW46OTk5OTk5';
+  private getTasksURL = 'http://localhost:8080/Hunter/restful/tasks/read';
   private getAllTasksURL = this.getTasksURL + '/all';
 
   constructor( private http: Http, private logger: LoggerService ) {}
@@ -53,6 +57,14 @@ export class TasksService {
       });
   }
 
+  public getAvailTskGrpsForTskId( taskId: number ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .get( this.getAvailTaskGroups + taskId )
+          .map( (response: Response) => response.json() as HunterServerResponse)
+    );
+  }
+
   public getClientTaskData() {
     return tasks;
   }
@@ -66,24 +78,28 @@ export class TasksService {
     );
   }
 
-  public getTaskHistoryForTaskId( taskId: number ) {
-    const events = taskHistory[0].events;
-    return events;
+  public getTaskHistoryForTaskId( taskId: number ): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .get( this.taskHistoryURL + taskId )
+          .map( (response: Response) => response.json() as HunterServerResponse)
+    );
   }
 
-  public getTaskForTaskId(taskId: number) {
-    const tasks = this.getClientTaskData();
-    for ( let i = 0; i < tasks.length; i++ ) {
-      const task = tasks[i];
-      if ( task.taskId === taskId ) {
-        return task;
-      }
-    }
-    return null;
+  public loadTaskForId(taskId: number): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .get( this.loadTaskForTaskURL + taskId )
+          .map( ( response: Response ) => response.json() as HunterServerResponse )
+    );
   }
 
-  public getTaskHistoryForTask(taskId: number) {
-
+  public furnishTask(taskId: number): Observable<HunterServerResponse> {
+    return (
+      this.http
+          .get( this.furnishTaskURL + taskId )
+          .map( ( response: Response ) => response.json() as HunterServerResponse )
+    );
   }
 
   public cloneTask( cloneTask: TaskCloneModel ): Observable<ServerStatusResponse> {
@@ -102,13 +118,12 @@ export class TasksService {
     );
   }
 
-  public getAllTaskIds() {
-    const taskIds = [];
-    for ( let i = 0; i < this.tasks.length; i++ ) {
-      const taskId = this.tasks[i];
-      taskIds.push(taskId);
-    }
-    return taskIds;
+  public addGroupToTask( taskId: number, groupIds: number[] ): Observable<ServerStatusResponse> {
+    return (
+      this.http
+          .post( this.addGrpToTask, JSON.stringify({ taskId: taskId, groupIds: groupIds }) )
+          .map( ( resp: Response) => resp.json() as ServerStatusResponse )
+    );
   }
 
   public getClients() {
@@ -116,67 +131,6 @@ export class TasksService {
   }
 
 
-  public getNewTask() {
-    return {
-        'description': 'asdfasdf',
-        'taskDateline': '2017-05-26 20:03',
-        'taskApproved': true,
-        'taskApprover': 'admin',
-        'updatedBy': 'admin',
-        'srlzdTskPrcssJbObjsFilLoc': null,
-        'taskDeliveryStatus': 'Failed',
-        'desiredReceiverCount': 1,
-        'taskLifeStatus': 'Processed',
-        'availableReceiverCount': 0,
-        'confirmedReceiverCount': 0,
-        'taskName': 'dasdfasdf',
-        'taskId': 4,
-        'taskGroups': [],
-        'clientId': 1,
-        'taskRegions': [],
-        'taskMessage': {
-            'toPhone': null,
-            'pageWordCount': 0,
-            'fromPhone': null,
-            'pageable': false,
-            'text': null,
-            'disclaimer': null,
-            'provider': {
-                'providerId': 1,
-                'providerName': 'Safaricom',
-                'cstPrAudMsg': 2,
-                'cstPrTxtMsg': 1
-            },
-            'msgDeliveryStatus': 'Conceptual',
-            'actualReceivers': 5000,
-            'confirmedReceivers': 0,
-            'desiredReceivers': 0,
-            'msgId': 4,
-            'msgLifeStatus': 'Processed',
-            'msgText': 'asdfasdfasdf',
-            'createdBy': 'admin',
-            'lastUpdate': '2017-05-26 20:55',
-            'lastUpdatedBy': 'admin',
-            'cretDate': '2017-05-26 20:03',
-            'msgOwner': 'admin',
-            'msgSendDate': '2017-05-26 20:56',
-            'msgTaskType': 'Text'
-        },
-        'tskMsgType': 'Text',
-        'tskAgrmntLoc': null,
-        'createdBy': 'admin',
-        'taskType': 'Political',
-        'lastUpdate': '2017-05-26 20:57',
-        'processedBy': null,
-        'processedOn': null,
-        'recurrentTask': true,
-        'gateWayClient': 'CM',
-        'taskObjective': 'asdfasdf',
-        'taskCost': 0,
-        'taskBudget': 10000,
-        'cretDate': '2017-05-26 20:03'
-    }
-  }
 
 
 

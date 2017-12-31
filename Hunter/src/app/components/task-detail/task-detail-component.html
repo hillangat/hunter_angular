@@ -7,7 +7,7 @@
 </ol>
 
 <!-- Delete Task Modal content-->
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="myModal" role="dialog" *ngIf='task' >
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -29,7 +29,7 @@
 
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#fields"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp; Task Fields</a></li>
-    <li><a data-toggle="tab" href="#statuses"><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp; Task Statuses</a></li>
+    <li><a data-toggle="tab"  (select)="alert('Hey')" href="#statuses"><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp; Task Statuses</a></li>
     <li><a data-toggle="tab" href="#message"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>&nbsp; Task Message</a></li>
     <li><a data-toggle="tab" href="#regions"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>&nbsp; Task Regions</a></li>
     <li><a data-toggle="tab" href="#groups"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>&nbsp; Task Groups</a></li>
@@ -37,7 +37,7 @@
     <li><a data-toggle="tab" href="#audit"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp; Task Audit Information</a></li>
 </ul>
 
-<div class="tab-content">
+<div class="tab-content" *ngIf='task' >
     <div id="fields" class="tab-pane fade in active">
         <br/>
         <div class="row">
@@ -69,8 +69,8 @@
                     </li>
                     <li class="list-group-item" style="border:1px solid #E6F1F3;">
                         <label style='width:25%;color:#41ABBC;'>Approved</label>
-                        <span *ngIf="task.taskApprover == 'Y'">Yes</span>
-                        <span *ngIf="task.taskApprover != 'Y'">False</span>
+                        <span *ngIf="task.taskApprover == 'Y'"><span  class='glyphicon glyphicon-ok successColor' ></span>&nbsp; Yes</span>
+                        <span *ngIf="task.taskApprover != 'Y'"><span  class='glyphicon glyphicon-remove failureColor' ></span>&nbsp; No</span>
                     </li>
                     <li class="list-group-item" style="border:1px solid #E6F1F3;">
                         <label style='width:25%;color:#41ABBC;'>Approver</label> {{task.approver}}
@@ -137,17 +137,18 @@
         <div class="row">
             <div class="col-md-12">
                 <br/>
-                <app-task-groups [taskGroups]="task.taskGroups"></app-task-groups>
+                <app-task-groups [taskGroups]='task.taskGroups' [taskId]='taskId' ></app-task-groups>
             </div>
         </div>
     </div>
     
     <div id="taskHistory" class="tab-pane fade">
         <br/>
-        <app-hunter-table 
+        <app-hunter-table
+            [pageSize]='20'
             [height]='400'
             [headers]="historyHeaders" 
-            [hunterTableData]="history" 
+            [serverResponse]="history"
             (createNewAction)="createNewAction($event)"
             (handleGridAction)="handleGridAction($event)">
         </app-hunter-table>
@@ -158,19 +159,19 @@
         <br/>
         <ul class="list-group">
             <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                <label style='width:25%;color:#41ABBC;'>Created On</label> {{task.cretDate}}
+                <label style='width:25%;color:#41ABBC;'>Created On</label> {{formatDateNumber( task.cretDate )}}
             </li>
             <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdBy}}
+                <label style='width:25%;color:#41ABBC;'>Created By</label> {{task.createdByStr}}
             </li>
             <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                <label style='width:25%;color:#41ABBC;'>Updated On</label> {{task.lastUpdate}}
+                <label style='width:25%;color:#41ABBC;'>Updated On</label> {{formatDateNumber( task.lastUpdate )}}
             </li>
             <li class="list-group-item" style="border:1px solid #E6F1F3;">
-                <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedBy}}
+                <label style='width:25%;color:#41ABBC;'>Updated By</label> {{task.updatedByStr}}
             </li>
             <li *ngIf="task.taskLifeStatus == 'Processed'" class="list-group-item" style="border:1px solid #E6F1F3;">
-                <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedBy}}
+                <label style='width:25%;color:#41ABBC;'>Processed By</label> {{task.processedByStr}}
             </li>
             <li *ngIf="task.taskLifeStatus == 'Processed'" class="list-group-item" style="border:1px solid #E6F1F3;">
                 <label style='width:25%;color:#41ABBC;'>Processed On</label> {{task.processedOn}}

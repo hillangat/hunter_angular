@@ -1,0 +1,9 @@
+<!--component html goes here -->
+<div id='overlay' [style.display]="overlayIsOn ? 'block':'none'">
+    <div class='hunterOverlayProgressBArDiv overlayImageContainer' >
+        <i class='fa fa-spinner fa-pulse fa-4x fa-fw iconColor' ></i>
+    </div>
+    <div *ngIf='message' class='hunterOverlayProgressBArDiv overlayMsgContainer' >
+        {{ message }}
+    </div>
+</div>
